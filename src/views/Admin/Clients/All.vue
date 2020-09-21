@@ -133,8 +133,8 @@ export default {
       errors: {
         visible: false,
         type: "danger",
-        message: ""
-      }
+        message: "",
+      },
     };
   },
   mounted: function() {
@@ -157,10 +157,22 @@ export default {
       });
     },
     getClients: function() {
-      this.$http.get("customer/").then(resp => {
-        this.customers = resp.data;
-      });
-    }
-  }
+      let loader = this.$loading.show();
+
+      this.$http
+        .get("customer/")
+        .then((resp) => {
+          this.customers = resp.data;
+        })
+        .catch(() => {
+          this.$toasted.global.error({
+            message: "Impossible de récupérer la liste des clients.",
+          });
+        })
+        .finally(() => {
+          loader.hide();
+        });
+    },
+  },
 };
 </script>

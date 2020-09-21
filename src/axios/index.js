@@ -16,14 +16,14 @@ export default {
         }
 
         // if coming from Login.vue
-        if (error.config.url.contains("/auth/token/")) {
+        if (error.config.url.includes("/auth/token/")) {
           return new Promise((resolve, reject) => {
             reject(error);
           });
         }
 
         // Logout user if token refresh didn't work or user is disabled
-        if (error.config.url == "/auth/token/refresh/") {
+        if (error.config.url.includes("/auth/token/refresh/")) {
           store.dispatch("logout").then(() => {
             Vue.toasted.global.success({
               message: "Veuillez vous reconnecter.",
@@ -38,24 +38,29 @@ export default {
         }
 
         // Try request again with new token
-        return jwt.refreshToken().then((resp) => {
-          // New request with new token
-          const config = error.config;
-          store.dispatch("auth/refreshAccessToken", resp.data);
-          // Adding to axios defaults
-          config.headers["Authorization"] = "Bearer " + resp.data.access;
+        return jwt
+          .refreshToken()
+          .then((resp) => {
+            // New request with new token
+            const config = error.config;
+            store.dispatch("refreshAccessToken", resp.data);
+            // Adding to axios defaults
+            config.headers["Authorization"] = "Bearer " + resp.data.access;
 
-          return new Promise((resolve, reject) => {
-            axios
-              .request(config)
-              .then((response) => {
-                resolve(response);
-              })
-              .catch((error) => {
-                reject(error);
-              });
+            return new Promise((resolve, reject) => {
+              axios
+                .request(config)
+                .then((response) => {
+                  resolve(response);
+                })
+                .catch((error) => {
+                  reject(error);
+                });
+            });
+          })
+          .catch((err) => {
+            console.warn(err.response);
           });
-        });
       }
     );
   },

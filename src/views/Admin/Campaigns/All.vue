@@ -142,8 +142,8 @@ export default {
       errors: {
         visible: false,
         type: "danger",
-        message: ""
-      }
+        message: "",
+      },
     };
   },
   mounted: function() {
@@ -160,13 +160,13 @@ export default {
     showDetail: function(id) {
       this.$router.push({
         name: "campaign",
-        params: { id: id }
+        params: { id: id },
       });
     },
     editCampaign: function(id) {
       this.$router.push({
         name: "edit-campaign",
-        params: { id: id }
+        params: { id: id },
       });
     },
     deleteCampaign: function(id) {
@@ -175,19 +175,22 @@ export default {
       });
     },
     getCampaigns: function() {
+      let loader = this.$loading.show();
+
       this.$http
         .get("campaign/")
-        .then(resp => {
+        .then((resp) => {
           this.campaigns = resp.data;
         })
         .catch(() => {
-          this.errors = {
-            visible: true,
-            type: "danger",
-            message: "Impossible de récupérer la liste des campagnes."
-          };
+          this.$toasted.global.error({
+            message: "Impossible de récupérer la liste des campagnes.",
+          });
+        })
+        .finally(() => {
+          loader.hide();
         });
-    }
-  }
+    },
+  },
 };
 </script>

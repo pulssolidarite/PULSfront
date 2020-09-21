@@ -169,9 +169,9 @@ Vue.use(
   Loading,
   {
     // props
-    color: "#FEC531",
-    backgroundColor: "#000000",
-    opacity: 0.3,
+    color: "#5969ff",
+    backgroundColor: "#fff",
+    opacity: 0.4,
   },
   {
     // slots
