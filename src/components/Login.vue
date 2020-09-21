@@ -58,32 +58,30 @@ export default {
     return {
       credentials: {
         username: "",
-        password: ""
+        password: "",
       },
       loading: false,
       errors: {
         visible: false,
         type: "danger",
-        message: ""
-      }
+        message: "",
+      },
     };
   },
   methods: {
     login() {
-      this.loading = true;
       this.$store
         .dispatch("login", this.credentials)
-        .then(() => this.$router.push("/"))
-        .catch(err => {
-          this.loading = false;
-          this.errors = {
-            visible: true,
-            type: "danger",
-            message: err.response.data["non_field_errors"][0]
-          };
+        .then(() => {
+          this.$toasted.global.success({
+            message: "Nous sommes ravis de vous revoir !",
+          });
+        })
+        .catch((error) => {
+          this.$toasted.global.error(error);
         });
-    }
-  }
+    },
+  },
 };
 </script>
 

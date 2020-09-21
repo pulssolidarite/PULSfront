@@ -56,23 +56,25 @@ export default {
     return {
       credentials: {
         username: "",
-        password: ""
+        password: "",
       },
       loading: false,
-      error: ""
     };
   },
   methods: {
     login() {
-      this.loading = true;
+      console.log("here");
       this.$store
         .dispatch("login", this.credentials)
-        .then(() => this.$router.push("/"))
-        .catch(err => {
-          this.loading = false;
-          this.error = err.response;
+        .then(() => {
+          this.$toasted.global.success({
+            message: "Nous sommes ravis de vous revoir !",
+          });
+        })
+        .catch((error) => {
+          this.$toasted.global.error(error);
         });
-    }
-  }
+    },
+  },
 };
 </script>
