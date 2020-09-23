@@ -342,8 +342,8 @@ export default {
       errors: {
         visible: false,
         type: "danger",
-        message: ""
-      }
+        message: "",
+      },
     };
   },
   mounted: function() {},
@@ -356,7 +356,7 @@ export default {
     addCampaign: function() {
       if (this.campaign) {
         let form = new FormData();
-        form.append("author", this.$store.state.user_id);
+        form.append("author", this.$store.state.currentUser.id);
         form.append("name", this.campaign.name);
         form.append("goal_amount", this.campaign.goal_amount);
         form.append("link", this.campaign.link);
@@ -376,22 +376,21 @@ export default {
         this.$http
           .post("campaign/", form, {
             headers: {
-              "Content-Type": "multipart/form-data"
-            }
+              "Content-Type": "multipart/form-data",
+            },
           })
-          .then(resp => {
+          .then((resp) => {
             this.campaign = resp.data;
             this.$router.push("/campaigns");
           })
-          .catch(() => {
-            this.errors = {
-              visible: true,
-              type: "danger",
-              message: "Impossible de créer une nouvelle campagne."
-            };
+          .catch((err) => {
+            console.error(err.response);
+            this.$toasted.global.error({
+              message: "Impossible de créer une nouvelle campagne.",
+            });
           });
       }
-    }
-  }
+    },
+  },
 };
 </script>

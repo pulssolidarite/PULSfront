@@ -63,7 +63,6 @@ export default {
   },
   methods: {
     login() {
-      console.log("here");
       this.$store
         .dispatch("login", this.credentials)
         .then(() => {

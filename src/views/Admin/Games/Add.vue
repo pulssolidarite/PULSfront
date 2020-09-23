@@ -147,8 +147,8 @@ export default {
       errors: {
         visible: false,
         type: "danger",
-        message: ""
-      }
+        message: "",
+      },
     };
   },
   mounted: function() {},
@@ -168,22 +168,20 @@ export default {
         this.$http
           .post("game/", form, {
             headers: {
-              "Content-Type": "multipart/form-data"
-            }
+              "Content-Type": "multipart/form-data",
+            },
           })
-          .then(resp => {
+          .then((resp) => {
             this.game = resp.data;
             this.$router.push("/games");
           })
           .catch(() => {
-            this.errors = {
-              visible: true,
-              type: "danger",
-              message: "Impossible de créer un nouveau jeu."
-            };
+            this.$toasted.global.error({
+              message: "Impossible d'ajouter ce jeu.",
+            });
           });
       }
-    }
-  }
+    },
+  },
 };
 </script>
