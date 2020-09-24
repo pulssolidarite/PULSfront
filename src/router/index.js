@@ -24,7 +24,7 @@ const routes = [
   {
     path: "/",
     name: "home",
-    component: Home
+    component: Home,
   },
   {
     path: "/terminals",
@@ -32,8 +32,8 @@ const routes = [
     component: AllTerminals,
     meta: {
       requiresAuth: true,
-      requiresAdmin: true
-    }
+      requiresAdmin: true,
+    },
   },
   {
     path: "/terminals/:id",
@@ -41,8 +41,8 @@ const routes = [
     component: ShowTerminal,
     meta: {
       requiresAuth: true,
-      requiresAdmin: true
-    }
+      requiresAdmin: true,
+    },
   },
   {
     path: "/terminal/add",
@@ -50,8 +50,8 @@ const routes = [
     component: AddTerminal,
     meta: {
       requiresAuth: true,
-      requiresAdmin: true
-    }
+      requiresAdmin: true,
+    },
   },
   {
     path: "/terminal/:id/edit",
@@ -59,8 +59,8 @@ const routes = [
     component: EditTerminal,
     meta: {
       requiresAuth: true,
-      requiresAdmin: true
-    }
+      requiresAdmin: true,
+    },
   },
   {
     path: "/campaigns",
@@ -68,8 +68,8 @@ const routes = [
     component: AllCampaigns,
     meta: {
       requiresAuth: true,
-      requiresAdmin: true
-    }
+      requiresAdmin: true,
+    },
   },
   {
     path: "/campaigns/:id",
@@ -77,8 +77,8 @@ const routes = [
     component: ShowCampaign,
     meta: {
       requiresAuth: true,
-      requiresAdmin: true
-    }
+      requiresAdmin: true,
+    },
   },
   {
     path: "/campaign/add",
@@ -86,8 +86,8 @@ const routes = [
     component: AddCampaign,
     meta: {
       requiresAuth: true,
-      requiresAdmin: true
-    }
+      requiresAdmin: true,
+    },
   },
   {
     path: "/campaign/:id/edit",
@@ -95,8 +95,8 @@ const routes = [
     component: EditCampaign,
     meta: {
       requiresAuth: true,
-      requiresAdmin: true
-    }
+      requiresAdmin: true,
+    },
   },
   {
     path: "/games",
@@ -104,8 +104,8 @@ const routes = [
     component: AllGames,
     meta: {
       requiresAuth: true,
-      requiresAdmin: true
-    }
+      requiresAdmin: true,
+    },
   },
   {
     path: "/game/add",
@@ -113,8 +113,8 @@ const routes = [
     component: AddGame,
     meta: {
       requiresAuth: true,
-      requiresAdmin: true
-    }
+      requiresAdmin: true,
+    },
   },
   {
     path: "/game/:id/edit",
@@ -122,8 +122,8 @@ const routes = [
     component: EditGame,
     meta: {
       requiresAuth: true,
-      requiresAdmin: true
-    }
+      requiresAdmin: true,
+    },
   },
   {
     path: "/clients",
@@ -131,8 +131,8 @@ const routes = [
     component: AllClients,
     meta: {
       requiresAuth: true,
-      requiresAdmin: true
-    }
+      requiresAdmin: true,
+    },
   },
   {
     path: "/client/add",
@@ -140,8 +140,8 @@ const routes = [
     component: AddClient,
     meta: {
       requiresAuth: true,
-      requiresAdmin: true
-    }
+      requiresAdmin: true,
+    },
   },
   {
     path: "/client/:id/edit",
@@ -149,35 +149,41 @@ const routes = [
     component: EditClient,
     meta: {
       requiresAuth: true,
-      requiresAdmin: true
-    }
-  }
+      requiresAdmin: true,
+    },
+  },
 ];
 
 const router = new VueRouter({
-  routes
+  mode: "history",
+  base: process.env.BASE_URL,
+  routes,
+
+  scrollBehavior(to, from, savedPosition) {
+    return { x: 0, y: 0 };
+  },
 });
 
 router.beforeEach((to, from, next) => {
-  if (to.matched.some(record => record.meta.onlyFrom)) {
+  if (to.matched.some((record) => record.meta.onlyFrom)) {
     if (from.name == to.meta.onlyFrom) {
       next();
       return;
     }
     next("/start");
-  } else if (to.matched.some(record => record.meta.requiresAdmin)) {
+  } else if (to.matched.some((record) => record.meta.requiresAdmin)) {
     if (store.getters.isAdmin) {
       next();
       return;
     }
     next("/");
-  } else if (to.matched.some(record => record.meta.requiresAuth)) {
+  } else if (to.matched.some((record) => record.meta.requiresAuth)) {
     if (store.getters.isLoggedIn) {
       next();
       return;
     }
     next("/login");
-  } else if (to.matched.some(record => record.meta.requiresAnon)) {
+  } else if (to.matched.some((record) => record.meta.requiresAnon)) {
     if (!store.getters.isLoggedIn) {
       next();
       return;

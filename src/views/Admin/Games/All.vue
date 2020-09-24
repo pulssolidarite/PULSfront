@@ -133,8 +133,8 @@ export default {
       errors: {
         visible: false,
         type: "danger",
-        message: ""
-      }
+        message: "",
+      },
     };
   },
   mounted: function() {
@@ -151,7 +151,7 @@ export default {
     showDetail: function(id) {
       this.$router.push({
         name: "game",
-        params: { id: id }
+        params: { id: id },
       });
     },
     editGame: function(id) {
@@ -163,10 +163,22 @@ export default {
       });
     },
     getGames: function() {
-      this.$http.get("game/").then(resp => {
-        this.games = resp.data;
-      });
-    }
-  }
+      let loader = this.$loading.show();
+
+      this.$http
+        .get("game/")
+        .then((resp) => {
+          this.games = resp.data;
+        })
+        .catch(() => {
+          this.$toasted.global.error({
+            message: "Impossible de récupérer la liste des jeux.",
+          });
+        })
+        .finally(() => {
+          loader.hide();
+        });
+    },
+  },
 };
 </script>
