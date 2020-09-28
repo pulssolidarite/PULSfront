@@ -264,7 +264,7 @@
                           terminal.campaigns.length == 0
                             ? 'text-danger'
                             : '',
-                          'font-weight-bold'
+                          'font-weight-bold',
                         ]"
                         >({{ terminal.campaigns.length }}/{{
                           maxCampaigns
@@ -281,7 +281,7 @@
                           'card-checkbox',
                           'col-3',
                           'py-2',
-                          'mx-2'
+                          'mx-2',
                         ]"
                         @click.prevent="selectCampaign(campaign)"
                       >
@@ -291,7 +291,7 @@
                             'selected',
                             'd-flex',
                             'align-items-center',
-                            'justify-content-center'
+                            'justify-content-center',
                           ]"
                         >
                           <font-awesome-icon icon="check" />
@@ -321,7 +321,7 @@
                           terminal.games.length == 0
                             ? 'text-danger'
                             : '',
-                          'font-weight-bold'
+                          'font-weight-bold',
                         ]"
                         >({{ terminal.games.length }}/{{ maxGames }})</span
                       ></label
@@ -335,7 +335,7 @@
                           'card-checkbox',
                           'col-3',
                           'py-3',
-                          'mx-2'
+                          'mx-2',
                         ]"
                         :key="game.id"
                         @click.prevent="selectGame(game)"
@@ -346,7 +346,7 @@
                             'selected',
                             'd-flex',
                             'align-items-center',
-                            'justify-content-center'
+                            'justify-content-center',
                           ]"
                         >
                           <font-awesome-icon icon="check" />
@@ -383,7 +383,7 @@ export default {
       user: {},
       terminal: {
         campaigns: [],
-        games: []
+        games: [],
       },
       formVisible: false,
       customers: {},
@@ -394,8 +394,8 @@ export default {
       errors: {
         visible: false,
         type: "danger",
-        message: ""
-      }
+        message: "",
+      },
     };
   },
   mounted: function() {
@@ -407,42 +407,42 @@ export default {
     getCustomers: function() {
       this.$http
         .get("customer/")
-        .then(resp => {
+        .then((resp) => {
           this.customers = resp.data;
         })
         .catch(() => {
           this.errors = {
             visible: true,
             type: "danger",
-            message: "Impossible de charger la liste des clients."
+            message: "Impossible de charger la liste des clients.",
           };
         });
     },
     getGames: function() {
       this.$http
         .get("game/")
-        .then(resp => {
+        .then((resp) => {
           this.games = resp.data;
         })
         .catch(() => {
           this.errors = {
             visible: true,
             type: "danger",
-            message: "Impossible de charger la liste des jeux."
+            message: "Impossible de charger la liste des jeux.",
           };
         });
     },
     getCampaigns: function() {
       this.$http
         .get("campaign/")
-        .then(resp => {
+        .then((resp) => {
           this.campaigns = resp.data;
         })
         .catch(() => {
           this.errors = {
             visible: true,
             type: "danger",
-            message: "Impossible de charger la liste des campagnes."
+            message: "Impossible de charger la liste des campagnes.",
           };
         });
     },
@@ -513,65 +513,66 @@ export default {
         this.user.customer = this.customer.id;
         this.$http
           .post("user/", this.user)
-          .then(resp => {
+          .then((resp) => {
             if (resp) {
               this.user = resp.data;
               this.terminal.owner = this.user.id;
 
               this.$http
                 .post("terminal/", this.terminal)
-                .then(resp => {
+                .then((resp) => {
                   this.terminal = resp.data;
+                  this.$toasted.global.success({
+                    message: "Le terminal a bien été ajouté.",
+                  });
                   this.$router.push("/terminals");
                 })
                 .catch(() => {
-                  this.errors = {
-                    visible: true,
-                    type: "danger",
-                    message: "Erreur dans l'enregistrement du terminal."
-                  };
+                  this.$toasted.global.error({
+                    message: "Erreur dans l'enregistrement du terminal.",
+                  });
                 });
             } else {
               this.errors = {
                 visible: true,
                 type: "danger",
                 message:
-                  "Impossible d'enregistrer cet utilisateur, vérifier l'username et le mot de passe."
+                  "Impossible d'enregistrer cet utilisateur, vérifier l'username et le mot de passe.",
               };
             }
           })
-          .catch(err => {
+          .catch((err) => {
             this.errors = {
               visible: true,
               type: "danger",
-              message: err
+              message: err,
             };
             console.log(err);
           });
       } else if (this.customer && this.user && this.terminal) {
         this.$http
           .post("customer/", this.customer)
-          .then(resp => {
+          .then((resp) => {
             this.customer = resp.data;
             this.user.customer = this.customer.id;
             this.$http
               .post("user/", this.user)
-              .then(resp => {
+              .then((resp) => {
                 this.user = resp.data;
                 this.terminal.owner = this.user.id;
                 this.$http
                   .post("terminal/", this.terminal)
-                  .then(resp => {
+                  .then((resp) => {
                     this.terminal = resp.data;
                     this.$router.push({
-                      name: "terminals"
+                      name: "terminals",
                     });
                   })
                   .catch(() => {
                     this.errors = {
                       visible: true,
                       type: "danger",
-                      message: "Erreur dans l'enregistrement du terminal."
+                      message: "Erreur dans l'enregistrement du terminal.",
                     };
                   });
               })
@@ -579,7 +580,7 @@ export default {
                 this.errors = {
                   visible: true,
                   type: "danger",
-                  message: "Erreur dans l'enregistrement de l'utilisateur."
+                  message: "Erreur dans l'enregistrement de l'utilisateur.",
                 };
               });
           })
@@ -587,11 +588,11 @@ export default {
             this.errors = {
               visible: true,
               type: "danger",
-              message: "Erreur dans l'enregistrement du client."
+              message: "Erreur dans l'enregistrement du client.",
             };
           });
       }
-    }
-  }
+    },
+  },
 };
 </script>
