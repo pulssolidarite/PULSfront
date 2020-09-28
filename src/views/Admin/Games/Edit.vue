@@ -80,8 +80,10 @@
                       v-model="game.name"
                     />
                   </div>
+                </div>
+                <div class="row">
                   <div class="form-group col">
-                    <label for="name">Chemin du fichier (rom)</label>
+                    <label for="name">Nom du fichier (rom)</label>
                     <div class="input-group mb-3">
                       <div class="input-group-prepend">
                         <span class="input-group-text" id="basic-addon1"
@@ -94,6 +96,15 @@
                         v-model="game.path"
                       />
                     </div>
+                  </div>
+
+                  <div class="form-group col">
+                    <label for="file">Fichier ROM</label>
+                    <v-select
+                      v-model="game.core"
+                      :options="cores"
+                      label="name"
+                    ></v-select>
                   </div>
                 </div>
                 <div class="row">
@@ -123,6 +134,37 @@
                 les uploader.
               </p>
               <form>
+                <div class="row">
+                  <div class="form-group col">
+                    <label for="file">Logo</label>
+                    <div>
+                      <a
+                        v-if="game.file"
+                        class="border d-flex p-2 text-center mb-3"
+                        :href="game.file.file"
+                        >Lien vers le fichier</a
+                      >
+                      <div class="upload-btn-wrapper w-100 text-center ">
+                        <button
+                          type="button"
+                          class="btn btn-outline-danger btn-sm"
+                          ref="text-romFile"
+                        >
+                          Ajouter un fichier ROM
+                        </button>
+                        <input
+                          type="file"
+                          id="file"
+                          name="file"
+                          ref="romFile"
+                          required="required"
+                          @change="editRom"
+                        />
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
                 <div class="row">
                   <div class="form-group col">
                     <label for="logo">Logo</label>
@@ -169,24 +211,95 @@ export default {
   data: function() {
     return {
       game: {},
+      cores: [],
       errors: {
         visible: false,
         type: "danger",
-        message: ""
-      }
+        message: "",
+      },
     };
   },
   mounted: function() {
     this.getGame();
+    this.getCores();
   },
   methods: {
+    getCores: function() {
+      let loader = this.$loading.show();
+
+      this.$http
+        .get("core/")
+        .then((resp) => {
+          this.cores = resp.data;
+        })
+        .catch(() => {
+          this.$toasted.global.error({
+            message: "Impossible de récupérer la liste des cores.",
+          });
+        })
+        .finally(() => {
+          loader.hide();
+        });
+    },
     getGame() {
-      this.$http.get("game/" + this.$route.params.id + "/").then(resp => {
-        this.game = resp.data;
-      });
+      let loader = this.$loading.show();
+
+      this.$http
+        .get("game/" + this.$route.params.id + "/")
+        .then((resp) => {
+          this.game = resp.data;
+        })
+        .catch(() => {
+          this.$toasted.global.error({
+            message: "Impossible de récupérer le jeu.",
+          });
+        })
+        .finally(() => {
+          loader.hide();
+        });
+    },
+    editRom: function(e) {
+      let loader = this.$loading.show();
+      this.$refs["text-romFile"].innerText = "Enregistrement...";
+      this.$refs["text-romFile"].classList.remove("btn-outline-danger");
+      this.$refs["text-romFile"].classList.add("btn-success");
+
+      let form_file = new FormData();
+      form_file.append("file", this.$refs.romFile.files[0]);
+      this.$http
+        .post("game/upload/", form_file, {
+          headers: {
+            "Content-Type": "multipart/form-data",
+          },
+        })
+        .then((resp) => {
+          this.game.file = resp.data;
+          let form = new FormData();
+          form.append("file", this.game.file.id);
+          this.$http
+            .patch("game/" + this.$route.params.id + "/update/", form, {
+              headers: {
+                "Content-Type": "multipart/form-data",
+              },
+            })
+            .then((resp) => {
+              this.game = resp.data;
+              this.$router.push("/games");
+            });
+        })
+        .catch(() => {
+          this.$toasted.global.error({
+            message: "Impossible d'uploader le fichier.",
+          });
+        })
+        .finally(() => {
+          loader.hide();
+        });
     },
     editLogo: function(e) {
       if (this.game) {
+        let loader = this.$loading.show();
+
         this.$refs["text-" + e.target.id].innerText = "Enregistrement...";
         this.$refs["text-" + e.target.id].classList.remove(
           "btn-outline-danger"
@@ -195,14 +308,17 @@ export default {
         let form = new FormData();
         form.append("logo", this.$refs.logo.files[0]);
         this.$http
-          .patch("game/" + this.$route.params.id + "/", form, {
+          .patch("game/" + this.$route.params.id + "/update/", form, {
             headers: {
-              "Content-Type": "multipart/form-data"
-            }
+              "Content-Type": "multipart/form-data",
+            },
           })
-          .then(resp => {
+          .then((resp) => {
             this.game = resp.data;
             this.$router.push("/games");
+          })
+          .finally(() => {
+            loader.hide();
           });
       }
     },
@@ -211,15 +327,21 @@ export default {
         let form = new FormData();
         form.append("name", this.game.name);
         form.append("path", this.game.path);
+        form.append("core", this.game.core.id);
         form.append("description", this.game.description);
         this.$http
-          .patch("game/" + this.$route.params.id + "/", form)
-          .then(resp => {
+          .patch("game/" + this.$route.params.id + "/update/", form)
+          .then((resp) => {
             this.game = resp.data;
             this.$router.push("/games");
+          })
+          .catch(() => {
+            this.$toasted.global.error({
+              message: "Impossible de mettre à jour le jeu.",
+            });
           });
       }
-    }
-  }
+    },
+  },
 };
 </script>

@@ -70,20 +70,24 @@
                       v-model="game.name"
                     />
                   </div>
+                </div>
+                <div class="row">
                   <div class="form-group col">
-                    <label for="name">Chemin du fichier (rom)</label>
-                    <div class="input-group mb-3">
-                      <div class="input-group-prepend">
-                        <span class="input-group-text" id="basic-addon1"
-                          ><font-awesome-icon icon="file"
-                        /></span>
-                      </div>
-                      <input
-                        type="text"
-                        class="form-control"
-                        v-model="game.path"
-                      />
-                    </div>
+                    <label for="name">Nom du fichier</label>
+
+                    <input
+                      type="text"
+                      class="form-control"
+                      v-model="game.path"
+                    />
+                  </div>
+                  <div class="form-group col">
+                    <label for="core">Core</label>
+                    <v-select
+                      v-model="game.core"
+                      :options="cores"
+                      label="name"
+                    ></v-select>
                   </div>
                 </div>
                 <div class="row">
@@ -108,6 +112,22 @@
                 les uploader.
               </p>
               <form>
+                <div class="row">
+                  <div class="form-group col">
+                    <label for="description">Fichier ROM</label>
+                    <input
+                      type="file"
+                      class="form-control-file"
+                      aria-describedby="fileHelp"
+                      ref="romFile"
+                      @change="uploadRom"
+                    />
+                    <small id="fileHelp" class="form-text text-muted"
+                      >Le fichier ROM associé au jeu.</small
+                    >
+                  </div>
+                </div>
+
                 <div class="row">
                   <div class="form-group col">
                     <label for="logo">Logo</label>
@@ -144,6 +164,8 @@ export default {
   data: function() {
     return {
       game: {},
+      file: {},
+      cores: [],
       errors: {
         visible: false,
         type: "danger",
@@ -151,35 +173,88 @@ export default {
       },
     };
   },
-  mounted: function() {},
+  created: function() {
+    this.getCores();
+  },
   methods: {
     handleFileChange(e) {
       this.$refs["text-" + e.target.id].innerText = "1 fichier sélectionné";
       this.$refs["text-" + e.target.id].classList.remove("btn-outline-danger");
       this.$refs["text-" + e.target.id].classList.add("btn-success");
     },
+    getCores: function() {
+      let loader = this.$loading.show();
+
+      this.$http
+        .get("core/")
+        .then((resp) => {
+          this.cores = resp.data;
+        })
+        .catch(() => {
+          this.$toasted.global.error({
+            message: "Impossible de récupérer la liste des cores.",
+          });
+        })
+        .finally(() => {
+          loader.hide();
+        });
+    },
+    uploadRom: function(event) {
+      let loader = this.$loading.show();
+
+      let form_file = new FormData();
+      form_file.append("file", this.$refs.romFile.files[0]);
+      this.$http
+        .post("game/upload/", form_file, {
+          headers: {
+            "Content-Type": "multipart/form-data",
+          },
+        })
+        .then((resp) => {
+          this.game.file = resp.data;
+        })
+        .catch(() => {
+          this.$toasted.global.error({
+            message: "Impossible d'uploader le fichier.",
+          });
+        })
+        .finally(() => {
+          loader.hide();
+        });
+    },
     addGame: function() {
       if (this.game) {
-        let form = new FormData();
-        form.append("name", this.game.name);
-        form.append("path", this.game.path);
-        form.append("description", this.game.description);
-        form.append("logo", this.$refs.logo.files[0]);
-        this.$http
-          .post("game/", form, {
-            headers: {
-              "Content-Type": "multipart/form-data",
-            },
-          })
-          .then((resp) => {
-            this.game = resp.data;
-            this.$router.push("/games");
-          })
-          .catch(() => {
-            this.$toasted.global.error({
-              message: "Impossible d'ajouter ce jeu.",
-            });
+        if (!this.game.file) {
+          this.$toasted.global.error({
+            message: "Veuillez ajouter un fichier ROM.",
           });
+        } else if (this.game.name && this.game.path && this.game.description) {
+          let form = new FormData();
+          form.append("name", this.game.name);
+          form.append("path", this.game.path);
+          form.append("core", this.game.core.id);
+          form.append("file", this.game.file.id);
+          form.append("description", this.game.description);
+          form.append("logo", this.$refs.logo.files[0]);
+          this.$http
+            .post("game/create/", form, {
+              headers: {
+                "Content-Type": "multipart/form-data",
+              },
+            })
+            .then((resp) => {
+              this.game = resp.data;
+              this.$router.push("/games");
+            })
+            .catch((err) => {
+              console.error(err.response);
+              this.$toasted.global.error({
+                message: "Impossible d'ajouter ce jeu.",
+              });
+            });
+        } else {
+          this.$toasted.global.error({ message: "Des champs sont manquants." });
+        }
       }
     },
   },
