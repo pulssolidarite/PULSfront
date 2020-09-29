@@ -114,6 +114,16 @@
                       >Ajouter un jeu</router-link
                     >
                   </li>
+                  <li class="nav-item">
+                    <router-link class="nav-link" to="/cores"
+                      >Tous les cores</router-link
+                    >
+                  </li>
+                  <li class="nav-item">
+                    <router-link class="nav-link" :to="{ name: 'addCore' }"
+                      >Ajouter un core</router-link
+                    >
+                  </li>
                 </ul>
               </div>
             </li>
@@ -160,6 +170,6 @@
 
 <script>
 export default {
-  name: "Sidebar"
+  name: "Sidebar",
 };
 </script>

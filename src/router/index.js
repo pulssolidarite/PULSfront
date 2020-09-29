@@ -14,6 +14,9 @@ import EditCampaign from "../views/Admin/Campaigns/Edit.vue";
 import AllGames from "../views/Admin/Games/All.vue";
 import AddGame from "../views/Admin/Games/Add.vue";
 import EditGame from "../views/Admin/Games/Edit.vue";
+import AllCores from "../views/Admin/Cores/All.vue";
+import AddCore from "../views/Admin/Cores/Add.vue";
+import EditCore from "../views/Admin/Cores/Edit.vue";
 import AllClients from "../views/Admin/Clients/All.vue";
 import AddClient from "../views/Admin/Clients/Add.vue";
 import EditClient from "../views/Admin/Clients/Edit.vue";
@@ -93,6 +96,34 @@ const routes = [
     path: "/campaign/:id/edit",
     name: "editCampaign",
     component: EditCampaign,
+    meta: {
+      requiresAuth: true,
+      requiresAdmin: true,
+    },
+  },
+
+  {
+    path: "/cores",
+    name: "cores",
+    component: AllCores,
+    meta: {
+      requiresAuth: true,
+      requiresAdmin: true,
+    },
+  },
+  {
+    path: "/core/add",
+    name: "addCore",
+    component: AddCore,
+    meta: {
+      requiresAuth: true,
+      requiresAdmin: true,
+    },
+  },
+  {
+    path: "/core/:id/edit",
+    name: "editCore",
+    component: EditCore,
     meta: {
       requiresAuth: true,
       requiresAdmin: true,
