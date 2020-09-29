@@ -151,6 +151,36 @@
                     </div>
                   </div>
                 </div>
+                <div class="row">
+                  <div class="form-group col">
+                    <label for="file">Fichier Bios</label>
+                    <div>
+                      <a
+                        v-if="core.bios"
+                        class="border d-flex p-2 text-center mb-3"
+                        :href="core.bios.file"
+                        >Lien vers le fichier</a
+                      >
+                      <div class="upload-btn-wrapper w-100 text-center ">
+                        <button
+                          type="button"
+                          class="btn btn-outline-danger btn-sm"
+                          ref="text-biosFile"
+                        >
+                          Ajouter un fichier bios
+                        </button>
+                        <input
+                          type="file"
+                          id="file"
+                          name="file"
+                          ref="biosFile"
+                          required="required"
+                          @change="editBios"
+                        />
+                      </div>
+                    </div>
+                  </div>
+                </div>
               </form>
             </div>
           </div>
@@ -232,6 +262,47 @@ export default {
           loader.hide();
         });
     },
+    editBios: function(e) {
+      let loader = this.$loading.show();
+      this.$refs["text-biosFile"].innerText = "Enregistrement...";
+      this.$refs["text-biosFile"].classList.remove("btn-outline-danger");
+      this.$refs["text-biosFile"].classList.add("btn-success");
+
+      let form_file = new FormData();
+      form_file.append("file", this.$refs.biosFile.files[0]);
+      this.$http
+        .post("game/core/bios/upload/", form_file, {
+          headers: {
+            "Content-Type": "multipart/form-data",
+          },
+        })
+        .then((resp) => {
+          this.core.bios = resp.data;
+          let form = new FormData();
+          form.append("bios", this.core.bios.id);
+          this.$http
+            .patch("game/core/" + this.$route.params.id + "/update/", form, {
+              headers: {
+                "Content-Type": "multipart/form-data",
+              },
+            })
+            .then((resp) => {
+              this.core = resp.data;
+              this.$toasted.global.success({
+                message: "Le fichier bios a été mis à jour.",
+              });
+              this.$router.push("/cores");
+            });
+        })
+        .catch(() => {
+          this.$toasted.global.error({
+            message: "Impossible d'uploader le fichier.",
+          });
+        })
+        .finally(() => {
+          loader.hide();
+        });
+    },
     edit: function() {
       if (this.core) {
         let form = new FormData();
@@ -242,6 +313,9 @@ export default {
           .patch("game/core/" + this.$route.params.id + "/update/", form)
           .then((resp) => {
             this.core = resp.data;
+            this.$toasted.global.success({
+              message: "Le fichier core a été mis à jour.",
+            });
             this.$router.push("/cores");
           })
           .catch(() => {

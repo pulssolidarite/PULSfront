@@ -115,6 +115,21 @@
                     >
                   </div>
                 </div>
+                <div class="row">
+                  <div class="form-group col">
+                    <label for="description">Fichier Bios</label>
+                    <input
+                      type="file"
+                      class="form-control-file"
+                      aria-describedby="fileHelp"
+                      ref="biosFile"
+                      @change="uploadBios"
+                    />
+                    <small id="fileHelp" class="form-text text-muted"
+                      >Le fichier Bios associé au core.</small
+                    >
+                  </div>
+                </div>
               </form>
             </div>
             <div class="card-body text-center">
@@ -172,16 +187,44 @@ export default {
           loader.hide();
         });
     },
+    uploadBios: function(event) {
+      let loader = this.$loading.show();
+
+      let form_file = new FormData();
+      form_file.append("file", this.$refs.biosFile.files[0]);
+      this.$http
+        .post("game/core/bios/upload/", form_file, {
+          headers: {
+            "Content-Type": "multipart/form-data",
+          },
+        })
+        .then((resp) => {
+          this.core.bios = resp.data;
+        })
+        .catch(() => {
+          this.$toasted.global.error({
+            message: "Impossible d'uploader le fichier Bios.",
+          });
+        })
+        .finally(() => {
+          loader.hide();
+        });
+    },
     addCore: function() {
       if (this.core) {
         if (!this.core.file) {
           this.$toasted.global.error({
             message: "Veuillez ajouter un fichier core.",
           });
+        } else if (!this.core.bios) {
+          this.$toasted.global.error({
+            message: "Veuillez ajouter un fichier bios.",
+          });
         } else if (this.core.name && this.core.path && this.core.description) {
           let form = new FormData();
           form.append("name", this.core.name);
           form.append("path", this.core.path);
+          form.append("bios", this.core.bios.id);
           form.append("file", this.core.file.id);
           form.append("description", this.core.description);
           this.$http
