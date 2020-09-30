@@ -6,12 +6,12 @@
         <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">
           <div class="page-header">
             <div class="d-flex justify-content-between">
-              <h2 class="pageheader-title">Campagnes</h2>
+              <h2 class="pageheader-title">Cores</h2>
               <router-link
                 class="btn btn-primary mb-1"
-                :to="{ name: 'addCampaign' }"
-                ><font-awesome-icon icon="plus" class="mr-2" />Ajouter une
-                campagne</router-link
+                :to="{ name: 'addCore' }"
+                ><font-awesome-icon icon="plus" class="mr-2" />Ajouter un
+                core</router-link
               >
             </div>
             <div class="page-breadcrumb">
@@ -28,8 +28,8 @@
                     class="mx-1"
                   />
                   <li class="breadcrumb-item">
-                    <router-link to="/campaigns" class="breadcrumb-link"
-                      >Campagnes</router-link
+                    <router-link to="/cores" class="breadcrumb-link"
+                      >Cores</router-link
                     >
                   </li>
                   <font-awesome-icon
@@ -38,7 +38,7 @@
                     class="mx-1"
                   />
                   <li class="breadcrumb-item active" aria-current="page">
-                    Toutes les campagnes
+                    Tous les cores
                   </li>
                 </ol>
               </nav>
@@ -58,56 +58,38 @@
         <div class="row">
           <div class="col-12">
             <div class="card">
-              <h5 class="card-header">Campagnes</h5>
+              <h5 class="card-header">Cores</h5>
               <div class="card-body p-0">
                 <div class="table-responsive">
                   <table class="table">
                     <thead class="bg-light">
                       <tr class="border-0">
                         <th class="border-0">#</th>
-                        <th class="border-0">Logo</th>
                         <th class="border-0">Nom</th>
                         <th class="border-0">Description</th>
-                        <th class="border-0">Dons collectés</th>
-                        <th class="border-0">Terminaux associés</th>
+                        <th class="border-0">Jeux associés</th>
                         <th class="border-0"></th>
                         <th class="border-0"></th>
                       </tr>
                     </thead>
                     <tbody>
-                      <tr v-for="(campaign, index) in campaigns" :key="index">
-                        <td>{{ campaign.id }}</td>
+                      <tr v-for="(core, index) in cores" :key="index">
+                        <td>{{ core.id }}</td>
                         <td>
-                          <span class="text-success"
-                            ><img
-                              :src="campaign.logo"
-                              height="30"
-                              :alt="campaign.name"
-                          /></span>
+                          {{ core.name }}
                         </td>
+                        <td>{{ stripCharacters(core.description) }}</td>
                         <td>
-                          {{ campaign.name }}
-                        </td>
-                        <td>{{ stripCharacters(campaign.description) }}</td>
-                        <td>
-                          {{ campaign.collected }}/{{ campaign.goal_amount }} €
-                        </td>
-                        <td>
-                          {{ campaign.nb_terminals }} termina<span
-                            v-if="campaign.nb_terminals > 1"
-                            >ux</span
-                          ><span v-else>l</span>
+                          <span v-if="core.nb_games">
+                            {{ core.nb_games }} jeu<span
+                              v-if="core.nb_games > 1"
+                              >x</span
+                            >
+                          </span>
                         </td>
                         <td>
                           <router-link
-                            :to="'/campaigns/' + campaign.id"
-                            class="text-dark"
-                            ><font-awesome-icon icon="eye"
-                          /></router-link>
-                        </td>
-                        <td>
-                          <router-link
-                            :to="'/campaign/' + campaign.id + '/edit'"
+                            :to="'/core/' + core.id + '/edit'"
                             class="text-primary"
                             ><font-awesome-icon icon="pen"
                           /></router-link>
@@ -115,7 +97,7 @@
                         <td>
                           <a
                             href=""
-                            @click.prevent="deleteCampaign(campaign.id)"
+                            @click.prevent="deleteCore(core.id)"
                             class="text-danger"
                             ><font-awesome-icon icon="trash-alt"
                           /></a>
@@ -135,10 +117,10 @@
 
 <script>
 export default {
-  name: "AllCampaigns",
+  name: "AllCores",
   data: function() {
     return {
-      campaigns: {},
+      cores: [],
       errors: {
         visible: false,
         type: "danger",
@@ -147,7 +129,7 @@ export default {
     };
   },
   mounted: function() {
-    this.getCampaigns();
+    this.getCores();
   },
   methods: {
     stripCharacters: function(text) {
@@ -159,32 +141,29 @@ export default {
     },
     showDetail: function(id) {
       this.$router.push({
-        name: "campaign",
+        name: "core",
         params: { id: id },
       });
     },
-    editCampaign: function(id) {
-      this.$router.push({
-        name: "edit-campaign",
-        params: { id: id },
+    editCore: function(id) {
+      this.$router.push("/core/" + id + "/edit");
+    },
+    deleteCore: function(id) {
+      this.$http.delete("/core/" + id + "/").then(() => {
+        this.getCores();
       });
     },
-    deleteCampaign: function(id) {
-      this.$http.delete("/campaign/" + id + "/").then(() => {
-        this.getCampaigns();
-      });
-    },
-    getCampaigns: function() {
+    getCores: function() {
       let loader = this.$loading.show();
 
       this.$http
-        .get("campaign/")
+        .get("game/core/")
         .then((resp) => {
-          this.campaigns = resp.data;
+          this.cores = resp.data;
         })
         .catch(() => {
           this.$toasted.global.error({
-            message: "Impossible de récupérer la liste des campagnes.",
+            message: "Impossible de récupérer la liste des cores.",
           });
         })
         .finally(() => {

@@ -68,12 +68,19 @@ export default {
     },
     isTerminalOn: function() {
       return this.$store.state.currentTerminal.is_on;
-    }
+    },
   },
   methods: {
     logout: function() {
-      this.$store.dispatch("logout");
-    }
-  }
+      this.$store
+        .dispatch("logout")
+        .then((resp) => {
+          this.$toasted.global.success(resp);
+        })
+        .catch((err) => {
+          this.$toasted.global.error(err);
+        });
+    },
+  },
 };
 </script>

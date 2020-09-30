@@ -14,6 +14,9 @@ import EditCampaign from "../views/Admin/Campaigns/Edit.vue";
 import AllGames from "../views/Admin/Games/All.vue";
 import AddGame from "../views/Admin/Games/Add.vue";
 import EditGame from "../views/Admin/Games/Edit.vue";
+import AllCores from "../views/Admin/Cores/All.vue";
+import AddCore from "../views/Admin/Cores/Add.vue";
+import EditCore from "../views/Admin/Cores/Edit.vue";
 import AllClients from "../views/Admin/Clients/All.vue";
 import AddClient from "../views/Admin/Clients/Add.vue";
 import EditClient from "../views/Admin/Clients/Edit.vue";
@@ -24,7 +27,7 @@ const routes = [
   {
     path: "/",
     name: "home",
-    component: Home
+    component: Home,
   },
   {
     path: "/terminals",
@@ -32,8 +35,8 @@ const routes = [
     component: AllTerminals,
     meta: {
       requiresAuth: true,
-      requiresAdmin: true
-    }
+      requiresAdmin: true,
+    },
   },
   {
     path: "/terminals/:id",
@@ -41,8 +44,8 @@ const routes = [
     component: ShowTerminal,
     meta: {
       requiresAuth: true,
-      requiresAdmin: true
-    }
+      requiresAdmin: true,
+    },
   },
   {
     path: "/terminal/add",
@@ -50,8 +53,8 @@ const routes = [
     component: AddTerminal,
     meta: {
       requiresAuth: true,
-      requiresAdmin: true
-    }
+      requiresAdmin: true,
+    },
   },
   {
     path: "/terminal/:id/edit",
@@ -59,8 +62,8 @@ const routes = [
     component: EditTerminal,
     meta: {
       requiresAuth: true,
-      requiresAdmin: true
-    }
+      requiresAdmin: true,
+    },
   },
   {
     path: "/campaigns",
@@ -68,8 +71,8 @@ const routes = [
     component: AllCampaigns,
     meta: {
       requiresAuth: true,
-      requiresAdmin: true
-    }
+      requiresAdmin: true,
+    },
   },
   {
     path: "/campaigns/:id",
@@ -77,8 +80,8 @@ const routes = [
     component: ShowCampaign,
     meta: {
       requiresAuth: true,
-      requiresAdmin: true
-    }
+      requiresAdmin: true,
+    },
   },
   {
     path: "/campaign/add",
@@ -86,8 +89,8 @@ const routes = [
     component: AddCampaign,
     meta: {
       requiresAuth: true,
-      requiresAdmin: true
-    }
+      requiresAdmin: true,
+    },
   },
   {
     path: "/campaign/:id/edit",
@@ -95,8 +98,36 @@ const routes = [
     component: EditCampaign,
     meta: {
       requiresAuth: true,
-      requiresAdmin: true
-    }
+      requiresAdmin: true,
+    },
+  },
+
+  {
+    path: "/cores",
+    name: "cores",
+    component: AllCores,
+    meta: {
+      requiresAuth: true,
+      requiresAdmin: true,
+    },
+  },
+  {
+    path: "/core/add",
+    name: "addCore",
+    component: AddCore,
+    meta: {
+      requiresAuth: true,
+      requiresAdmin: true,
+    },
+  },
+  {
+    path: "/core/:id/edit",
+    name: "editCore",
+    component: EditCore,
+    meta: {
+      requiresAuth: true,
+      requiresAdmin: true,
+    },
   },
   {
     path: "/games",
@@ -104,8 +135,8 @@ const routes = [
     component: AllGames,
     meta: {
       requiresAuth: true,
-      requiresAdmin: true
-    }
+      requiresAdmin: true,
+    },
   },
   {
     path: "/game/add",
@@ -113,8 +144,8 @@ const routes = [
     component: AddGame,
     meta: {
       requiresAuth: true,
-      requiresAdmin: true
-    }
+      requiresAdmin: true,
+    },
   },
   {
     path: "/game/:id/edit",
@@ -122,8 +153,8 @@ const routes = [
     component: EditGame,
     meta: {
       requiresAuth: true,
-      requiresAdmin: true
-    }
+      requiresAdmin: true,
+    },
   },
   {
     path: "/clients",
@@ -131,8 +162,8 @@ const routes = [
     component: AllClients,
     meta: {
       requiresAuth: true,
-      requiresAdmin: true
-    }
+      requiresAdmin: true,
+    },
   },
   {
     path: "/client/add",
@@ -140,8 +171,8 @@ const routes = [
     component: AddClient,
     meta: {
       requiresAuth: true,
-      requiresAdmin: true
-    }
+      requiresAdmin: true,
+    },
   },
   {
     path: "/client/:id/edit",
@@ -149,35 +180,41 @@ const routes = [
     component: EditClient,
     meta: {
       requiresAuth: true,
-      requiresAdmin: true
-    }
-  }
+      requiresAdmin: true,
+    },
+  },
 ];
 
 const router = new VueRouter({
-  routes
+  mode: "history",
+  base: process.env.BASE_URL,
+  routes,
+
+  scrollBehavior(to, from, savedPosition) {
+    return { x: 0, y: 0 };
+  },
 });
 
 router.beforeEach((to, from, next) => {
-  if (to.matched.some(record => record.meta.onlyFrom)) {
+  if (to.matched.some((record) => record.meta.onlyFrom)) {
     if (from.name == to.meta.onlyFrom) {
       next();
       return;
     }
     next("/start");
-  } else if (to.matched.some(record => record.meta.requiresAdmin)) {
+  } else if (to.matched.some((record) => record.meta.requiresAdmin)) {
     if (store.getters.isAdmin) {
       next();
       return;
     }
     next("/");
-  } else if (to.matched.some(record => record.meta.requiresAuth)) {
+  } else if (to.matched.some((record) => record.meta.requiresAuth)) {
     if (store.getters.isLoggedIn) {
       next();
       return;
     }
     next("/login");
-  } else if (to.matched.some(record => record.meta.requiresAnon)) {
+  } else if (to.matched.some((record) => record.meta.requiresAnon)) {
     if (!store.getters.isLoggedIn) {
       next();
       return;

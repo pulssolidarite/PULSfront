@@ -68,7 +68,6 @@
                         <th class="border-0">Logo</th>
                         <th class="border-0">Nom</th>
                         <th class="border-0">Description</th>
-                        <th class="border-0">Dons collectés</th>
                         <th class="border-0">Terminaux associés</th>
                         <th class="border-0"></th>
                         <th class="border-0"></th>
@@ -86,10 +85,6 @@
                           {{ game.name }}
                         </td>
                         <td>{{ stripCharacters(game.description) }}</td>
-                        <td v-if="game.total_donations">
-                          {{ game.total_donations }} €
-                        </td>
-                        <td v-else>0 €</td>
                         <td>
                           {{ game.nb_terminals }} termina<span
                             v-if="game.nb_terminals > 1"
@@ -133,8 +128,8 @@ export default {
       errors: {
         visible: false,
         type: "danger",
-        message: ""
-      }
+        message: "",
+      },
     };
   },
   mounted: function() {
@@ -151,7 +146,7 @@ export default {
     showDetail: function(id) {
       this.$router.push({
         name: "game",
-        params: { id: id }
+        params: { id: id },
       });
     },
     editGame: function(id) {
@@ -163,10 +158,22 @@ export default {
       });
     },
     getGames: function() {
-      this.$http.get("game/").then(resp => {
-        this.games = resp.data;
-      });
-    }
-  }
+      let loader = this.$loading.show();
+
+      this.$http
+        .get("game/")
+        .then((resp) => {
+          this.games = resp.data;
+        })
+        .catch(() => {
+          this.$toasted.global.error({
+            message: "Impossible de récupérer la liste des jeux.",
+          });
+        })
+        .finally(() => {
+          loader.hide();
+        });
+    },
+  },
 };
 </script>

@@ -6,7 +6,7 @@
         <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">
           <div class="page-header">
             <div class="d-flex justify-content-between">
-              <h2 class="pageheader-title">Jeux</h2>
+              <h2 class="pageheader-title">Cores</h2>
             </div>
             <div class="page-breadcrumb">
               <nav aria-label="breadcrumb">
@@ -22,8 +22,8 @@
                     class="mx-1"
                   />
                   <li class="breadcrumb-item">
-                    <router-link to="/games" class="breadcrumb-link"
-                      >Jeux</router-link
+                    <router-link to="/cores" class="breadcrumb-link"
+                      >Cores</router-link
                     >
                   </li>
                   <font-awesome-icon
@@ -32,7 +32,7 @@
                     class="mx-1"
                   />
                   <li class="breadcrumb-item active" aria-current="page">
-                    Ajouter un jeu
+                    Ajouter un core
                   </li>
                 </ol>
               </nav>
@@ -54,20 +54,20 @@
             <div
               class="card-header d-flex align-items-center justify-content-between"
             >
-              <h5 class="mb-0">Ajouter un jeu</h5>
+              <h5 class="mb-0">Ajouter un core</h5>
             </div>
             <div class="card-body">
               <h4 class="mb-0">Informations générales</h4>
-              <p>Les informations générales sur le nouveau jeu.</p>
+              <p>Les informations générales sur le nouveau core.</p>
               <form>
                 <div class="row">
                   <div class="form-group col">
-                    <label for="name">Nom du jeu</label>
+                    <label for="name">Nom du core</label>
                     <input
                       type="text"
                       class="form-control"
                       aria-describedby="nameHelp"
-                      v-model="game.name"
+                      v-model="core.name"
                     />
                   </div>
                 </div>
@@ -78,16 +78,17 @@
                     <input
                       type="text"
                       class="form-control"
-                      v-model="game.path"
+                      v-model="core.path"
                     />
                   </div>
                   <div class="form-group col">
-                    <label for="core">Core</label>
-                    <v-select
-                      v-model="game.core"
-                      :options="cores"
-                      label="name"
-                    ></v-select>
+                    <label for="name">Nom du fichier Bios</label>
+
+                    <input
+                      type="text"
+                      class="form-control"
+                      v-model="core.bios_path"
+                    />
                   </div>
                 </div>
                 <div class="row">
@@ -95,11 +96,11 @@
                     <label for="description">Description</label>
                     <textarea
                       class="form-control"
-                      v-model="game.description"
+                      v-model="core.description"
                       aria-describedby="descHelp"
                     ></textarea>
                     <small id="descHelp" class="form-text text-muted"
-                      >Une courte description du jeu.</small
+                      >Une courte description du core.</small
                     >
                   </div>
                 </div>
@@ -107,48 +108,42 @@
             </div>
             <div class="card-body border-top">
               <h4 class="mb-0">Médias</h4>
-              <p>
-                Il est important de compresser les images au maximum avant de
-                les uploader.
-              </p>
               <form>
                 <div class="row">
                   <div class="form-group col">
-                    <label for="description">Fichier ROM</label>
+                    <label for="description">Fichier Core</label>
                     <input
                       type="file"
                       class="form-control-file"
                       aria-describedby="fileHelp"
-                      ref="romFile"
-                      @change="uploadRom"
+                      ref="coreFile"
+                      @change="uploadCore"
                     />
                     <small id="fileHelp" class="form-text text-muted"
-                      >Le fichier ROM associé au jeu.</small
+                      >Le fichier associé au core.</small
                     >
                   </div>
                 </div>
-
                 <div class="row">
                   <div class="form-group col">
-                    <label for="logo">Logo</label>
+                    <label for="description">Fichier Bios</label>
                     <input
                       type="file"
                       class="form-control-file"
-                      aria-describedby="fileHelpId"
-                      name="logo"
-                      ref="logo"
+                      aria-describedby="fileHelp"
+                      ref="biosFile"
+                      @change="uploadBios"
                     />
-                    <small id="fileHelpId" class="form-text text-muted"
-                      >Logo PNG, JPEG ou SVG permettant d'identifier clairement
-                      l'association.</small
+                    <small id="fileHelp" class="form-text text-muted"
+                      >Le fichier Bios associé au core.</small
                     >
                   </div>
                 </div>
               </form>
             </div>
             <div class="card-body text-center">
-              <button class="btn btn-success" @click.prevent="addGame">
-                Enregistrer le jeu
+              <button class="btn btn-success" @click.prevent="addCore">
+                Enregistrer le core
               </button>
             </div>
           </div>
@@ -160,12 +155,11 @@
 
 <script>
 export default {
-  name: "AddGame",
+  name: "AddCore",
   data: function() {
     return {
-      game: {},
+      core: {},
       file: {},
-      cores: [],
       errors: {
         visible: false,
         type: "danger",
@@ -173,45 +167,25 @@ export default {
       },
     };
   },
-  created: function() {
-    this.getCores();
-  },
   methods: {
     handleFileChange(e) {
       this.$refs["text-" + e.target.id].innerText = "1 fichier sélectionné";
       this.$refs["text-" + e.target.id].classList.remove("btn-outline-danger");
       this.$refs["text-" + e.target.id].classList.add("btn-success");
     },
-    getCores: function() {
-      let loader = this.$loading.show();
-
-      this.$http
-        .get("game/core/")
-        .then((resp) => {
-          this.cores = resp.data;
-        })
-        .catch(() => {
-          this.$toasted.global.error({
-            message: "Impossible de récupérer la liste des cores.",
-          });
-        })
-        .finally(() => {
-          loader.hide();
-        });
-    },
-    uploadRom: function(event) {
+    uploadCore: function(event) {
       let loader = this.$loading.show();
 
       let form_file = new FormData();
-      form_file.append("file", this.$refs.romFile.files[0]);
+      form_file.append("file", this.$refs.coreFile.files[0]);
       this.$http
-        .post("game/upload/", form_file, {
+        .post("game/core/upload/", form_file, {
           headers: {
             "Content-Type": "multipart/form-data",
           },
         })
         .then((resp) => {
-          this.game.file = resp.data;
+          this.core.file = resp.data;
         })
         .catch(() => {
           this.$toasted.global.error({
@@ -222,34 +196,59 @@ export default {
           loader.hide();
         });
     },
-    addGame: function() {
-      if (this.game) {
-        if (!this.game.file) {
+    uploadBios: function(event) {
+      let loader = this.$loading.show();
+
+      let form_file = new FormData();
+      form_file.append("file", this.$refs.biosFile.files[0]);
+      this.$http
+        .post("game/core/bios/upload/", form_file, {
+          headers: {
+            "Content-Type": "multipart/form-data",
+          },
+        })
+        .then((resp) => {
+          this.core.bios = resp.data;
+        })
+        .catch(() => {
           this.$toasted.global.error({
-            message: "Veuillez ajouter un fichier ROM.",
+            message: "Impossible d'uploader le fichier Bios.",
           });
-        } else if (this.game.name && this.game.path && this.game.description) {
+        })
+        .finally(() => {
+          loader.hide();
+        });
+    },
+    addCore: function() {
+      if (this.core) {
+        if (!this.core.file) {
+          this.$toasted.global.error({
+            message: "Veuillez ajouter un fichier core.",
+          });
+        } else if (!this.core.bios) {
+          this.$toasted.global.error({
+            message: "Veuillez ajouter un fichier bios.",
+          });
+        } else if (this.core.name && this.core.path && this.core.description) {
           let form = new FormData();
-          form.append("name", this.game.name);
-          form.append("path", this.game.path);
-          form.append("core", this.game.core.id);
-          form.append("file", this.game.file.id);
-          form.append("description", this.game.description);
-          form.append("logo", this.$refs.logo.files[0]);
+          form.append("name", this.core.name);
+          form.append("path", this.core.path);
+          form.append("bios", this.core.bios.id);
+          form.append("file", this.core.file.id);
+          form.append("description", this.core.description);
           this.$http
-            .post("game/create/", form, {
+            .post("game/core/create/", form, {
               headers: {
                 "Content-Type": "multipart/form-data",
               },
             })
             .then((resp) => {
-              this.game = resp.data;
-              this.$router.push("/games");
+              this.core = resp.data;
+              this.$router.push("/cores");
             })
             .catch((err) => {
-              console.error(err.response);
               this.$toasted.global.error({
-                message: "Impossible d'ajouter ce jeu.",
+                message: "Impossible d'ajouter ce core.",
               });
             });
         } else {

@@ -441,6 +441,8 @@ export default {
   },
   methods: {
     getTerminal: function() {
+      let loader = this.$loading.show();
+
       this.$http
         .get("terminal/" + this.$route.params.id + "/")
         .then(resp => {
@@ -461,6 +463,8 @@ export default {
             type: "danger",
             message: err
           };
+        }).finally(() => {
+          loader.hide();
         });
     },
     setPages() {

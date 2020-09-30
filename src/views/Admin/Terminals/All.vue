@@ -177,8 +177,8 @@ export default {
       errors: {
         visible: false,
         type: "danger",
-        message: ""
-      }
+        message: "",
+      },
     };
   },
   mounted: function() {
@@ -186,18 +186,21 @@ export default {
   },
   methods: {
     getTerminals: function() {
+      let loader = this.$loading.show();
+
       this.$http
         .get("terminal/")
-        .then(resp => {
+        .then((resp) => {
           this.terminals = resp.data;
         })
         .catch(() => {
-          this.errors = {
-            visible: true,
-            type: "danger",
+          this.$toasted.global.error({
             message:
-              "Impossible de récupérer la liste des terminaux. Vérifier que le serveur est opérationnelle."
-          };
+              "Impossible de récupérer la liste des terminaux. Vérifier que le serveur est opérationnelle.",
+          });
+        })
+        .finally(() => {
+          loader.hide();
         });
     },
     activateTerminal: function(index) {
@@ -207,38 +210,37 @@ export default {
       ) {
         this.$http
           .get("terminal/" + this.terminals[index].id + "/activate/")
-          .then(resp => {
+          .then((resp) => {
             this.$set(this.terminals[index], "is_active", resp.data.is_active);
+            this.$toasted.global.success({
+              message: "La borne a bien été activé.",
+            });
           })
           .catch(() => {
-            this.errors = {
-              visible: true,
-              type: "danger",
-              message: "Impossible de d'activer le terminal."
-            };
+            this.$toasted.global.error({
+              message: "Impossible d'activer la borne.",
+            });
           });
       } else {
-        this.errors = {
-          visible: true,
-          type: "danger",
-          message: "Impossible d'activer un terminal sans campagne ou sans jeu."
-        };
+        this.$toasted.global.error({
+          message: "Impossible d'activer une borne sans campagne ou sans jeu.",
+        });
       }
     },
     deactivateTerminal: function(index) {
       this.$http
         .get("terminal/" + this.terminals[index].id + "/deactivate/")
-        .then(resp => {
+        .then((resp) => {
           this.$set(this.terminals[index], "is_active", resp.data.is_active);
         })
         .catch(() => {
           this.errors = {
             visible: true,
             type: "danger",
-            message: "Impossible de désactiver le terminal."
+            message: "Impossible de désactiver le terminal.",
           };
         });
-    }
-  }
+    },
+  },
 };
 </script>
