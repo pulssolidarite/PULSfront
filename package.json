@@ -20,7 +20,7 @@
     "express": "^4.17.1",
     "helmet": "^4.1.1",
     "izitoast": "^1.4.0",
-    "jquery": "^3.4.1",
+    "jquery": "^3.5.0",
     "popper.js": "^1.16.0",
     "simple-keyboard-key-navigation": "^2.0.57",
     "vue": "^2.6.10",
