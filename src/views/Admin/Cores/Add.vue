@@ -229,7 +229,7 @@ export default {
           let form = new FormData();
           form.append("name", this.core.name);
           form.append("path", this.core.path);
-          if (this.core.bios.id) {
+          if (this.core.bios && this.core.bios.id) {
             form.append("bios", this.core.bios.id);
           }
           if (this.core.bios_path) {
