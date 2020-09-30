@@ -323,6 +323,10 @@ export default {
         let form = new FormData();
         form.append("name", this.core.name);
         form.append("path", this.core.path);
+        if(this.core.bios_path)
+        {
+          form.append("bios_path", this.core.bios_path);
+        }
         form.append("description", this.core.description);
         this.$http
           .patch("game/core/" + this.$route.params.id + "/update/", form)

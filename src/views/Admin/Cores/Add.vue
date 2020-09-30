@@ -225,15 +225,16 @@ export default {
           this.$toasted.global.error({
             message: "Veuillez ajouter un fichier core.",
           });
-        } else if (!this.core.bios) {
-          this.$toasted.global.error({
-            message: "Veuillez ajouter un fichier bios.",
-          });
         } else if (this.core.name && this.core.path && this.core.description) {
           let form = new FormData();
           form.append("name", this.core.name);
           form.append("path", this.core.path);
-          form.append("bios", this.core.bios.id);
+          if (this.core.bios.id) {
+            form.append("bios", this.core.bios.id);
+          }
+          if (this.core.bios_path) {
+            form.append("bios_path", this.core.bios_path);
+          }
           form.append("file", this.core.file.id);
           form.append("description", this.core.description);
           this.$http
