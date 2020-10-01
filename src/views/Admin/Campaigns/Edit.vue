@@ -151,7 +151,7 @@
                 </div>
               </form>
               <div class="card-body text-center">
-                <button class="btn btn-success" @click.prevent="addCampaign">
+                <button class="btn btn-success" @click.prevent="edit">
                   Enregistrer la campagne
                 </button>
               </div>
@@ -383,6 +383,43 @@
                           />
                         </div>
                       </div>
+                      <div
+                        class="col d-flex flex-column align-items-center card py-3 mr-2"
+                      >
+                        <h3>50€</h3>
+                        <img
+                          :src="campaign.photo50"
+                          width="100"
+                          height="100"
+                          style="object-fit: contain;"
+                          class="rounded my-3 mx-auto d-block"
+                        />
+                        <textarea
+                          style="font-size: 12px;"
+                          id="text50"
+                          name="text50"
+                          ref="action-photo50"
+                          class="mb-2 w-100"
+                          rows="4"
+                          v-model="campaign.text50"
+                        ></textarea>
+                        <div class="upload-btn-wrapper">
+                          <button
+                            class="btn btn-outline-danger btn-sm"
+                            ref="text-photo50"
+                          >
+                            Ajouter une photo
+                          </button>
+                          <input
+                            type="file"
+                            id="photo50"
+                            name="photo50"
+                            ref="photo50"
+                            required="required"
+                            @change="handleFileChange"
+                          />
+                        </div>
+                      </div>
                     </div>
                   </div>
                 </div>
@@ -404,8 +441,8 @@ export default {
       errors: {
         visible: false,
         type: "danger",
-        message: ""
-      }
+        message: "",
+      },
     };
   },
   mounted: function() {
@@ -415,10 +452,10 @@ export default {
     getCampaign: function() {
       this.$http
         .get("campaign/" + this.$route.params.id + "/")
-        .then(resp => {
+        .then((resp) => {
           this.campaign = resp.data;
         })
-        .catch(err => {
+        .catch((err) => {
           console.log(err.response);
         });
     },
@@ -436,19 +473,25 @@ export default {
       this.$http
         .patch("campaign/" + this.campaign.id + "/", form, {
           headers: {
-            "Content-Type": "multipart/form-data"
-          }
+            "Content-Type": "multipart/form-data",
+          },
         })
-        .then(resp => {
+        .then((resp) => {
           this.campaign = resp.data;
           this.$refs["text-" + e.target.id].classList.remove("btn-success");
           this.$refs["text-" + e.target.id].classList.add(
             "btn-outline-warning"
           );
           this.$refs["text-" + e.target.id].innerText = "Modifier la photo";
+          this.$toasted.global.success({
+            message: "La photo a été sauvegardé avec succès.",
+          });
         })
-        .catch(err => {
+        .catch((err) => {
           console.log(err.response);
+          this.$toasted.global.error({
+            message: "Impossible d'uploader la photo.",
+          });
         });
     },
     editLogo: function(e) {
@@ -460,37 +503,54 @@ export default {
       this.$http
         .patch("campaign/" + this.campaign.id + "/", form, {
           headers: {
-            "Content-Type": "multipart/form-data"
-          }
+            "Content-Type": "multipart/form-data",
+          },
         })
-        .then(resp => {
+        .then((resp) => {
           this.campaign = resp.data;
           this.$refs["text-" + e.target.id].innerText = "Enregistré";
+          this.$toasted.global.success({
+            message: "La photo a été sauvegardé avec succès.",
+          });
         })
-        .catch(err => {
+        .catch((err) => {
           console.log(err.response);
+          this.$toasted.global.error({
+            message: "Impossible d'uploader la photo.",
+          });
         });
     },
     edit: function() {
       if (this.campaign) {
         let form = new FormData();
-        form.append("author", this.$store.state.user_id);
+        form.append("author", this.$store.state.currentUser.id);
         form.append("name", this.campaign.name);
         form.append("goal_amount", this.campaign.goal_amount);
         form.append("link", this.campaign.link);
         form.append("description", this.campaign.description);
         form.append("video", this.campaign.video);
-        form.append("html_template", this.campaign.html_template);
+        form.append("text1", this.campaign.text1);
+        form.append("text5", this.campaign.text5);
+        form.append("text10", this.campaign.text10);
+        form.append("text20", this.campaign.text20);
+        form.append("text30", this.campaign.text30);
+        form.append("text50", this.campaign.text50);
         this.$http
           .patch("campaign/" + this.campaign.id + "/", form)
-          .then(resp => {
+          .then((resp) => {
             this.campaign = resp.data;
+            this.$toasted.global.success({
+              message: "Vos changements ont été sauvegardés.",
+            });
           })
-          .catch(err => {
+          .catch((err) => {
             console.log(err.response);
+            this.$toasted.global.error({
+              message: "Impossible de sauvegarder vos changements.",
+            });
           });
       }
-    }
-  }
+    },
+  },
 };
 </script>
