@@ -440,6 +440,22 @@
                       </div>
                     </div>
                   </div>
+                  <div class="col-xl-3 col-lg-3 col-md-6 col-sm-12 col-12">
+                    <div class="card">
+                      <div class="card-body">
+                        <span>
+                          <img
+                            :src="campaign.photo50"
+                            :alt="campaign.text50"
+                            class="w-100 border"
+                            style="height: 150px; object-fit: contain;"
+                          />
+                        </span>
+                        <h1 class="mt-1 mb-0 text-center">50 €</h1>
+                        <p>{{ campaign.text50 }}</p>
+                      </div>
+                    </div>
+                  </div>
                 </div>
               </div>
             </div>
@@ -464,17 +480,17 @@ export default {
       errors: {
         visible: false,
         type: "danger",
-        message: ""
+        message: "",
       },
       page: 1,
       perPage: 9,
-      pages: []
+      pages: [],
     };
   },
   watch: {
     allPayments() {
       this.setPages();
-    }
+    },
   },
   computed: {
     allPayments() {
@@ -482,7 +498,7 @@ export default {
     },
     displayedPayments() {
       return this.paginate(this.allPayments);
-    }
+    },
   },
   mounted: function() {
     this.getCampaign();
@@ -496,10 +512,10 @@ export default {
     getCampaign: function() {
       this.$http
         .get("campaign/" + this.$route.params.id + "/")
-        .then(resp => {
+        .then((resp) => {
           this.campaign = resp.data;
         })
-        .catch(err => {
+        .catch((err) => {
           console.log(err.response);
         });
     },
@@ -515,7 +531,7 @@ export default {
       let from = page * perPage - perPage;
       let to = page * perPage;
       return payments.slice(from, to);
-    }
-  }
+    },
+  },
 };
 </script>
