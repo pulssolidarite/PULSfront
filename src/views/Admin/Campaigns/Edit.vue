@@ -151,7 +151,7 @@
                 </div>
               </form>
               <div class="card-body text-center">
-                <button class="btn btn-success" @click.prevent="addCampaign">
+                <button class="btn btn-success" @click.prevent="edit">
                   Enregistrer la campagne
                 </button>
               </div>
