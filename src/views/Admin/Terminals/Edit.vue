@@ -157,6 +157,24 @@
                       >Localisation de la borne.</small
                     >
                   </div>
+                  <div class="form-group">
+                    <label for="play_timer" class="col-form-label"
+                      >Temps de jeu maximum</label
+                    >
+                    <div class="input-group input-group-sm mb-3">
+                      <div class="input-group-prepend">
+                        <span class="input-group-text"
+                          ><font-awesome-icon icon="clock"
+                        /></span>
+                      </div>
+                      <input
+                        v-model="terminal.play_timer"
+                        type="number"
+                        min="0"
+                        class="form-control"
+                      />
+                    </div>
+                  </div>
                 </div>
               </div>
             </div>
