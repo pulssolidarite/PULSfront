@@ -132,28 +132,84 @@
                     >
                   </div>
                 </div>
-                <div class="row">
-                  <div class="form-group col">
-                    <label for="name">ID de la vidéo Youtube</label>
-                    <div class="input-group mb-3">
-                      <div class="input-group-prepend">
-                        <span class="input-group-text" id="basic-addon1"
-                          ><font-awesome-icon icon="video"
-                        /></span>
-                      </div>
-                      <input
-                        type="text"
-                        class="form-control"
-                        v-model="campaign.video"
-                      />
-                    </div>
-                  </div>
-                </div>
               </form>
               <div class="card-body text-center">
                 <button class="btn btn-success" @click.prevent="edit">
                   Enregistrer la campagne
                 </button>
+              </div>
+            </div>
+            <div class="card-body border-top">
+              <h4 class="mb-0">Choix du support</h4>
+              <p>
+                Vous avez le choix entre une vidéo ou une photo pour présenter
+                l'association.
+              </p>
+              <div class="row">
+                <div class="form-group col-12">
+                  <label for="name">Type de support</label>
+                  <div class="d-block">
+                    <v-select
+                      :options="supports"
+                      :reduce="(r) => r.value"
+                      label="key"
+                      v-model="campaign.is_video"
+                    ></v-select>
+                  </div>
+                </div>
+              </div>
+              <div class="row" v-if="campaign.is_video">
+                <div class="form-group col-12">
+                  <label for="name">ID de la vidéo Youtube</label>
+                  <div class="input-group mb-3">
+                    <div class="input-group-prepend">
+                      <span class="input-group-text" id="basic-addon1"
+                        ><font-awesome-icon icon="video"
+                      /></span>
+                    </div>
+                    <input
+                      type="text"
+                      class="form-control"
+                      v-model="campaign.video"
+                    />
+                  </div>
+                </div>
+                <div class="col text-center">
+                  <button
+                    class="btn btn-success"
+                    @click.prevent="editVideoChoice"
+                  >
+                    Enregistrer le support
+                  </button>
+                </div>
+              </div>
+              <div class="row" v-else>
+                <div class="col d-flex flex-column">
+                  <img
+                    :src="campaign.featured_image"
+                    width="200"
+                    height="200"
+                    style="object-fit: contain;"
+                    class="rounded border mx-auto my-3 d-block"
+                  />
+
+                  <div class="upload-btn-wrapper text-center">
+                    <button
+                      class="btn btn-outline-danger btn-sm"
+                      ref="text-featured"
+                    >
+                      Ajouter une photo
+                    </button>
+                    <input
+                      type="file"
+                      id="featured_image"
+                      name="featured_image"
+                      ref="featured_image"
+                      required="required"
+                      @change="editFeaturedImage"
+                    />
+                  </div>
+                </div>
               </div>
             </div>
             <div class="card-body border-top">
@@ -194,6 +250,7 @@
                     </div>
                   </div>
                 </div>
+
                 <div class="row">
                   <div class="form-group col">
                     <label for="actions">Montants de donations</label>
@@ -438,6 +495,10 @@ export default {
   data: function() {
     return {
       campaign: {},
+      supports: [
+        { key: "Vidéo", value: true },
+        { key: "Photo", value: false },
+      ],
       errors: {
         visible: false,
         type: "danger",
@@ -494,6 +555,33 @@ export default {
           });
         });
     },
+    editFeaturedImage: function(e) {
+      this.$refs["text-featured"].innerText = "Enregistrement...";
+      this.$refs["text-featured"].classList.remove("btn-outline-danger");
+      this.$refs["text-featured"].classList.add("btn-success");
+      let form = new FormData();
+      form.append("is_video", this.campaign.is_video);
+      form.append("featured_image", this.$refs.featured_image.files[0]);
+      this.$http
+        .patch("campaign/" + this.campaign.id + "/", form, {
+          headers: {
+            "Content-Type": "multipart/form-data",
+          },
+        })
+        .then((resp) => {
+          this.campaign = resp.data;
+          this.$refs["text-featured"].innerText = "Enregistré";
+          this.$toasted.global.success({
+            message: "La photo a été sauvegardé avec succès.",
+          });
+        })
+        .catch((err) => {
+          console.log(err.response);
+          this.$toasted.global.error({
+            message: "Impossible d'uploader la photo.",
+          });
+        });
+    },
     editLogo: function(e) {
       this.$refs["text-" + e.target.id].innerText = "Enregistrement...";
       this.$refs["text-" + e.target.id].classList.remove("btn-outline-danger");
@@ -520,6 +608,29 @@ export default {
           });
         });
     },
+    editVideoChoice: function() {
+      if (this.campaign) {
+        let form = new FormData();
+        form.append("is_video", this.campaign.is_video);
+        if (this.campaign.is_video) {
+          form.append("video", this.campaign.video);
+        }
+        this.$http
+          .patch("campaign/" + this.campaign.id + "/", form)
+          .then((resp) => {
+            this.campaign = resp.data;
+            this.$toasted.global.success({
+              message: "Vos changements ont été sauvegardés.",
+            });
+          })
+          .catch((err) => {
+            console.log(err.response);
+            this.$toasted.global.error({
+              message: "Impossible de sauvegarder vos changements.",
+            });
+          });
+      }
+    },
     edit: function() {
       if (this.campaign) {
         let form = new FormData();
@@ -528,7 +639,10 @@ export default {
         form.append("goal_amount", this.campaign.goal_amount);
         form.append("link", this.campaign.link);
         form.append("description", this.campaign.description);
-        form.append("video", this.campaign.video);
+        form.append("is_video", this.campaign.is_video);
+        if (this.campaign.is_video) {
+          form.append("video", this.campaign.video);
+        }
         form.append("text1", this.campaign.text1);
         form.append("text5", this.campaign.text5);
         form.append("text10", this.campaign.text10);

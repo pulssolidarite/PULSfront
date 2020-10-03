@@ -151,9 +151,12 @@
                           /></router-link>
                         </td>
                         <td>
-                          <router-link to="/" class="text-danger"
+                          <a
+                            href=""
+                            @click.prevent="deleteTerminal(index)"
+                            class="text-danger"
                             ><font-awesome-icon icon="trash-alt"
-                          /></router-link>
+                          /></a>
                         </td>
                       </tr>
                     </tbody>
@@ -239,6 +242,21 @@ export default {
             type: "danger",
             message: "Impossible de désactiver le terminal.",
           };
+        });
+    },
+    deleteTerminal: function(index) {
+      this.$http
+        .delete("terminal/" + this.terminals[index].id + "/")
+        .then(() => {
+          this.$delete(this.terminals, index);
+          this.$toasted.global.success({
+            message: "Le terminal a été supprimé.",
+          });
+        })
+        .catch(() => {
+          this.$toasted.global.error({
+            message: "Impossible de supprimer ce terminal.",
+          });
         });
     },
   },

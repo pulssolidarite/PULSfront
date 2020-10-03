@@ -258,16 +258,9 @@
                   <div class="col" v-if="campaigns">
                     <label for="campaign"
                       >Campagnes actives :
-                      <span
-                        :class="[
-                          terminal.campaigns.length > maxCampaigns ||
-                          terminal.campaigns.length == 0
-                            ? 'text-danger'
-                            : '',
-                          'font-weight-bold',
-                        ]"
+                      <span :class="['font-weight-bold']"
                         >({{ terminal.campaigns.length }}/{{
-                          maxCampaigns
+                          campaigns.length
                         }})</span
                       ></label
                     >
@@ -299,12 +292,12 @@
                         <span class="checkbox-icon">
                           <img
                             :src="campaign.logo"
-                            height="70"
+                            class="img-fluid"
                             :alt="campaign.name"
                           />
                         </span>
                         <h5 class="mt-2">{{ campaign.name }}</h5>
-                        <p class="lead">
+                        <p class="lead px-1">
                           {{ campaign.collected }}/{{ campaign.goal_amount }} €
                         </p>
                       </label>
@@ -315,15 +308,8 @@
                   <div class="col" v-if="games">
                     <label for="game"
                       >Jeux actifs :
-                      <span
-                        :class="[
-                          terminal.games.length > maxGames ||
-                          terminal.games.length == 0
-                            ? 'text-danger'
-                            : '',
-                          'font-weight-bold',
-                        ]"
-                        >({{ terminal.games.length }}/{{ maxGames }})</span
+                      <span :class="['font-weight-bold']"
+                        >({{ terminal.games.length }}/{{ games.length }})</span
                       ></label
                     >
                     <div class="row form-group">
@@ -389,8 +375,6 @@ export default {
       customers: {},
       campaigns: {},
       games: {},
-      maxGames: this.$store.state.maxGames,
-      maxCampaigns: this.$store.state.maxCampaigns,
       errors: {
         visible: false,
         type: "danger",
@@ -456,10 +440,8 @@ export default {
     },
     selectCampaign: function(campaign) {
       if (!this.campaignExists(campaign.id)) {
-        if (this.terminal.campaigns.length <= this.maxCampaigns) {
-          // Only if not max campaigns
-          this.terminal.campaigns.push(campaign.id);
-        }
+        // Only if not max campaigns
+        this.terminal.campaigns.push(campaign.id);
       } else {
         for (let index = 0; index < this.terminal.campaigns.length; index++) {
           const element = this.terminal.campaigns[index];
@@ -479,9 +461,7 @@ export default {
     },
     selectGame: function(game) {
       if (!this.gameExists(game.id)) {
-        if (this.terminal.games.length <= this.maxGames) {
-          this.terminal.games.push(game.id);
-        }
+        this.terminal.games.push(game.id);
       } else {
         for (let index = 0; index < this.terminal.games.length; index++) {
           const element = this.terminal.games[index];
@@ -527,27 +507,33 @@ export default {
                   });
                   this.$router.push("/terminals");
                 })
-                .catch(() => {
-                  this.$toasted.global.error({
-                    message: "Erreur dans l'enregistrement du terminal.",
+                .catch((err) => {
+                  if (err.response.data) {
+                    Object.values(err.response.data).forEach((element) => {
+                      this.$toasted.global.error({ message: element });
+                    });
+                  } else {
+                    this.$toasted.global.error({
+                      message: "Erreur dans l'enregistrement du terminal.",
+                    });
+                  }
+
+                  // We also delete the newly created user
+                  this.$http.delete("user/" + this.user.id + "/").catch(() => {
+                    this.$toasted.global.error({
+                      message:
+                        "Impossible de supprimer l'utilisateur tout juste créé. Vérifiez si le serveur est opérationnelle.",
+                    });
                   });
                 });
-            } else {
-              this.errors = {
-                visible: true,
-                type: "danger",
-                message:
-                  "Impossible d'enregistrer cet utilisateur, vérifier l'username et le mot de passe.",
-              };
             }
           })
           .catch((err) => {
-            this.errors = {
-              visible: true,
-              type: "danger",
-              message: err,
-            };
-            console.log(err);
+            if (err.response.data) {
+              Object.values(err.response.data).forEach((element) => {
+                this.$toasted.global.error({ message: element });
+              });
+            }
           });
       } else if (this.customer && this.user && this.terminal) {
         this.$http
