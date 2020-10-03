@@ -43,6 +43,7 @@ import {
   faMapPin,
   faUndo,
   faLock,
+  faClock,
 } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/vue-fontawesome";
 import Alert from "@/components/Alert.vue";
@@ -82,7 +83,8 @@ library.add(
   faEnvelope,
   faMapPin,
   faUndo,
-  faLock
+  faLock,
+  faClock
 );
 Vue.component("font-awesome-icon", FontAwesomeIcon);
 

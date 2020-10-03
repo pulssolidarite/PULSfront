@@ -121,13 +121,17 @@
                   </div>
                 </div>
                 <div class="row">
-                  <div class="form-group col">
+                  <div class="form-group col-12">
                     <label for="name">ID de la vidéo Youtube</label>
-                    <div class="input-group mb-3">
+                    <div class="input-group">
                       <div class="input-group-prepend">
-                        <span class="input-group-text" id="basic-addon1"
-                          ><font-awesome-icon icon="video"
-                        /></span>
+                        <div class="input-group-text">
+                          <input
+                            type="checkbox"
+                            aria-label="Checkbox for following text input"
+                            v-model="campaign.is_video"
+                          />
+                        </div>
                       </div>
                       <input
                         type="text"
@@ -135,6 +139,11 @@
                         v-model="campaign.video"
                       />
                     </div>
+                    <small class="form-text text-muted"
+                      >Sélectionner la checkbox si vous voulez activer la vidéo
+                      youtube. Insérer uniquement l'ID de la vidéo, non pas le
+                      lien en entier.</small
+                    >
                   </div>
                 </div>
               </form>
@@ -316,6 +325,36 @@
                           />
                         </div>
                       </div>
+                      <div
+                        class="col d-flex flex-column align-items-center card py-3 mr-2"
+                      >
+                        <h3>50€</h3>
+                        <textarea
+                          style="font-size: 12px;"
+                          id="text30"
+                          name="text30"
+                          ref="action-photo50"
+                          class="mb-2 w-100"
+                          rows="4"
+                          v-model="campaign.text50"
+                        ></textarea>
+                        <div class="upload-btn-wrapper">
+                          <button
+                            class="btn btn-outline-danger btn-sm"
+                            ref="text-photo50"
+                          >
+                            Ajouter une photo
+                          </button>
+                          <input
+                            type="file"
+                            id="photo50"
+                            name="photo50"
+                            ref="photo50"
+                            required="required"
+                            @change="handleFileChange"
+                          />
+                        </div>
+                      </div>
                     </div>
                   </div>
                 </div>
@@ -338,7 +377,13 @@ export default {
   name: "AddCampaign",
   data: function() {
     return {
-      campaign: {},
+      campaign: {
+        is_video: true,
+      },
+      supports: [
+        { key: "Vidéo", value: true },
+        { key: "Photo", value: false },
+      ],
       errors: {
         visible: false,
         type: "danger",
@@ -361,18 +406,21 @@ export default {
         form.append("goal_amount", this.campaign.goal_amount);
         form.append("link", this.campaign.link);
         form.append("description", this.campaign.description);
-        form.append("video", this.campaign.video);
         form.append("logo", this.$refs.logo.files[0]);
+        form.append("is_video", this.campaign.is_video);
+        form.append("video", this.campaign.video);
         form.append("photo1", this.$refs.photo1.files[0]);
         form.append("photo5", this.$refs.photo5.files[0]);
         form.append("photo10", this.$refs.photo10.files[0]);
         form.append("photo20", this.$refs.photo20.files[0]);
         form.append("photo30", this.$refs.photo30.files[0]);
+        form.append("photo50", this.$refs.photo50.files[0]);
         form.append("text1", this.campaign.text1);
         form.append("text5", this.campaign.text5);
         form.append("text10", this.campaign.text10);
         form.append("text20", this.campaign.text20);
         form.append("text30", this.campaign.text30);
+        form.append("text50", this.campaign.text50);
         this.$http
           .post("campaign/", form, {
             headers: {
@@ -382,6 +430,9 @@ export default {
           .then((resp) => {
             this.campaign = resp.data;
             this.$router.push("/campaigns");
+            this.$toasted.global.success({
+              message: "La campagne a été ajouté.",
+            });
           })
           .catch((err) => {
             console.error(err.response);

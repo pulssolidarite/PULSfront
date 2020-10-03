@@ -15,13 +15,6 @@ export default {
           });
         }
 
-        // if coming from Login.vue
-        if (error.config.url.includes("/auth/token/")) {
-          return new Promise((resolve, reject) => {
-            reject(error);
-          });
-        }
-
         // Logout user if token refresh didn't work or user is disabled
         if (error.config.url.includes("/auth/token/refresh/")) {
           store.dispatch("logout").then(() => {
@@ -30,8 +23,14 @@ export default {
             });
           });
           delete axios.defaults.headers.common["Authorization"];
-          router.push("/login");
 
+          return new Promise((resolve, reject) => {
+            reject(error);
+          });
+        }
+
+        // if coming from Login.vue
+        if (error.config.url.includes("/auth/token/")) {
           return new Promise((resolve, reject) => {
             reject(error);
           });

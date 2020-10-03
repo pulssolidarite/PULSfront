@@ -133,13 +133,17 @@
                   </div>
                 </div>
                 <div class="row">
-                  <div class="form-group col">
+                  <div class="form-group col-12">
                     <label for="name">ID de la vidéo Youtube</label>
-                    <div class="input-group mb-3">
+                    <div class="input-group">
                       <div class="input-group-prepend">
-                        <span class="input-group-text" id="basic-addon1"
-                          ><font-awesome-icon icon="video"
-                        /></span>
+                        <div class="input-group-text">
+                          <input
+                            type="checkbox"
+                            aria-label="Checkbox for following text input"
+                            v-model="campaign.is_video"
+                          />
+                        </div>
                       </div>
                       <input
                         type="text"
@@ -147,6 +151,11 @@
                         v-model="campaign.video"
                       />
                     </div>
+                    <small class="form-text text-muted"
+                      >Sélectionner la checkbox si vous voulez activer la vidéo
+                      youtube. Insérer uniquement l'ID de la vidéo, non pas le
+                      lien en entier.</small
+                    >
                   </div>
                 </div>
               </form>
@@ -194,6 +203,7 @@
                     </div>
                   </div>
                 </div>
+
                 <div class="row">
                   <div class="form-group col">
                     <label for="actions">Montants de donations</label>
@@ -438,6 +448,10 @@ export default {
   data: function() {
     return {
       campaign: {},
+      supports: [
+        { key: "Vidéo", value: true },
+        { key: "Photo", value: false },
+      ],
       errors: {
         visible: false,
         type: "danger",
@@ -528,6 +542,7 @@ export default {
         form.append("goal_amount", this.campaign.goal_amount);
         form.append("link", this.campaign.link);
         form.append("description", this.campaign.description);
+        form.append("is_video", this.campaign.is_video);
         form.append("video", this.campaign.video);
         form.append("text1", this.campaign.text1);
         form.append("text5", this.campaign.text5);
