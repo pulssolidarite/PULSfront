@@ -84,32 +84,17 @@
                   </div>
                 </div>
                 <div class="row">
-                  <div class="form-group col-md-6 col-12">
+                  <div class="form-group col-12">
                     <label for="sales_type">Type de vente</label>
                     <select class="custom-select" v-model="customer.sales_type">
                       <option value="A" :selected="customer.sales_type == 'A'"
                         >Achat</option
                       >
+                      <option value="S" :selected="customer.sales_type == 'S'"
+                        >Abonnement</option
+                      >
                       <option value="L" :selected="customer.sales_type == 'L'"
                         >Location</option
-                      >
-                    </select>
-                  </div>
-                  <div class="form-group col-md-6 col-12">
-                    <label for="sales_type">Contrat de maintenance</label>
-                    <select
-                      class="custom-select"
-                      v-model="customer.maintenance_type"
-                    >
-                      <option
-                        value="option1"
-                        :selected="customer.maintenance_type == 'option1'"
-                        >Option 1</option
-                      >
-                      <option
-                        value="option2"
-                        :selected="customer.maintenance_type == 'option2'"
-                        >Option 2</option
                       >
                     </select>
                   </div>
@@ -137,8 +122,8 @@ export default {
       errors: {
         visible: false,
         type: "danger",
-        message: ""
-      }
+        message: "",
+      },
     };
   },
   mounted: function() {
@@ -146,7 +131,7 @@ export default {
   },
   methods: {
     getCustomer: function() {
-      this.$http.get("customer/" + this.$route.params.id + "/").then(resp => {
+      this.$http.get("customer/" + this.$route.params.id + "/").then((resp) => {
         this.customer = resp.data;
       });
     },
@@ -160,10 +145,10 @@ export default {
           this.errors = {
             visible: true,
             type: "danger",
-            message: "Erreur dans l'enregistrement du client."
+            message: "Erreur dans l'enregistrement du client.",
           };
         });
-    }
-  }
+    },
+  },
 };
 </script>

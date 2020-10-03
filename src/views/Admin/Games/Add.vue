@@ -103,6 +103,32 @@
                     >
                   </div>
                 </div>
+                <div class="row">
+                  <div class="form-group col-12">
+                    <label for="name">ID de la vidéo Youtube</label>
+                    <div class="input-group">
+                      <div class="input-group-prepend">
+                        <div class="input-group-text">
+                          <input
+                            type="checkbox"
+                            aria-label="Checkbox for following text input"
+                            v-model="game.is_video"
+                          />
+                        </div>
+                      </div>
+                      <input
+                        type="text"
+                        class="form-control"
+                        v-model="game.video"
+                      />
+                    </div>
+                    <small class="form-text text-muted"
+                      >Sélectionner la checkbox si vous voulez activer la vidéo
+                      youtube. Insérer uniquement l'ID de la vidéo, non pas le
+                      lien en entier.</small
+                    >
+                  </div>
+                </div>
               </form>
             </div>
             <div class="card-body border-top">
@@ -236,6 +262,8 @@ export default {
           form.append("file", this.game.file.id);
           form.append("description", this.game.description);
           form.append("logo", this.$refs.logo.files[0]);
+          form.append("is_video", this.game.is_video);
+          form.append("video", this.game.video);
           this.$http
             .post("game/create/", form, {
               headers: {
