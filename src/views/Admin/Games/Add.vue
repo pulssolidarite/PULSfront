@@ -132,6 +132,113 @@
               </form>
             </div>
             <div class="card-body border-top">
+              <h4 class="mb-0">Contrôles</h4>
+              <p>
+                Indiquer les touches et autres contrôles utiles lors d'une
+                partie.
+              </p>
+              <div class="row mb-3">
+                <div class="col-12 col-md-6">
+                  <label for="name">Joystick haut</label>
+                  <input
+                    type="text"
+                    class="form-control"
+                    aria-describedby="nameHelp"
+                    v-model="game.j_up"
+                  />
+                </div>
+                <div class="col-12 col-md-6">
+                  <label for="name">Joystick bas</label>
+                  <input
+                    type="text"
+                    class="form-control"
+                    aria-describedby="nameHelp"
+                    v-model="game.j_down"
+                  />
+                </div>
+              </div>
+              <div class="row mb-5">
+                <div class="col-12 col-md-6">
+                  <label for="name">Joystick gauche</label>
+                  <input
+                    type="text"
+                    class="form-control"
+                    aria-describedby="nameHelp"
+                    v-model="game.j_right"
+                  />
+                </div>
+                <div class="col-12 col-md-6">
+                  <label for="name">Joystick droite</label>
+                  <input
+                    type="text"
+                    class="form-control"
+                    aria-describedby="nameHelp"
+                    v-model="game.j_left"
+                  />
+                </div>
+              </div>
+              <div class="row mb-3">
+                <div class="col-12 col-md-6">
+                  <label for="name">Bouton X</label>
+                  <input
+                    type="text"
+                    class="form-control"
+                    aria-describedby="nameHelp"
+                    v-model="game.btn_x"
+                  />
+                </div>
+                <div class="col-12 col-md-6">
+                  <label for="name">Bouton Y</label>
+                  <input
+                    type="text"
+                    class="form-control"
+                    aria-describedby="nameHelp"
+                    v-model="game.btn_y"
+                  />
+                </div>
+              </div>
+              <div class="row mb-3">
+                <div class="col-12 col-md-6">
+                  <label for="name">Bouton A</label>
+                  <input
+                    type="text"
+                    class="form-control"
+                    aria-describedby="nameHelp"
+                    v-model="game.btn_a"
+                  />
+                </div>
+                <div class="col-12 col-md-6">
+                  <label for="name">Bouton B</label>
+                  <input
+                    type="text"
+                    class="form-control"
+                    aria-describedby="nameHelp"
+                    v-model="game.btn_b"
+                  />
+                </div>
+              </div>
+              <div class="row">
+                <div class="col-12 col-md-6">
+                  <label for="name">Bouton L</label>
+                  <input
+                    type="text"
+                    class="form-control"
+                    aria-describedby="nameHelp"
+                    v-model="game.btn_l"
+                  />
+                </div>
+                <div class="col-12 col-md-6">
+                  <label for="name">Bouton R</label>
+                  <input
+                    type="text"
+                    class="form-control"
+                    aria-describedby="nameHelp"
+                    v-model="game.btn_r"
+                  />
+                </div>
+              </div>
+            </div>
+            <div class="card-body border-top">
               <h4 class="mb-0">Médias</h4>
               <p>
                 Il est important de compresser les images au maximum avant de
@@ -263,7 +370,16 @@ export default {
           form.append("description", this.game.description);
           form.append("logo", this.$refs.logo.files[0]);
           form.append("is_video", this.game.is_video);
-          form.append("video", this.game.video);
+          form.append("j_up", this.game.j_up);
+          form.append("j_down", this.game.j_down);
+          form.append("j_right", this.game.j_right);
+          form.append("j_left", this.game.j_left);
+          form.append("btn_x", this.game.btn_x);
+          form.append("btn_y", this.game.btn_y);
+          form.append("btn_a", this.game.btn_a);
+          form.append("btn_b", this.game.btn_b);
+          form.append("btn_l", this.game.btn_l);
+          form.append("btn_r", this.game.btn_r);
           this.$http
             .post("game/create/", form, {
               headers: {
