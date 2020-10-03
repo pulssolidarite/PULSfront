@@ -120,6 +120,22 @@
                     >
                   </div>
                 </div>
+                <div class="row mb-2">
+                  <div class="col-12 col-md-6">
+                    <label for="name">Type de jeu</label>
+                    <v-select :options="types" v-model="game.type"></v-select>
+                  </div>
+                  <div class="col-12 col-md-6">
+                    <label for="name">Nombre de joueurs</label>
+                    <input
+                      type="number"
+                      min="0"
+                      class="form-control"
+                      aria-describedby="nameHelp"
+                      v-model="game.nb_players"
+                    />
+                  </div>
+                </div>
                 <div class="row">
                   <div class="form-group col-12">
                     <label for="name">ID de la vidéo Youtube</label>
@@ -365,6 +381,7 @@ export default {
     return {
       game: {},
       cores: [],
+      types: ["Unique", "Plateforme", "Puzzle", "Combat", "Course & Sport"],
       errors: {
         visible: false,
         type: "danger",
@@ -496,6 +513,8 @@ export default {
         form.append("btn_r", this.game.btn_r);
         form.append("btn_start", this.game.btn_start);
         form.append("btn_select", this.game.btn_select);
+        form.append("type", this.game.type);
+        form.append("nb_players", this.game.nb_players);
         this.$http
           .patch("game/" + this.$route.params.id + "/update/", form)
           .then((resp) => {
