@@ -69,7 +69,6 @@
                         <th class="border-0">Entreprise</th>
                         <th class="border-0">Contact</th>
                         <th class="border-0">Type de contrat</th>
-                        <th class="border-0">Type de maintenance</th>
                         <th class="border-0"></th>
                         <th class="border-0"></th>
                       </tr>
@@ -91,10 +90,6 @@
                           Achat
                         </td>
                         <td v-else>Location</td>
-                        <td v-if="customer.maintenance_type == 1">
-                          Option 1
-                        </td>
-                        <td v-else>Option 2</td>
                         <td>
                           <a
                             href=""

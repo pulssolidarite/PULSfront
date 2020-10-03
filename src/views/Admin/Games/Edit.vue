@@ -234,7 +234,7 @@
                   />
                 </div>
               </div>
-              <div class="row">
+              <div class="row mb-5">
                 <div class="col-12 col-md-6">
                   <label for="name">Bouton L</label>
                   <input
@@ -251,6 +251,26 @@
                     class="form-control"
                     aria-describedby="nameHelp"
                     v-model="game.btn_r"
+                  />
+                </div>
+              </div>
+              <div class="row">
+                <div class="col-12 col-md-6">
+                  <label for="name">Bouton Start</label>
+                  <input
+                    type="text"
+                    class="form-control"
+                    aria-describedby="nameHelp"
+                    v-model="game.btn_start"
+                  />
+                </div>
+                <div class="col-12 col-md-6">
+                  <label for="name">Bouton Select</label>
+                  <input
+                    type="text"
+                    class="form-control"
+                    aria-describedby="nameHelp"
+                    v-model="game.btn_select"
                   />
                 </div>
               </div>
@@ -474,11 +494,16 @@ export default {
         form.append("btn_b", this.game.btn_b);
         form.append("btn_l", this.game.btn_l);
         form.append("btn_r", this.game.btn_r);
+        form.append("btn_start", this.game.btn_start);
+        form.append("btn_select", this.game.btn_select);
         this.$http
           .patch("game/" + this.$route.params.id + "/update/", form)
           .then((resp) => {
             this.game = resp.data;
             this.$router.push("/games");
+            this.$toasted.global.success({
+              message: "Le jeu a été mis à jour.",
+            });
           })
           .catch(() => {
             this.$toasted.global.error({
