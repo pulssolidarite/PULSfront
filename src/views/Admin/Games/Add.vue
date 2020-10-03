@@ -103,6 +103,22 @@
                     >
                   </div>
                 </div>
+                <div class="row mb-2">
+                  <div class="col-12 col-md-6">
+                    <label for="name">Type de jeu</label>
+                    <v-select :options="types" v-model="game.type"></v-select>
+                  </div>
+                  <div class="col-12 col-md-6">
+                    <label for="name">Nombre de joueurs</label>
+                    <input
+                      type="number"
+                      min="0"
+                      class="form-control"
+                      aria-describedby="nameHelp"
+                      v-model="game.nb_players"
+                    />
+                  </div>
+                </div>
                 <div class="row">
                   <div class="form-group col-12">
                     <label for="name">ID de la vidéo Youtube</label>
@@ -257,6 +273,20 @@
                   />
                 </div>
               </div>
+              <div class="row">
+                <div class="col-12 col-md-6">
+                  <label for="name">Type de jeu</label>
+                </div>
+                <div class="col-12 col-md-6">
+                  <label for="name">Bouton Select</label>
+                  <input
+                    type="number"
+                    class="form-control"
+                    aria-describedby="nameHelp"
+                    v-model="game.btn_select"
+                  />
+                </div>
+              </div>
             </div>
             <div class="card-body border-top">
               <h4 class="mb-0">Médias</h4>
@@ -324,6 +354,7 @@ export default {
         type: "danger",
         message: "",
       },
+      types: ["Unique", "Plateforme", "Puzzle", "Combat", "Course & Sport"],
     };
   },
   created: function() {
@@ -402,6 +433,8 @@ export default {
           form.append("btn_r", this.game.btn_r);
           form.append("btn_start", this.game.btn_start);
           form.append("btn_select", this.game.btn_select);
+          form.append("type", this.game.type);
+          form.append("nb_players", this.game.nb_players);
           this.$http
             .post("game/create/", form, {
               headers: {
