@@ -225,7 +225,7 @@
                           name="text1"
                           class="mb-2 w-100"
                           rows="4"
-                          ref="text1"
+                          ref="action-photo1"
                           v-model="campaign.text1"
                         ></textarea>
                         <div class="upload-btn-wrapper">

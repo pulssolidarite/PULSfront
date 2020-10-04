@@ -246,16 +246,16 @@ export default {
     },
     deleteTerminal: function(index) {
       this.$http
-        .delete("terminal/" + this.terminals[index].id + "/")
+        .get("terminal/" + this.terminals[index].id + "/archive/")
         .then(() => {
           this.$delete(this.terminals, index);
           this.$toasted.global.success({
-            message: "Le terminal a été supprimé.",
+            message: "Le terminal a été archivé.",
           });
         })
         .catch(() => {
           this.$toasted.global.error({
-            message: "Impossible de supprimer ce terminal.",
+            message: "Impossible d'archiver ce terminal.",
           });
         });
     },
