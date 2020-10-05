@@ -354,7 +354,7 @@ export default {
         type: "danger",
         message: "",
       },
-      types: ["Unique", "Plateforme", "Puzzle", "Combat", "Course & Sport"],
+      types: ["Unique", "Plateforme", "Puzzle", "Combat", "Course", "Shoot", "Sport", "Tir"],
     };
   },
   created: function() {

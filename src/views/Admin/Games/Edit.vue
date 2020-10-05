@@ -381,7 +381,7 @@ export default {
     return {
       game: {},
       cores: [],
-      types: ["Unique", "Plateforme", "Puzzle", "Combat", "Course & Sport"],
+      types: ["Unique", "Plateforme", "Puzzle", "Combat", "Course", "Shoot", "Sport", "Tir"],
       errors: {
         visible: false,
         type: "danger",
