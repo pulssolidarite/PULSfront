@@ -185,7 +185,7 @@
                 <div class="col" v-if="terminal.campaigns">
                   <label for="campaign"
                     >Campagnes actives :
-                    <span
+                    <!-- <span
                       :class="[
                         terminal.campaigns.length > maxCampaigns ||
                         terminal.campaigns.length == 0
@@ -196,7 +196,8 @@
                       >({{ terminal.campaigns.length }}/{{
                         maxCampaigns
                       }})</span
-                    ></label
+                    > -->
+                    </label
                   >
                   <div class="row form-group">
                     <label
@@ -242,7 +243,7 @@
                 <div class="col" v-if="terminal.games">
                   <label for="game"
                     >Jeux actifs :
-                    <span
+                    <!-- <span
                       :class="[
                         terminal.games.length > maxGames ||
                         terminal.games.length == 0
@@ -251,7 +252,8 @@
                         'font-weight-bold',
                       ]"
                       >({{ terminal.games.length }}/{{ maxGames }})</span
-                    ></label
+                    > -->
+                    </label
                   >
                   <div class="row form-group">
                     <label
@@ -310,8 +312,8 @@ export default {
       games: {},
       user: {},
       customer: {},
-      maxGames: this.$store.state.maxGames,
-      maxCampaigns: this.$store.state.maxCampaigns,
+      // maxGames: this.$store.state.maxGames,
+      // maxCampaigns: this.$store.state.maxCampaigns,
       errors: {
         visible: false,
         type: "danger",
@@ -365,10 +367,10 @@ export default {
     },
     selectCampaign: function(campaign) {
       if (!this.campaignExists(campaign.id)) {
-        if (this.terminal.campaigns.length <= this.maxCampaigns) {
+        // if (this.terminal.campaigns.length <= this.maxCampaigns) {
           // Only if not max campaigns
           this.terminal.campaigns.push(campaign);
-        }
+        // }
       } else {
         for (let index = 0; index < this.terminal.campaigns.length; index++) {
           const element = this.terminal.campaigns[index];
@@ -388,9 +390,9 @@ export default {
     },
     selectGame: function(game) {
       if (!this.gameExists(game.id)) {
-        if (this.terminal.games.length <= this.maxGames) {
+        // if (this.terminal.games.length <= this.maxGames) {
           this.terminal.games.push(game);
-        }
+        // }
       } else {
         for (let index = 0; index < this.terminal.games.length; index++) {
           const element = this.terminal.games[index];
