@@ -273,20 +273,6 @@
                   />
                 </div>
               </div>
-              <div class="row">
-                <div class="col-12 col-md-6">
-                  <label for="name">Type de jeu</label>
-                </div>
-                <div class="col-12 col-md-6">
-                  <label for="name">Bouton Select</label>
-                  <input
-                    type="number"
-                    class="form-control"
-                    aria-describedby="nameHelp"
-                    v-model="game.btn_select"
-                  />
-                </div>
-              </div>
             </div>
             <div class="card-body border-top">
               <h4 class="mb-0">Médias</h4>
