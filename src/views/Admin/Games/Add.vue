@@ -175,7 +175,7 @@
               </div>
               <div class="row mb-5">
                 <div class="col-12 col-md-6">
-                  <label for="name">Joystick gauche</label>
+                  <label for="name">Joystick droit</label>
                   <input
                     type="text"
                     class="form-control"
@@ -184,7 +184,7 @@
                   />
                 </div>
                 <div class="col-12 col-md-6">
-                  <label for="name">Joystick droite</label>
+                  <label for="name">Joystick gauche</label>
                   <input
                     type="text"
                     class="form-control"
@@ -332,7 +332,21 @@ export default {
   name: "AddGame",
   data: function() {
     return {
-      game: {},
+      game: {
+        is_video: false,
+        j_up: "Haut",
+        j_down: "Bas",
+        j_right: "Droite",
+        j_left: "Gauche",
+        btn_x: "Rien",
+        btn_y: "Rien",
+        btn_a: "Rien",
+        btn_b: "Rien",
+        btn_l: "Rien",
+        btn_r: "Rien",
+        btn_start: "Start",
+        btn_select: "Select",
+      },
       file: {},
       cores: [],
       errors: {
@@ -340,7 +354,16 @@ export default {
         type: "danger",
         message: "",
       },
-      types: ["Unique", "Plateforme", "Puzzle", "Combat", "Course", "Shoot", "Sport", "Tir"],
+      types: [
+        "Unique",
+        "Plateforme",
+        "Puzzle",
+        "Combat",
+        "Course",
+        "Shoot",
+        "Sport",
+        "Tir",
+      ],
     };
   },
   created: function() {

@@ -17,11 +17,7 @@ export default {
 
         // Logout user if token refresh didn't work or user is disabled
         if (error.config.url.includes("/auth/token/refresh/")) {
-          store.dispatch("logout").then(() => {
-            Vue.toasted.global.success({
-              message: "Veuillez vous reconnecter.",
-            });
-          });
+          store.dispatch("logout").then(() => {});
           delete axios.defaults.headers.common["Authorization"];
 
           return new Promise((resolve, reject) => {
