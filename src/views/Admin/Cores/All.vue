@@ -149,7 +149,7 @@ export default {
       this.$router.push("/core/" + id + "/edit");
     },
     deleteCore: function(id) {
-      this.$http.delete("/core/" + id + "/").then(() => {
+      this.$http.delete("game/core/" + id + "/").then(() => {
         this.getCores();
       });
     },
