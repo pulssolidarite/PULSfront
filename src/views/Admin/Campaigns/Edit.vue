@@ -208,7 +208,8 @@
                   <div class="form-group col">
                     <label for="actions">Montants de donations</label>
                     <div class="d-flex justify-content-between">
-                        <button @click="deleteStep">x</button>
+                      <div class="col d-flex flex-column align-items-center card py-3 mr-2">
+                        <button class="btn btn-outline-danger btn-sm" @click="deleteStep">x</button>
                         <label>Image</label>
                         <img
                           :src="campaign.photo1"
