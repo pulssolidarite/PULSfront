@@ -208,10 +208,9 @@
                   <div class="form-group col">
                     <label for="actions">Montants de donations</label>
                     <div class="d-flex justify-content-between">
-                      <div
-                        class="col d-flex flex-column align-items-center card py-3 mr-2"
-                      >
-                        <h3>1€</h3>
+                      <div class="col d-flex flex-column align-items-center card py-3 mr-2">
+                        <div @click="deleteStep">x</div>
+                        <label>Image</label>
                         <img
                           :src="campaign.photo1"
                           width="100"
@@ -219,6 +218,7 @@
                           style="object-fit: contain;"
                           class="rounded my-3 mx-auto d-block"
                         />
+                        <label>Text</label>
                         <textarea
                           style="font-size: 12px;"
                           id="text1"
@@ -229,10 +229,7 @@
                           v-model="campaign.text1"
                         ></textarea>
                         <div class="upload-btn-wrapper">
-                          <button
-                            class="btn btn-outline-danger btn-sm"
-                            ref="text-photo1"
-                          >
+                          <button class="btn btn-outline-danger btn-sm" ref="text-photo1">
                             Ajouter une photo
                           </button>
                           <input
@@ -243,6 +240,7 @@
                             required="required"
                             @change="handleFileChange"
                           />
+                          <label>Montant</label>
                           <input
                             type="number"
                             id="amount"
@@ -617,6 +615,12 @@ export default {
             });
           });
       }
+    },
+    addStep: function(){
+
+    },
+    deleteStep: function(){
+
     },
   },
 };
