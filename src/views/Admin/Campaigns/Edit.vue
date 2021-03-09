@@ -208,8 +208,7 @@
                   <div class="form-group col">
                     <label for="actions">Montants de donations</label>
                     <div class="d-flex justify-content-between">
-                      <div class="col d-flex flex-column align-items-center card py-3 mr-2">
-                        <div @click="deleteStep">x</div>
+                        <button @click="deleteStep">x</button>
                         <label>Image</label>
                         <img
                           :src="campaign.photo1"
@@ -240,14 +239,14 @@
                             required="required"
                             @change="handleFileChange"
                           />
-                          <label>Montant</label>
+                          <label>Montant </label>
                           <input
                             type="number"
                             id="amount"
                             name="amount"
                             ref="amount"
                             required="required"
-                          />
+                          />€
                         </div>
                       </div>
                       <button @click="addStep"><h1>+</h1></button>
