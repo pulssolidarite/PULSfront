@@ -206,7 +206,45 @@
 
                 <div class="row">
                   <div class="form-group col">
-                    <div class="d-flex">
+                    <label for="actions">Montants de donations</label>
+                    <div class="d-flex justify-content-between">
+                      <div
+                        class="col d-flex flex-column align-items-center card py-3 mr-2"
+                      >
+                        <h3>1€</h3>
+                        <img
+                          :src="campaign.photo1"
+                          width="100"
+                          height="100"
+                          style="object-fit: contain;"
+                          class="rounded my-3 mx-auto d-block"
+                        />
+                        <textarea
+                          style="font-size: 12px;"
+                          id="text1"
+                          name="text1"
+                          class="mb-2 w-100"
+                          rows="4"
+                          ref="action-photo1"
+                          v-model="campaign.text1"
+                        ></textarea>
+                        <div class="upload-btn-wrapper">
+                          <button
+                            class="btn btn-outline-danger btn-sm"
+                            ref="text-photo1"
+                          >
+                            Ajouter une photo
+                          </button>
+                          <input
+                            type="file"
+                            id="photo1"
+                            name="photo1"
+                            ref="photo1"
+                            required="required"
+                            @change="handleFileChange"
+                          />
+                        </div>
+                      </div>
                       <h1>+</h1>
                     </div>
                   </div>
