@@ -206,7 +206,9 @@
 
                 <div class="row">
                   <div class="form-group col">
-                    +
+                    <div class="d-flex">
+                      <h1>+</h1>
+                    </div>
                   </div>
                 </div>
                 <!-- <div class="row">
