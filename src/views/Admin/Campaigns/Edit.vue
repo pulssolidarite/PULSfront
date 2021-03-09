@@ -206,6 +206,11 @@
 
                 <div class="row">
                   <div class="form-group col">
+                    +
+                  </div>
+                </div>
+                <!-- <div class="row">
+                  <div class="form-group col">
                     <label for="actions">Montants de donations</label>
                     <div class="d-flex justify-content-between">
                       <div
@@ -432,7 +437,7 @@
                       </div>
                     </div>
                   </div>
-                </div>
+                </div> -->
               </form>
             </div>
           </div>
