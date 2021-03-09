@@ -210,6 +210,14 @@
                     <div class="d-flex justify-content-between">
                       <div class="col d-flex flex-column align-items-center card py-3 mr-2">
                         <button class="btn btn-outline-danger btn-sm" @click="deleteStep">x</button>
+                          <label>Montant </label>
+                          <input
+                            type="number"
+                            id="amount"
+                            name="amount"
+                            ref="amount"
+                            required="required"
+                          />€
                         <label>Image</label>
                         <img
                           :src="campaign.photo1"
@@ -229,7 +237,7 @@
                           v-model="campaign.text1"
                         ></textarea>
                         <div class="upload-btn-wrapper">
-                          <button class="btn btn-outline-danger btn-sm" ref="text-photo1">
+                          <button class="btn btn-outline-danger btn-sm" ref="text-photo">
                             Ajouter une photo
                           </button>
                           <input
@@ -240,17 +248,9 @@
                             required="required"
                             @change="handleFileChange"
                           />
-                          <label>Montant </label>
-                          <input
-                            type="number"
-                            id="amount"
-                            name="amount"
-                            ref="amount"
-                            required="required"
-                          />€
                         </div>
+                      <button class="btn btn-outline-success btn-lg" @click="addStep"><h1>+</h1></button>
                       </div>
-                      <button @click="addStep"><h1>+</h1></button>
                     </div>
                   </div>
                 </div>
@@ -507,6 +507,13 @@ export default {
         type: "danger",
         message: "",
       },
+      steps:[
+        {
+          amount:0,
+          text:"",
+          photo:"",
+        }
+      ]
     };
   },
   mounted: function() {
