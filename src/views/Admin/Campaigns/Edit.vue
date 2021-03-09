@@ -237,15 +237,22 @@
                           </button>
                           <input
                             type="file"
-                            id="photo1"
-                            name="photo1"
-                            ref="photo1"
+                            id="photo"
+                            name="photo"
+                            ref="photo"
                             required="required"
                             @change="handleFileChange"
                           />
+                          <input
+                            type="number"
+                            id="amount"
+                            name="amount"
+                            ref="amount"
+                            required="required"
+                          />
                         </div>
                       </div>
-                      <h1>+</h1>
+                      <button @click="addStep"><h1>+</h1></button>
                     </div>
                   </div>
                 </div>
