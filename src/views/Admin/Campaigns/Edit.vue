@@ -203,55 +203,100 @@
                     </div>
                   </div>
                 </div>
-
+              
                 <div class="row">
-                  <div class="form-group col">
-                    <label for="actions">Montants de donations</label>
-                    <div class="d-flex justify-content-between">
-                      <div class="col d-flex flex-column align-items-center card py-3 mr-2">
-                        <button class="btn btn-outline-danger btn-sm" @click="deleteStep">x</button>
-                          <label>Montant </label>
-                          <input
-                            type="number"
-                            id="amount"
-                            name="amount"
-                            ref="amount"
-                            required="required"
-                          />€
-                        <label>Image</label>
-                        <img
-                          :src="campaign.photo1"
-                          width="100"
-                          height="100"
-                          style="object-fit: contain;"
-                          class="rounded my-3 mx-auto d-block"
-                        />
-                        <label>Text</label>
-                        <textarea
-                          style="font-size: 12px;"
-                          id="text1"
-                          name="text1"
-                          class="mb-2 w-100"
-                          rows="4"
-                          ref="action-photo1"
-                          v-model="campaign.text1"
-                        ></textarea>
-                        <div class="upload-btn-wrapper">
-                          <button class="btn btn-outline-danger btn-sm" ref="text-photo">
-                            Ajouter une photo
-                          </button>
-                          <input
-                            type="file"
-                            id="photo"
-                            name="photo"
-                            ref="photo"
-                            required="required"
-                            @change="handleFileChange"
-                          />
-                        </div>
-                      <button class="btn btn-outline-success btn-lg" @click="addStep"><h1>+</h1></button>
+<div class="card-body border-top">
+                  <div class="col">
+                    <div class="row">
+                      <div class="card-body border-top">
+                        <h4 class="mb-0">Equivalences de Dons</h4>
+                        <p>Ajoutez autant de pallier que vous voulez</p>
                       </div>
                     </div>
+                    <div class="row">
+                      <div class="col d-inline-flex justify-content-around">
+                        <div>
+                          <div class=" form-group col border">
+
+                            <div class="row justify-content-end">
+                              <button type="button" class="close btn-close mr-2 mt-1" aria-label="Close">
+                                <span aria-hidden="true">&times;</span>
+                              </button>
+                            </div>
+
+                            <div class="row">
+                              <div class="form-group col">
+                                <div class="input-group">
+                                <label for="amount">Montant</label>
+                                <div class="input-group input-group-sm mb-3">
+                                  <div class="input-group-prepend">
+                                    <span class="input-group-text" id="inputGroup-sizing-sm">€</span>
+                                  </div>
+                                    <input
+                                      type="number"
+                                      id="amount"
+                                      name="amount"
+                                      ref="amount"
+                                      required="required"
+                                      class="form-control"
+                                    />                              
+                                  </div>
+                                </div>
+                              </div>
+                            </div>
+
+                            <div class="row">
+                              <div class="form-group col">
+                              <label for="photo">Image</label>
+                                <img
+                                  :src="campaign.photo"
+                                  width="100"
+                                  height="100"
+                                  style="object-fit: contain;"
+                                  class="rounded my-3 mx-auto d-block"
+                                />
+                              </div>
+                            </div>
+
+                            <div class="row">
+                              <div class="form-group mx-auto">
+                                <button class="btn btn-outline-primary btn-sm" ref="text-photo">
+                                    Ajouter une photo
+                                </button>
+                              </div>
+                            </div>
+
+                            <div class="row">
+                              <div class="form-group col">
+                                <label for="text">Text</label>
+                                <textarea
+                                  style="font-size: 12px;"
+                                  id="text1"
+                                  name="text1"
+                                  class="mb-2 w-100 form-control"
+                                  rows="4"
+                                  ref="action-photo1"
+                                  v-model="campaign.text1"
+                                ></textarea>
+                              </div>
+                            </div>
+
+                            <div class="upload-btn-wrapper">
+                              <input
+                                type="file"
+                                id="photo"
+                                name="photo"
+                                ref="photo"
+                                required="required"
+                                @change="handleFileChange"
+                              />
+                            </div>
+                          </div>
+                        </div>
+                        <button type="button" class=" col-1 btn btn-light fs-3 btn-close" @click="addStep"><h2>+</h2></button>
+                      </div>
+                    </div>
+                  </div>
                   </div>
                 </div>
                 <!-- <div class="row">

@@ -414,12 +414,12 @@ export default {
         form.append("logo", this.$refs.logo.files[0]);
         form.append("is_video", this.campaign.is_video);
         form.append("video", this.campaign.video);
-        form.append("photo1", this.$refs.photo1.files[0]);
-        form.append("photo5", this.$refs.photo5.files[0]);
-        form.append("photo10", this.$refs.photo10.files[0]);
-        form.append("photo20", this.$refs.photo20.files[0]);
-        form.append("photo30", this.$refs.photo30.files[0]);
-        form.append("photo50", this.$refs.photo50.files[0]);
+        // form.append("photo1", this.$refs.photo1.files[0]);
+        // form.append("photo5", this.$refs.photo5.files[0]);
+        // form.append("photo10", this.$refs.photo10.files[0]);
+        // form.append("photo20", this.$refs.photo20.files[0]);
+        // form.append("photo30", this.$refs.photo30.files[0]);
+        // form.append("photo50", this.$refs.photo50.files[0]);
         form.append("text1", this.campaign.text1);
         form.append("text5", this.campaign.text5);
         form.append("text10", this.campaign.text10);
