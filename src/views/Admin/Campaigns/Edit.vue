@@ -214,12 +214,15 @@
                       </div>
                     </div>
                     <div class="row">
-                      <div class="col d-inline-flex justify-content-around">
+                      <div  class="col d-inline-flex justify-content-around"
+                            v-for="(step, nbSteps) in steps"
+                            v-bind:key="nbSteps"
+                      >
                         <div>
                           <div class=" form-group col border">
 
                             <div class="row justify-content-end">
-                              <button type="button" class="close btn-close mr-2 mt-1" aria-label="Close">
+                              <button type="button" class="close btn-close mr-2 mt-1" aria-label="Close" @click="deleteStep">
                                 <span aria-hidden="true">&times;</span>
                               </button>
                             </div>
@@ -239,6 +242,7 @@
                                       ref="amount"
                                       required="required"
                                       class="form-control"
+                                      v-model="step.amount"
                                     />                              
                                   </div>
                                 </div>
@@ -276,7 +280,7 @@
                                   class="mb-2 w-100 form-control"
                                   rows="4"
                                   ref="action-photo1"
-                                  v-model="campaign.text1"
+                                  v-model="step.text"
                                 ></textarea>
                               </div>
                             </div>
@@ -293,8 +297,8 @@
                             </div>
                           </div>
                         </div>
-                        <button type="button" class=" col-1 btn btn-light fs-3 btn-close" @click="addStep"><h2>+</h2></button>
                       </div>
+                        <button type="button" class=" col-1 btn btn-light fs-3 btn-close" @click="addStep"><h2>+</h2></button>
                     </div>
                   </div>
                   </div>
@@ -669,10 +673,18 @@ export default {
       }
     },
     addStep: function(){
-
+      console.log("addStep()");
+      this.steps.push({
+          amount:0,
+          text:"",
+          photo:"",
+        }
+      );
     },
-    deleteStep: function(){
-
+    deleteStep: function(nbSteps){
+      console.log("deleteStep()");
+      this.steps.splice(nbSteps, 1);
+      console.log("nbSteps=" + nbSteps);
     },
   },
 };
