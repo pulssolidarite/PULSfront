@@ -205,7 +205,7 @@
                 </div>
               
                 <div class="row">
-<div class="card-body border-top">
+                  <div class="card-body border-top">
                   <div class="col">
                     <div class="row">
                       <div class="card-body border-top">
@@ -301,8 +301,12 @@
                         <button type="button" class=" col-1 btn btn-light fs-3 btn-close" @click="addStep"><h2>+</h2></button>
                     </div>
                   </div>
+                  <div class="d-flex justify-content-center">
+                    <button type="button" class="btn btn-primary" @click="editSteps">Sauvegarder</button>
+                  </div>
                   </div>
                 </div>
+
                 <!-- <div class="row">
                   <div class="form-group col">
                     <label for="actions">Montants de donations</label>
@@ -640,6 +644,9 @@ export default {
           });
         });
     },
+    editSteps: function(e) {
+      let form = new FormData();
+    },
     edit: function() {
       if (this.campaign) {
         let form = new FormData();
@@ -650,12 +657,12 @@ export default {
         form.append("description", this.campaign.description);
         form.append("is_video", this.campaign.is_video);
         form.append("video", this.campaign.video);
-        form.append("text1", this.campaign.text1);
-        form.append("text5", this.campaign.text5);
-        form.append("text10", this.campaign.text10);
-        form.append("text20", this.campaign.text20);
-        form.append("text30", this.campaign.text30);
-        form.append("text50", this.campaign.text50);
+        // form.append("text1", this.campaign.text1);
+        // form.append("text5", this.campaign.text5);
+        // form.append("text10", this.campaign.text10);
+        // form.append("text20", this.campaign.text20);
+        // form.append("text30", this.campaign.text30);
+        // form.append("text50", this.campaign.text50);
         this.$http
           .patch("campaign/" + this.campaign.id + "/", form)
           .then((resp) => {
@@ -673,7 +680,7 @@ export default {
       }
     },
     addStep: function(){
-      console.log("addStep()");
+      // console.log("addStep()");
       this.steps.push({
           amount:0,
           text:"",
@@ -682,9 +689,9 @@ export default {
       );
     },
     deleteStep: function(nbSteps){
-      console.log("deleteStep()");
+      // console.log("deleteStep()");
       this.steps.splice(nbSteps, 1);
-      console.log("nbSteps=" + nbSteps);
+      // console.log("nbSteps=" + nbSteps);
     },
   },
 };
