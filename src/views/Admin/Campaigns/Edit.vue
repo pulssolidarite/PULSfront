@@ -189,7 +189,7 @@
                           class="btn btn-outline-danger btn-sm"
                           ref="text-logo"
                         >
-                          Ajouter une photo
+                          Changer la photo
                         </button>
                         <input
                           type="file"
@@ -203,7 +203,8 @@
                     </div>
                   </div>
                 </div>
-              
+              </form>
+              <form>
                 <div class="row">
                   <div class="card-body border-top">
                   <div class="col">
@@ -215,8 +216,8 @@
                     </div>
                     <div class="row">
                       <div  class="col d-inline-flex justify-content-around"
-                            v-for="(step, nbSteps) in steps"
-                            v-bind:key="nbSteps"
+                            v-for="(step, stepIndex) in campaign.donationSteps"
+                            v-bind:key="stepIndex"
                       >
                         <div>
                           <div class=" form-group col border">
@@ -242,7 +243,7 @@
                                       ref="amount"
                                       required="required"
                                       class="form-control"
-                                      v-model="step.amount"
+                                      v-model="campaign.donationSteps[0].amount"
                                     />                              
                                   </div>
                                 </div>
@@ -253,7 +254,7 @@
                               <div class="form-group col">
                               <label for="photo">Image</label>
                                 <img
-                                  :src="campaign.photo"
+                                  :src="campaign.donationSteps[0].photo"
                                   width="100"
                                   height="100"
                                   style="object-fit: contain;"
@@ -264,9 +265,19 @@
 
                             <div class="row">
                               <div class="form-group mx-auto">
-                                <button class="btn btn-outline-primary btn-sm" ref="text-photo">
-                                    Ajouter une photo
-                                </button>
+                                <div class="upload-btn-wrapper">
+                                  <button class="btn btn-outline-primary btn-sm" ref="text-photo">
+                                      Changer de photo
+                                  </button>
+                                    <input
+                                      type="file"
+                                      id="photo"
+                                      name="photo"
+                                      ref="photo"
+                                      required="required"
+                                      @change="handleFileChange"
+                                    />
+                                </div>
                               </div>
                             </div>
 
@@ -275,34 +286,25 @@
                                 <label for="text">Text</label>
                                 <textarea
                                   style="font-size: 12px;"
-                                  id="text1"
-                                  name="text1"
+                                  id="text"
+                                  name="text"
                                   class="mb-2 w-100 form-control"
                                   rows="4"
-                                  ref="action-photo1"
-                                  v-model="step.text"
+                                  ref="action-photo"
+                                  required="required"
+                                  v-model="campaign.donationSteps[0].text"
                                 ></textarea>
                               </div>
                             </div>
 
-                            <div class="upload-btn-wrapper">
-                              <input
-                                type="file"
-                                id="photo"
-                                name="photo"
-                                ref="photo"
-                                required="required"
-                                @change="handleFileChange"
-                              />
-                            </div>
                           </div>
                         </div>
                       </div>
-                        <button type="button" class=" col-1 btn btn-light fs-3 btn-close" @click="addStep"><h2>+</h2></button>
+                        <button type="button" class="col-1 btn btn-light fs-3 btn-close" @click="addStep"><h2>+</h2></button>
                     </div>
                   </div>
                   <div class="d-flex justify-content-center">
-                    <button type="button" class="btn btn-primary" @click="editSteps">Sauvegarder</button>
+                    <button type="button" class="btn btn-primary" @click="edit">Sauvegarder</button>
                   </div>
                   </div>
                 </div>
@@ -560,17 +562,11 @@ export default {
         type: "danger",
         message: "",
       },
-      steps:[
-        {
-          amount:0,
-          text:"",
-          photo:"",
-        }
-      ]
     };
   },
   mounted: function() {
     this.getCampaign();
+    // console.log(this.campaign)
   },
   methods: {
     getCampaign: function() {
@@ -578,22 +574,33 @@ export default {
         .get("campaign/" + this.$route.params.id + "/")
         .then((resp) => {
           this.campaign = resp.data;
+          console.log(resp.data)
         })
         .catch((err) => {
           console.log(err.response);
         });
     },
+    // getSteps: function(){
+    //   this.$http
+    //     .get("donationsteps/" + this.$route.params.id + "/")
+    //     .then((resp) => {
+    //       this.campaign = resp.data;
+    //     })
+    //     .catch((err) => {
+    //       console.log(err.response);
+    //     });
+    // },
     handleFileChange(e) {
-      this.$refs["text-" + e.target.id].innerText = "Enregistrement...";
-      this.$refs["text-" + e.target.id].classList.remove("btn-outline-warning");
-      this.$refs["text-" + e.target.id].classList.add("btn-success");
+      const btn = this.$refs["text-photo"][0]
+      console.log(btn)
+      btn.innerText = "Enregistrement...";
+      btn.classList.remove("btn-outline-primary");
+      btn.classList.add("btn-success");
 
       let form = new FormData();
-      form.append(e.target.id, this.$refs[e.target.id].files[0]);
-      form.append(
-        this.$refs["action-" + e.target.id].id,
-        this.$refs["action-" + e.target.id].value
-      );
+      form.append("amount", this.$refs["amount"].value)
+      form.append("photo", this.$refs["photo"][0].files[0]);
+      form.append("text", this.$refs["action-photo"].value);
       this.$http
         .patch("campaign/" + this.campaign.id + "/", form, {
           headers: {
@@ -602,17 +609,15 @@ export default {
         })
         .then((resp) => {
           this.campaign = resp.data;
-          this.$refs["text-" + e.target.id].classList.remove("btn-success");
-          this.$refs["text-" + e.target.id].classList.add(
-            "btn-outline-warning"
-          );
-          this.$refs["text-" + e.target.id].innerText = "Modifier la photo";
+          btn.classList.remove("btn-success");
+          btn.classList.add("btn-outline-warning");
+          btn.innerText = "Modifier la photo";
           this.$toasted.global.success({
             message: "La photo a été sauvegardé avec succès.",
           });
         })
         .catch((err) => {
-          console.log(err.response);
+          console.log(err.message);
           this.$toasted.global.error({
             message: "Impossible d'uploader la photo.",
           });
@@ -646,6 +651,23 @@ export default {
     },
     editSteps: function(e) {
       let form = new FormData();
+      form.append("amount", campaign.donationSteps[0][0].amount);
+      form.append("text", campaign.donationSteps[0][0].text);
+      form.append("photo", campaign.donationSteps[0][0].photo);
+      this.$http
+        .patch("donationsteps/" + this.campaign.id + "/")
+        .then((resp) => {
+            this.campaign = resp.data;
+            this.$toasted.global.success({
+              message: "Vos changements ont été sauvegardés.",
+            });
+          })
+          .catch((err) => {
+            console.log(err.response);
+            this.$toasted.global.error({
+              message: "Impossible de sauvegarder vos changements.",
+            });
+          });
     },
     edit: function() {
       if (this.campaign) {
@@ -657,6 +679,7 @@ export default {
         form.append("description", this.campaign.description);
         form.append("is_video", this.campaign.is_video);
         form.append("video", this.campaign.video);
+        form.append("donationSteps", campaign.donationSteps)
         // form.append("text1", this.campaign.text1);
         // form.append("text5", this.campaign.text5);
         // form.append("text10", this.campaign.text10);
@@ -681,17 +704,18 @@ export default {
     },
     addStep: function(){
       // console.log("addStep()");
-      this.steps.push({
+      this.campaign.donationSteps.push(
+        {
           amount:0,
           text:"",
           photo:"",
         }
       );
     },
-    deleteStep: function(nbSteps){
+    deleteStep: function(stepIndex){
       // console.log("deleteStep()");
-      this.steps.splice(nbSteps, 1);
-      // console.log("nbSteps=" + nbSteps);
+      this.campaign.donationSteps.splice(stepIndex, 1);
+      // console.log("stepIndex=" + stepIndex);
     },
   },
 };
