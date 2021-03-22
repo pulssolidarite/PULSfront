@@ -159,11 +159,11 @@
                   </div>
                 </div>
               </form>
-              <div class="card-body text-center">
+              <!-- <div class="card-body text-center">
                 <button class="btn btn-success" @click.prevent="edit">
                   Enregistrer la campagne
                 </button>
-              </div>
+              </div> -->
             </div>
             <div class="card-body border-top">
               <h4 class="mb-0">Médias</h4>
@@ -224,7 +224,7 @@
 
                             <div class="row justify-content-end">
                               <button type="button" class="close btn-close mr-2 mt-1" aria-label="Close" @click="deleteStep">
-                                <span aria-hidden="true">&times;</span>
+                                <span aria-hidden="true" :id="stepIndex">&times;</span>
                               </button>
                             </div>
 
@@ -243,7 +243,7 @@
                                       ref="amount"
                                       required="required"
                                       class="form-control"
-                                      v-model="campaign.donationSteps[0].amount"
+                                      v-model="campaign.donationSteps[stepIndex].amount"
                                     />                              
                                   </div>
                                 </div>
@@ -254,7 +254,7 @@
                               <div class="form-group col">
                               <label for="photo">Image</label>
                                 <img
-                                  :src="campaign.donationSteps[0].photo"
+                                  :src="campaign.donationSteps[stepIndex].photo"
                                   width="100"
                                   height="100"
                                   style="object-fit: contain;"
@@ -271,7 +271,7 @@
                                   </button>
                                     <input
                                       type="file"
-                                      id="photo"
+                                      :id="stepIndex"
                                       name="photo"
                                       ref="photo"
                                       required="required"
@@ -292,7 +292,7 @@
                                   rows="4"
                                   ref="action-photo"
                                   required="required"
-                                  v-model="campaign.donationSteps[0].text"
+                                  v-model="campaign.donationSteps[stepIndex].text"
                                 ></textarea>
                               </div>
                             </div>
@@ -304,240 +304,10 @@
                     </div>
                   </div>
                   <div class="d-flex justify-content-center">
-                    <button type="button" class="btn btn-primary" @click="edit">Sauvegarder</button>
+                    <button type="button" class="btn btn-primary" @click.prevent="edit">Sauvegarder</button>
                   </div>
                   </div>
                 </div>
-
-                <!-- <div class="row">
-                  <div class="form-group col">
-                    <label for="actions">Montants de donations</label>
-                    <div class="d-flex justify-content-between">
-                      <div
-                        class="col d-flex flex-column align-items-center card py-3 mr-2"
-                      >
-                        <h3>1€</h3>
-                        <img
-                          :src="campaign.photo1"
-                          width="100"
-                          height="100"
-                          style="object-fit: contain;"
-                          class="rounded my-3 mx-auto d-block"
-                        />
-                        <textarea
-                          style="font-size: 12px;"
-                          id="text1"
-                          name="text1"
-                          class="mb-2 w-100"
-                          rows="4"
-                          ref="action-photo1"
-                          v-model="campaign.text1"
-                        ></textarea>
-                        <div class="upload-btn-wrapper">
-                          <button
-                            class="btn btn-outline-danger btn-sm"
-                            ref="text-photo1"
-                          >
-                            Ajouter une photo
-                          </button>
-                          <input
-                            type="file"
-                            id="photo1"
-                            name="photo1"
-                            ref="photo1"
-                            required="required"
-                            @change="handleFileChange"
-                          />
-                        </div>
-                      </div>
-                      <div
-                        class="col d-flex flex-column align-items-center card py-3 mr-2"
-                      >
-                        <h3>5€</h3>
-                        <img
-                          :src="campaign.photo5"
-                          width="100"
-                          height="100"
-                          style="object-fit: contain;"
-                          class="rounded my-3 mx-auto d-block"
-                        />
-                        <textarea
-                          style="font-size: 12px;"
-                          id="text5"
-                          name="text5"
-                          class="mb-2 w-100"
-                          rows="4"
-                          ref="action-photo5"
-                          v-model="campaign.text5"
-                        ></textarea>
-                        <div class="upload-btn-wrapper">
-                          <button
-                            class="btn btn-outline-danger btn-sm"
-                            ref="text-photo5"
-                          >
-                            Ajouter une photo
-                          </button>
-                          <input
-                            type="file"
-                            id="photo5"
-                            name="photo5"
-                            ref="photo5"
-                            required="required"
-                            @change="handleFileChange"
-                          />
-                        </div>
-                      </div>
-                      <div
-                        class="col d-flex flex-column align-items-center card py-3 mr-2"
-                      >
-                        <h3>10€</h3>
-                        <img
-                          :src="campaign.photo10"
-                          width="100"
-                          height="100"
-                          style="object-fit: contain;"
-                          class="rounded my-3 mx-auto d-block"
-                        />
-                        <textarea
-                          style="font-size: 12px;"
-                          id="text10"
-                          name="text10"
-                          class="mb-2 w-100"
-                          ref="action-photo10"
-                          rows="4"
-                          v-model="campaign.text10"
-                        ></textarea>
-                        <div class="upload-btn-wrapper">
-                          <button
-                            class="btn btn-outline-danger btn-sm"
-                            ref="text-photo10"
-                          >
-                            Ajouter une photo
-                          </button>
-                          <input
-                            type="file"
-                            id="photo10"
-                            name="photo10"
-                            ref="photo10"
-                            required="required"
-                            @change="handleFileChange"
-                          />
-                        </div>
-                      </div>
-                      <div
-                        class="col d-flex flex-column align-items-center card py-3 mr-2"
-                      >
-                        <h3>20€</h3>
-                        <img
-                          :src="campaign.photo20"
-                          width="100"
-                          height="100"
-                          style="object-fit: contain;"
-                          class="rounded my-3 mx-auto d-block"
-                        />
-                        <textarea
-                          style="font-size: 12px;"
-                          id="text20"
-                          name="text20"
-                          ref="action-photo20"
-                          class="mb-2 w-100"
-                          rows="4"
-                          v-model="campaign.text20"
-                        ></textarea>
-                        <div class="upload-btn-wrapper">
-                          <button
-                            class="btn btn-outline-danger btn-sm"
-                            ref="text-photo20"
-                          >
-                            Ajouter une photo
-                          </button>
-                          <input
-                            type="file"
-                            id="photo20"
-                            name="photo20"
-                            ref="photo20"
-                            required="required"
-                            @change="handleFileChange"
-                          />
-                        </div>
-                      </div>
-                      <div
-                        class="col d-flex flex-column align-items-center card py-3 mr-2"
-                      >
-                        <h3>30€</h3>
-                        <img
-                          :src="campaign.photo30"
-                          width="100"
-                          height="100"
-                          style="object-fit: contain;"
-                          class="rounded my-3 mx-auto d-block"
-                        />
-                        <textarea
-                          style="font-size: 12px;"
-                          id="text30"
-                          name="text30"
-                          ref="action-photo30"
-                          class="mb-2 w-100"
-                          rows="4"
-                          v-model="campaign.text30"
-                        ></textarea>
-                        <div class="upload-btn-wrapper">
-                          <button
-                            class="btn btn-outline-danger btn-sm"
-                            ref="text-photo30"
-                          >
-                            Ajouter une photo
-                          </button>
-                          <input
-                            type="file"
-                            id="photo30"
-                            name="photo30"
-                            ref="photo30"
-                            required="required"
-                            @change="handleFileChange"
-                          />
-                        </div>
-                      </div>
-                      <div
-                        class="col d-flex flex-column align-items-center card py-3 mr-2"
-                      >
-                        <h3>50€</h3>
-                        <img
-                          :src="campaign.photo50"
-                          width="100"
-                          height="100"
-                          style="object-fit: contain;"
-                          class="rounded my-3 mx-auto d-block"
-                        />
-                        <textarea
-                          style="font-size: 12px;"
-                          id="text50"
-                          name="text50"
-                          ref="action-photo50"
-                          class="mb-2 w-100"
-                          rows="4"
-                          v-model="campaign.text50"
-                        ></textarea>
-                        <div class="upload-btn-wrapper">
-                          <button
-                            class="btn btn-outline-danger btn-sm"
-                            ref="text-photo50"
-                          >
-                            Ajouter une photo
-                          </button>
-                          <input
-                            type="file"
-                            id="photo50"
-                            name="photo50"
-                            ref="photo50"
-                            required="required"
-                            @change="handleFileChange"
-                          />
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                </div> -->
               </form>
             </div>
           </div>
@@ -574,7 +344,7 @@ export default {
         .get("campaign/" + this.$route.params.id + "/")
         .then((resp) => {
           this.campaign = resp.data;
-          console.log(resp.data)
+          // console.log(resp.data)
         })
         .catch((err) => {
           console.log(err.response);
@@ -591,37 +361,42 @@ export default {
     //     });
     // },
     handleFileChange(e) {
-      const btn = this.$refs["text-photo"][0]
-      console.log(btn)
-      btn.innerText = "Enregistrement...";
-      btn.classList.remove("btn-outline-primary");
-      btn.classList.add("btn-success");
+      
+      // let photo = this.$refs["photo"][e.target.id].files[0]
+      // console.log(this.campaign.donationSteps);
 
-      let form = new FormData();
-      form.append("amount", this.$refs["amount"].value)
-      form.append("photo", this.$refs["photo"][0].files[0]);
-      form.append("text", this.$refs["action-photo"].value);
-      this.$http
-        .patch("campaign/" + this.campaign.id + "/", form, {
-          headers: {
-            "Content-Type": "multipart/form-data",
-          },
-        })
-        .then((resp) => {
-          this.campaign = resp.data;
-          btn.classList.remove("btn-success");
-          btn.classList.add("btn-outline-warning");
-          btn.innerText = "Modifier la photo";
-          this.$toasted.global.success({
-            message: "La photo a été sauvegardé avec succès.",
-          });
-        })
-        .catch((err) => {
-          console.log(err.message);
-          this.$toasted.global.error({
-            message: "Impossible d'uploader la photo.",
-          });
-        });
+      // const btn = this.$refs["text-photo"][0]
+      // // console.log(btn)
+      // btn.innerText = "Enregistrement...";
+      // btn.classList.remove("btn-outline-primary");
+      // btn.classList.add("btn-success");
+
+      // let form = new FormData();
+      // form.append("campaign", this.campaign.id);
+      // form.append("amount", this.$refs["amount"].value);
+      // form.append("photo", photo);
+      // form.append("text", this.$refs["action-photo"].value);
+      // this.$http
+        // .patch("donationstep/" + this.campaign.donationSteps[e.target.id].id + "/changephoto/", form, {
+          // headers: {
+          //   "Content-Type": "multipart/form-data",
+          // },
+        // })
+      //   .then((resp) => {
+      //     this.campaign = resp.data;
+      //     btn.classList.remove("btn-success");
+      //     btn.classList.add("btn-outline-warning");
+      //     btn.innerText = "Modifier la photo";
+      //     this.$toasted.global.success({
+      //       message: "La photo a été sauvegardé avec succès.",
+      //     });
+      //   })
+      //   .catch((err) => {
+      //     console.log(err.message);
+      //     this.$toasted.global.error({
+      //       message: "Impossible d'uploader la photo.",
+      //     });
+      //   });
     },
     editLogo: function(e) {
       this.$refs["text-" + e.target.id].innerText = "Enregistrement...";
@@ -648,26 +423,6 @@ export default {
             message: "Impossible d'uploader la photo.",
           });
         });
-    },
-    editSteps: function(e) {
-      let form = new FormData();
-      form.append("amount", campaign.donationSteps[0][0].amount);
-      form.append("text", campaign.donationSteps[0][0].text);
-      form.append("photo", campaign.donationSteps[0][0].photo);
-      this.$http
-        .patch("donationsteps/" + this.campaign.id + "/")
-        .then((resp) => {
-            this.campaign = resp.data;
-            this.$toasted.global.success({
-              message: "Vos changements ont été sauvegardés.",
-            });
-          })
-          .catch((err) => {
-            console.log(err.response);
-            this.$toasted.global.error({
-              message: "Impossible de sauvegarder vos changements.",
-            });
-          });
     },
     edit: function() {
       if (this.campaign) {
@@ -706,16 +461,40 @@ export default {
       // console.log("addStep()");
       this.campaign.donationSteps.push(
         {
-          amount:0,
-          text:"",
-          photo:"",
+          id: 0,
+          amount: 0,
+          text: "",
+          photo: "",
+          campaign: this.campaign.id
         }
       );
+      // console.log(this.campaign.donationSteps)
     },
-    deleteStep: function(stepIndex){
+    deleteStep: function(e){
       // console.log("deleteStep()");
-      this.campaign.donationSteps.splice(stepIndex, 1);
-      // console.log("stepIndex=" + stepIndex);
+      if(this.campaign.donationSteps.length > 1)
+      {
+        let step = this.campaign.donationSteps[e.target.id]
+        // console.log(step);
+        
+        this.$http
+        .post("donationstep/" + step.id + "/delete/")
+        .then((resp) => {
+          this.campaign.donationSteps.splice(e.target.id, 1);
+        })
+        .catch((err) => {
+            // console.log(err.response);
+            this.$toasted.global.error({
+              message: err.message,
+            });
+          });
+      }
+      else
+      {
+        this.$toasted.global.error({
+          message: "Il faut au moins une équivalence.",
+        });
+      }
     },
   },
 };
