@@ -241,7 +241,6 @@
                                       id="amount"
                                       name="amount"
                                       ref="amount"
-                                      required="required"
                                       class="form-control"
                                       v-model="campaign.donationSteps[stepIndex].amount"
                                     />                              
@@ -274,7 +273,6 @@
                                       :id="stepIndex"
                                       name="photo"
                                       ref="photo"
-                                      required="required"
                                       @change="handleFileChange"
                                     />
                                 </div>
@@ -291,7 +289,6 @@
                                   class="mb-2 w-100 form-control"
                                   rows="4"
                                   ref="action-photo"
-                                  required="required"
                                   v-model="campaign.donationSteps[stepIndex].text"
                                 ></textarea>
                               </div>
@@ -362,41 +359,41 @@ export default {
     // },
     handleFileChange(e) {
       
-      // let photo = this.$refs["photo"][e.target.id].files[0]
-      // console.log(this.campaign.donationSteps);
+      let photo = this.$refs["photo"][e.target.id].files[0]
+      console.log(this.campaign.donationSteps);
 
-      // const btn = this.$refs["text-photo"][0]
-      // // console.log(btn)
-      // btn.innerText = "Enregistrement...";
-      // btn.classList.remove("btn-outline-primary");
-      // btn.classList.add("btn-success");
+      const btn = this.$refs["text-photo"][0]
+      // console.log(btn)
+      btn.innerText = "Enregistrement...";
+      btn.classList.remove("btn-outline-primary");
+      btn.classList.add("btn-success");
 
-      // let form = new FormData();
-      // form.append("campaign", this.campaign.id);
-      // form.append("amount", this.$refs["amount"].value);
-      // form.append("photo", photo);
-      // form.append("text", this.$refs["action-photo"].value);
-      // this.$http
-        // .patch("donationstep/" + this.campaign.donationSteps[e.target.id].id + "/changephoto/", form, {
-          // headers: {
-          //   "Content-Type": "multipart/form-data",
-          // },
-        // })
-      //   .then((resp) => {
-      //     this.campaign = resp.data;
-      //     btn.classList.remove("btn-success");
-      //     btn.classList.add("btn-outline-warning");
-      //     btn.innerText = "Modifier la photo";
-      //     this.$toasted.global.success({
-      //       message: "La photo a été sauvegardé avec succès.",
-      //     });
-      //   })
-      //   .catch((err) => {
-      //     console.log(err.message);
-      //     this.$toasted.global.error({
-      //       message: "Impossible d'uploader la photo.",
-      //     });
-      //   });
+      let form = new FormData();
+      form.append("campaign", this.campaign.id);
+      form.append("amount", this.$refs["amount"].value);
+      form.append("photo", photo);
+      form.append("text", this.$refs["action-photo"].value);
+      this.$http
+        .patch("donationstep/" + this.campaign.donationSteps[e.target.id].id + "/changephoto/", form, {
+          headers: {
+            "Content-Type": "multipart/form-data",
+          },
+        })
+        .then((resp) => {
+          this.campaign = resp.data;
+          btn.classList.remove("btn-success");
+          btn.classList.add("btn-outline-warning");
+          btn.innerText = "Modifier la photo";
+          this.$toasted.global.success({
+            message: "La photo a été sauvegardé avec succès.",
+          });
+        })
+        .catch((err) => {
+          console.log(err.message);
+          this.$toasted.global.error({
+            message: "Impossible d'uploader la photo.",
+          });
+        });
     },
     editLogo: function(e) {
       this.$refs["text-" + e.target.id].innerText = "Enregistrement...";
@@ -425,7 +422,7 @@ export default {
         });
     },
     edit: function() {
-      if (this.campaign) {
+      if (this.campaign && this.campaign.donationSteps.length > 0) {
         let form = new FormData();
         form.append("author", this.$store.state.currentUser.id);
         form.append("name", this.campaign.name);
@@ -434,7 +431,9 @@ export default {
         form.append("description", this.campaign.description);
         form.append("is_video", this.campaign.is_video);
         form.append("video", this.campaign.video);
-        form.append("donationSteps", campaign.donationSteps)
+        form.append("donationSteps", JSON.stringify(this.campaign.donationSteps))
+        // console.log(this.campaign.donationSteps);
+        
         // form.append("text1", this.campaign.text1);
         // form.append("text5", this.campaign.text5);
         // form.append("text10", this.campaign.text10);
@@ -442,7 +441,7 @@ export default {
         // form.append("text30", this.campaign.text30);
         // form.append("text50", this.campaign.text50);
         this.$http
-          .patch("campaign/" + this.campaign.id + "/", form)
+          .put("campaign/" + this.campaign.id + "/", form)
           .then((resp) => {
             this.campaign = resp.data;
             this.$toasted.global.success({
@@ -456,43 +455,9 @@ export default {
             });
           });
       }
-    },
-    addStep: function(){
-      // console.log("addStep()");
-      this.campaign.donationSteps.push(
-        {
-          id: 0,
-          amount: 0,
-          text: "",
-          photo: "",
-          campaign: this.campaign.id
-        }
-      );
-      // console.log(this.campaign.donationSteps)
-    },
-    deleteStep: function(e){
-      // console.log("deleteStep()");
-      if(this.campaign.donationSteps.length > 1)
-      {
-        let step = this.campaign.donationSteps[e.target.id]
-        // console.log(step);
-        
-        this.$http
-        .post("donationstep/" + step.id + "/delete/")
-        .then((resp) => {
-          this.campaign.donationSteps.splice(e.target.id, 1);
-        })
-        .catch((err) => {
-            // console.log(err.response);
-            this.$toasted.global.error({
-              message: err.message,
-            });
-          });
-      }
-      else
-      {
+      else {
         this.$toasted.global.error({
-          message: "Il faut au moins une équivalence.",
+          message: "Il faut au moins une équivalence de don.",
         });
       }
     },
