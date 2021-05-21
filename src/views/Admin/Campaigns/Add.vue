@@ -423,12 +423,12 @@ export default {
         // form.append("photo20", this.$refs.photo20.files[0]);
         // form.append("photo30", this.$refs.photo30.files[0]);
         // form.append("photo50", this.$refs.photo50.files[0]);
-        form.append("text1", this.campaign.text1);
-        form.append("text5", this.campaign.text5);
-        form.append("text10", this.campaign.text10);
-        form.append("text20", this.campaign.text20);
-        form.append("text30", this.campaign.text30);
-        form.append("text50", this.campaign.text50);
+        // form.append("text1", this.campaign.text1);
+        // form.append("text5", this.campaign.text5);
+        // form.append("text10", this.campaign.text10);
+        // form.append("text20", this.campaign.text20);
+        // form.append("text30", this.campaign.text30);
+        // form.append("text50", this.campaign.text50);
         this.$http
           .post("campaign/", form, {
             headers: {
