@@ -410,7 +410,7 @@ export default {
         let form = new FormData();
         form.append("campaign", this.campaign.id);
         form.append("amount", ds.amount);
-        form.append("photo", ds.photo);
+        // form.append("photo", ds.photo);
         form.append("text", ds.text);
         if (ds.id) {
           this.$http
