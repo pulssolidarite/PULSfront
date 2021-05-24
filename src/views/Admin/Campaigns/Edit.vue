@@ -130,11 +130,6 @@
                   <button type="button" class="btn btn-primary" @click.prevent="edit">Sauvegarder</button>
                 </div>
               </form>
-              <!-- <div class="card-body text-center">
-                <button class="btn btn-success" @click.prevent="edit">
-                  Enregistrer la campagne
-                </button>
-              </div>-->
             </div>
             <div class="card-body border-top">
               <h4 class="mb-0">Médias</h4>
@@ -224,36 +219,36 @@
                                 </div>
                               </div>
 
-                              <!-- <div class="row">
+                              <div class="row">
                               <div class="form-group col">
-                              <label for="photo">Image</label>
+                              <label for="image">Image</label>
                                 <img
-                                  :src="campaign.donationSteps[stepIndex].photo"
-                                  width="100"
-                                  height="100"
+                                  :src="campaign.donationSteps[stepIndex].image"
+                                  width="200"
+                                  height="200"
                                   style="object-fit: contain;"
                                   class="rounded my-3 mx-auto d-block"
                                 />
                               </div>
-                              </div>-->
+                              </div>
 
-                              <!-- <div class="row">
+                              <div class="row">
                               <div class="form-group mx-auto">
                                 <div class="upload-btn-wrapper">
-                                  <button class="btn btn-outline-primary btn-sm" ref="text-photo">
-                                      Changer de photo
+                                  <button class="btn btn-outline-primary btn-sm" ref="text-image">
+                                      Changer d'image
                                   </button>
                                     <input
                                       type="file"
                                       :id="stepIndex"
-                                      name="photo"
-                                      ref="photo"
+                                      name="image"
+                                      ref="image"
                                       required="required"
                                       @change="handleFileChange"
                                     />
                                 </div>
                               </div>
-                              </div>-->
+                              </div>
 
                               <div class="row">
                                 <div class="form-group col">
@@ -264,7 +259,6 @@
                                     name="text"
                                     class="mb-2 w-100 form-control"
                                     rows="4"
-                                    ref="action-photo"
                                     required="required"
                                     v-model="step.text"
                                   ></textarea>
@@ -327,56 +321,15 @@ export default {
         .get("campaign/" + this.$route.params.id + "/")
         .then(resp => {
           this.campaign = resp.data;
-          console.log(resp.data);
+          // console.log(resp.data);
         })
         .catch(err => {
           console.log(err.response);
         });
     },
-    // getSteps: function(){
-    //   this.$http
-    //     .get("donationsteps/" + this.$route.params.id + "/")
-    //     .then((resp) => {
-    //       this.campaign = resp.data;
-    //     })
-    //     .catch((err) => {
-    //       console.log(err.response);
-    //     });
-    // },
     handleFileChange(e) {
-      // let photo = this.$refs["photo"][e.target.id].files[0]
-      // console.log(this.campaign.donationSteps);
-      // const btn = this.$refs["text-photo"][0]
-      // // console.log(btn)
-      // btn.innerText = "Enregistrement...";
-      // btn.classList.remove("btn-outline-primary");
-      // btn.classList.add("btn-success");
-      // let form = new FormData();
-      // form.append("campaign", this.campaign.id);
-      // form.append("amount", this.$refs["amount"].value);
-      // form.append("photo", photo);
-      // form.append("text", this.$refs["action-photo"].value);
-      // this.$http
-      // .patch("donationstep/" + this.campaign.donationSteps[e.target.id].id + "/changephoto/", form, {
-      // headers: {
-      //   "Content-Type": "multipart/form-data",
-      // },
-      // })
-      //   .then((resp) => {
-      //     this.campaign = resp.data;
-      //     btn.classList.remove("btn-success");
-      //     btn.classList.add("btn-outline-warning");
-      //     btn.innerText = "Modifier la photo";
-      //     this.$toasted.global.success({
-      //       message: "La photo a été sauvegardé avec succès.",
-      //     });
-      //   })
-      //   .catch((err) => {
-      //     console.log(err.message);
-      //     this.$toasted.global.error({
-      //       message: "Impossible d'uploader la photo.",
-      //     });
-      //   });
+      const file = this.$refs["image"][e.target.id].files[0];
+      this.campaign.donationSteps[e.target.id].image = file;
     },
     editLogo: function(e) {
       this.$refs["text-" + e.target.id].innerText = "Enregistrement...";
@@ -410,7 +363,7 @@ export default {
         let form = new FormData();
         form.append("campaign", this.campaign.id);
         form.append("amount", ds.amount);
-        // form.append("photo", ds.photo);
+        form.append("image", ds.image);
         form.append("text", ds.text);
         if (ds.id) {
           this.$http
@@ -489,7 +442,7 @@ export default {
         id: 0,
         amount: 0,
         text: "",
-        photo: "",
+        image: "",
         campaign: this.campaign.id
       });
       // console.log(this.campaign.donationSteps)
