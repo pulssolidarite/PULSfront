@@ -210,9 +210,8 @@
                                         id="amount"
                                         name="amount"
                                         ref="amount"
-                                        required="required"
                                         class="form-control"
-                                        v-model="step.amount"
+                                        v-model="campaign.donationSteps[stepIndex].amount"
                                       />
                                     </div>
                                   </div>
@@ -220,34 +219,34 @@
                               </div>
 
                               <div class="row">
-                              <div class="form-group col">
-                              <label for="image">Image</label>
-                                <img
-                                  :src="campaign.donationSteps[stepIndex].image"
-                                  width="200"
-                                  height="200"
-                                  style="object-fit: contain;"
-                                  class="rounded my-3 mx-auto d-block"
-                                />
-                              </div>
+                                <div class="form-group col">
+                                  <label for="image">Image</label>
+                                  <img
+                                    :src="campaign.donationSteps[stepIndex].image"
+                                    width="200"
+                                    height="200"
+                                    style="object-fit: contain;"
+                                    class="rounded my-3 mx-auto d-block"
+                                  />
+                                </div>
                               </div>
 
                               <div class="row">
-                              <div class="form-group mx-auto">
-                                <div class="upload-btn-wrapper">
-                                  <button class="btn btn-outline-primary btn-sm" ref="text-image">
-                                      Changer d'image
-                                  </button>
+                                <div class="form-group mx-auto">
+                                  <div class="upload-btn-wrapper">
+                                    <button
+                                      class="btn btn-outline-primary btn-sm"
+                                      ref="text-image"
+                                    >Changer d'image</button>
                                     <input
                                       type="file"
                                       :id="stepIndex"
                                       name="image"
                                       ref="image"
-                                      required="required"
                                       @change="handleFileChange"
                                     />
+                                  </div>
                                 </div>
-                              </div>
                               </div>
 
                               <div class="row">
@@ -259,7 +258,6 @@
                                     name="text"
                                     class="mb-2 w-100 form-control"
                                     rows="4"
-                                    required="required"
                                     v-model="step.text"
                                   ></textarea>
                                 </div>
@@ -313,7 +311,6 @@ export default {
   },
   mounted: function() {
     this.getCampaign();
-    // console.log(this.campaign)
   },
   methods: {
     getCampaign: function() {
@@ -321,15 +318,38 @@ export default {
         .get("campaign/" + this.$route.params.id + "/")
         .then(resp => {
           this.campaign = resp.data;
-          // console.log(resp.data);
         })
         .catch(err => {
           console.log(err.response);
         });
     },
     handleFileChange(e) {
-      const file = this.$refs["image"][e.target.id].files[0];
-      this.campaign.donationSteps[e.target.id].image = file;
+      if (!e || !this.campaign) return;
+      console.log(e);
+
+      var step = this.$refs["image"][e.target.id];
+      const stepId = this.campaign.donationSteps[e.target.id].id;
+
+      let form = new FormData();
+      form.append("image", this.$refs["image"][e.target.id].files[0]);
+      form.append("campaign", this.campaign.id);
+      form.append("amount", this.campaign.donationSteps[e.target.id].amount);
+
+      this.$http
+        .patch("donationstep/" + stepId + "/", form, {
+          headers: {
+            "Content-Type": "multipart/form-data"
+          }
+        })
+        .then(resp => {
+          this.campaign.donationSteps[e.target.id].image = resp.data.image;
+        })
+        .catch(err => {
+          console.log(err.response);
+          this.$toasted.global.error({
+            message: "Impossible de sauvegarder vos changements."
+          });
+        });
     },
     editLogo: function(e) {
       this.$refs["text-" + e.target.id].innerText = "Enregistrement...";
@@ -363,46 +383,26 @@ export default {
         let form = new FormData();
         form.append("campaign", this.campaign.id);
         form.append("amount", ds.amount);
-        form.append("image", ds.image);
         form.append("text", ds.text);
-        if (ds.id) {
-          this.$http
-          .patch("donationstep/"+ ds.id +"/", form, {
+
+        this.$http
+          .patch("donationstep/" + ds.id + "/", form, {
             headers: {
-              "Content-Type": "multipart/form-data",
-            },
+              "Content-Type": "multipart/form-data"
+            }
           })
           .then(resp => {
-            this.campaign = resp.data;
-              this.$toasted.global.success({
-                message: "Vos changements ont été sauvegardés."
-              });
-            })
-            .catch(err => {
-              console.log(err.response);
-              this.$toasted.global.error({
-                message: "Impossible de sauvegarder vos changements."
-              });
+            this.$toasted.global.success({
+              message: "Vos changements ont été sauvegardés."
             });
-        }
-        else{
-          this.$http
-          .post("donationstep/", form)
-          .then(resp => {
-            this.campaign = resp.data;
-              this.$toasted.global.success({
-                message: "Vos changements ont été sauvegardés."
-              });
-            })
-            .catch(err => {
-              console.log(err.response);
-              this.$toasted.global.error({
-                message: "Impossible de sauvegarder vos changements."
-              });
+          })
+          .catch(err => {
+            console.log(err.response);
+            this.$toasted.global.error({
+              message: "Impossible de sauvegarder vos changements."
             });
-          }
-        });
-      
+          });
+      });
     },
     edit: function() {
       if (this.campaign) {
@@ -414,12 +414,6 @@ export default {
         form.append("description", this.campaign.description);
         form.append("is_video", this.campaign.is_video);
         form.append("video", this.campaign.video);
-        // form.append("text1", this.campaign.text1);
-        // form.append("text5", this.campaign.text5);
-        // form.append("text10", this.campaign.text10);
-        // form.append("text20", this.campaign.text20);
-        // form.append("text30", this.campaign.text30);
-        // form.append("text50", this.campaign.text50);
         this.$http
           .patch("campaign/" + this.campaign.id + "/", form)
           .then(resp => {
@@ -437,33 +431,52 @@ export default {
       }
     },
     addStep: function() {
-      // console.log("addStep()");
-      this.campaign.donationSteps.push({
+      var newStep = {
         id: 0,
         amount: 0,
         text: "",
         image: "",
         campaign: this.campaign.id
-      });
-      // console.log(this.campaign.donationSteps)
+      }
+      this.campaign.donationSteps.push(newStep);
+
+      let form = new FormData();
+      form.append("id", newStep.id);
+      form.append("campaign", newStep.campaign);
+      form.append("amount", newStep.amount);
+      form.append("text", newStep.text);
+      form.append("image", newStep.image);
+
+      this.$http
+        .post("donationstep/", form)
+        .then(resp => {
+          this.campaign.donationSteps[this.campaign.donationSteps.length - 1].id = resp.data.id
+        })
+        .catch(err => {
+          console.log(err.response);
+          this.$toasted.global.error({
+            message: "Impossible de sauvegarder vos changements."
+          });
+        });
     },
     deleteStep: function(e) {
-      // console.log("deleteStep()");
       if (this.campaign.donationSteps.length > 1) {
         let step = this.campaign.donationSteps[e.target.id];
-        // console.log(step);
-
-        this.$http
-          .post("donationstep/" + step.id + "/delete/")
-          .then(resp => {
-            this.campaign.donationSteps.splice(e.target.id, 1);
-          })
-          .catch(err => {
-            // console.log(err.response);
-            this.$toasted.global.error({
-              message: err.message
+        if (step.id != 0) {
+          this.$http
+            .post("donationstep/" + step.id + "/delete/")
+            .then(resp => {
+              this.campaign.donationSteps.splice(e.target.id, 1);
+            })
+            .catch(err => {
+              console.log(err.response);
+              this.$toasted.global.error({
+                message: err.message
+              });
             });
-          });
+        } else {
+          this.campaign.donationSteps.splice(e.target.id, 1);
+        }
       } else {
         this.$toasted.global.error({
           message: "Il faut au moins une équivalence."
