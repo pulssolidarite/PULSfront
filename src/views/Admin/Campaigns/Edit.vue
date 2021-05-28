@@ -325,7 +325,6 @@ export default {
     },
     handleFileChange(e) {
       if (!e || !this.campaign) return;
-      console.log(e);
 
       var step = this.$refs["image"][e.target.id];
       const stepId = this.campaign.donationSteps[e.target.id].id;
