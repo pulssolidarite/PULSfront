@@ -129,10 +129,10 @@
             </div>
             <div class="card-body border-top">
               <h4 class="mb-0">Médias</h4>
-              <p>
+              <i>
                 Il est important de compresser les images au maximum avant de
-                les uploader.
-              </p>
+                les uploader. taille conseillée : 600x600
+              </i>
               <form>
                 <div class="row">
                   <div class="form-group col">
@@ -170,6 +170,7 @@
                         <div class="card-body">
                           <h4 class="mb-0">Equivalences de Dons</h4>
                           <p>Ajoutez autant de pallier que vous voulez</p>
+                          <i>taille conseillée : 300x300</i>
                         </div>
                       </div>
                       <div class="row">
@@ -373,6 +374,12 @@ export default {
     editDonationSteps() {
       if (!this.campaign) return;
       this.campaign.donationSteps.forEach(ds => {
+        if (ds.amount <= 0) {
+          this.$toasted.global.error({
+              message: "Montant d'équivalence invalide."
+            });
+          return;
+        }
         let form = new FormData();
         form.append("campaign", this.campaign.id);
         form.append("amount", ds.amount);
@@ -425,7 +432,7 @@ export default {
     addStep: function() {
       var newStep = {
         id: 0,
-        amount: 0,
+        amount: 1,
         text: "",
         image: "",
         campaign: this.campaign.id
