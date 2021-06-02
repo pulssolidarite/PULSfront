@@ -184,6 +184,7 @@ export default {
         form.append("link", this.campaign.link);
         form.append("description", this.campaign.description);
         form.append("video", this.campaign.video);
+        form.append("logo", this.$refs.logo.files[0]);
         form.append("donationSteps", this.campaign.donationSteps);
         this.$http
           .post("campaign/", form, {
