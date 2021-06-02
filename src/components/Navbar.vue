@@ -1,7 +1,7 @@
 <template>
   <div class="dashboard-header">
     <nav class="navbar navbar-expand-lg bg-white fixed-top">
-      <router-link class="navbar-brand" to="/">PULS Admin</router-link>
+      <router-link class="navbar-brand" to="/">Seth API - Arcade for Good</router-link>
       <button
         class="navbar-toggler"
         type="button"

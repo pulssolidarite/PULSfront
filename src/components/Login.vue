@@ -5,7 +5,7 @@
   <div class="splash-container">
     <div class="card ">
       <div class="card-header text-center">
-        <h3>PULS Admin</h3>
+        <h3>Seth API - Arcade for Good</h3>
         <span class="splash-description"
           >Veuillez entrer vos informations de connexion.</span
         >
