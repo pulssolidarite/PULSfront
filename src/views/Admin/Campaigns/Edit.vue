@@ -131,7 +131,7 @@
               <h4 class="mb-0">Médias</h4>
               <i>
                 Il est important de compresser les images au maximum avant de
-                les uploader. taille conseillée : 600x600
+                les uploader. taille conseillée : 500x500
               </i>
               <form>
                 <div class="row">
