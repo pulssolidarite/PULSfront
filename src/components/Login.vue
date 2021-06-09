@@ -5,7 +5,7 @@
   <div class="splash-container">
     <div class="card ">
       <div class="card-header text-center">
-        <h3>Seth API - Arcade for Good</h3>
+        <h3>Seth - Arcade for Good API</h3> 
         <span class="splash-description"
           >Veuillez entrer vos informations de connexion.</span
         >

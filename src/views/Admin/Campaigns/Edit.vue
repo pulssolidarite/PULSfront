@@ -170,7 +170,7 @@
                         <div class="card-body">
                           <h4 class="mb-0">Equivalences de Dons</h4>
                           <p>Ajoutez autant de pallier que vous voulez</p>
-                          <i>taille conseillée : 300x300</i>
+                          <i>taille conseillée : 300x150</i>
                         </div>
                       </div>
                       <div class="row">
