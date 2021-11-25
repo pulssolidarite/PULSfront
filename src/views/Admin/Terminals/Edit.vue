@@ -1,6 +1,6 @@
 <template>
   <div class="dashboard-ecommerce">
-    <div class="container-fluid dashboard-content ">
+    <div class="container-fluid dashboard-content">
       <!-- BREADCRUMB -->
       <div class="row">
         <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">
@@ -64,7 +64,12 @@
         <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">
           <div class="card">
             <div
-              class="card-header d-flex align-items-center justify-content-between"
+              class="
+                card-header
+                d-flex
+                align-items-center
+                justify-content-between
+              "
             >
               <h5 class="mb-0">Ajouter un terminal</h5>
             </div>
@@ -175,6 +180,10 @@
                       />
                     </div>
                   </div>
+				  <div class="mb-3 form-check">
+					<input type="checkbox" class="form-check-input" v-model="terminal.is_free">
+					<label class="form-check-label" for="exampleCheck1" >Jouer Gratuitement</label>
+				</div>
                 </div>
               </div>
             </div>
@@ -197,8 +206,7 @@
                         maxCampaigns
                       }})</span
                     > -->
-                    </label
-                  >
+                  </label>
                   <div class="row form-group">
                     <label
                       v-for="campaign in campaigns"
@@ -253,8 +261,7 @@
                       ]"
                       >({{ terminal.games.length }}/{{ maxGames }})</span
                     > -->
-                    </label
-                  >
+                  </label>
                   <div class="row form-group">
                     <label
                       v-for="game in games"
@@ -305,7 +312,7 @@
 <script>
 export default {
   name: "EditTerminal",
-  data: function() {
+  data: function () {
     return {
       terminal: "",
       campaigns: {},
@@ -321,13 +328,13 @@ export default {
       },
     };
   },
-  mounted: function() {
+  mounted: function () {
     this.getTerminal();
     this.getCampaigns();
     this.getGames();
   },
   methods: {
-    getGames: function() {
+    getGames: function () {
       this.$http
         .get("game/")
         .then((resp) => {
@@ -337,7 +344,7 @@ export default {
           console.log(err.response);
         });
     },
-    getCampaigns: function() {
+    getCampaigns: function () {
       this.$http
         .get("campaign/")
         .then((resp) => {
@@ -347,7 +354,7 @@ export default {
           console.log(err.response);
         });
     },
-    getTerminal: function() {
+    getTerminal: function () {
       this.$http
         .get("terminal/" + this.$route.params.id + "/")
         .then((resp) => {
@@ -357,7 +364,7 @@ export default {
           console.log(err.response);
         });
     },
-    campaignExists: function(id) {
+    campaignExists: function (id) {
       for (let i = 0; i < this.terminal.campaigns.length; i++) {
         if (this.terminal.campaigns[i].id == id) {
           return true;
@@ -365,11 +372,11 @@ export default {
       }
       return false;
     },
-    selectCampaign: function(campaign) {
+    selectCampaign: function (campaign) {
       if (!this.campaignExists(campaign.id)) {
         // if (this.terminal.campaigns.length <= this.maxCampaigns) {
-          // Only if not max campaigns
-          this.terminal.campaigns.push(campaign);
+        // Only if not max campaigns
+        this.terminal.campaigns.push(campaign);
         // }
       } else {
         for (let index = 0; index < this.terminal.campaigns.length; index++) {
@@ -380,7 +387,7 @@ export default {
         }
       }
     },
-    gameExists: function(id) {
+    gameExists: function (id) {
       for (let i = 0; i < this.terminal.games.length; i++) {
         if (this.terminal.games[i].id == id) {
           return true;
@@ -388,10 +395,10 @@ export default {
       }
       return false;
     },
-    selectGame: function(game) {
+    selectGame: function (game) {
       if (!this.gameExists(game.id)) {
         // if (this.terminal.games.length <= this.maxGames) {
-          this.terminal.games.push(game);
+        this.terminal.games.push(game);
         // }
       } else {
         for (let index = 0; index < this.terminal.games.length; index++) {
@@ -402,7 +409,7 @@ export default {
         }
       }
     },
-    edit: function() {
+    edit: function () {
       if (this.terminal) {
         let sentTerminal = { ...this.terminal };
         // Rearranging data for serializer reasons

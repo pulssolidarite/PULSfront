@@ -264,6 +264,10 @@
                     />
                   </div>
                 </div>
+				<div class="mb-3 form-check">
+					<input type="checkbox" class="form-check-input" v-model="terminal.is_free">
+					<label class="form-check-label" for="exampleCheck1">Jouer Gratuitement</label>
+				</div>
               </form>
             </div>
             <div class="card-body border-top">
@@ -388,6 +392,7 @@ export default {
       terminal: {
         campaigns: [],
         games: [],
+		is_free: false,
       },
       formVisible: false,
       customers: {},
