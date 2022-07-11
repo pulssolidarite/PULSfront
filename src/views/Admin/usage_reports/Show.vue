@@ -27,7 +27,6 @@
           </div>
         </div>
       </div>
-
           <div class="ecommerce-widget">
 
               <div class="card">
@@ -108,9 +107,7 @@
                     <label for="core">TPE</label>
                             <select class="custom-select mb-2"  >
                          <option > Tout </option>
-
-              </select>
-
+                 </select>
                   </div>
                    <div class="form-group col">
                     <label for="core">Période</label>
@@ -125,11 +122,8 @@
                   </div>
 
                 </div></div>
-
      </div>
-
         <div class="row">
-
           <div class="col-xl-3 col-lg-6 col-md-6 col-sm-12 col-12">
             <div class="card">
               <div class="card-body">
@@ -144,7 +138,6 @@
               </div>
             </div>
           </div>
-
            <div class="col-xl-3 col-lg-6 col-md-6 col-sm-12 col-12">
             <div class="card">
               <div class="card-body">
@@ -160,14 +153,6 @@
               </div>
             </div>
           </div>
-
-
-
-
-
-
-
-
           <div class="col-xl-3 col-lg-6 col-md-6 col-sm-12 col-12">
             <div class="card">
               <div class="card-body">
@@ -180,72 +165,63 @@
               </div>
             </div>
           </div>
+           <table class="table">
+              <thead class="bg-light">
+                <tr class="border-0">
+           <th class="border-0">#</th>
+        <th class="border-0">Date</th>
+        <th class="border-0">Heure</th>
+        <th class="border-0">Transaction</th>
+        <th class="border-0">Donateur</th>
+        <th class="border-0">Compagne</th>
+        <th class="border-0">Terminal</th>
+        <th class="border-0">Client</th>
+        <th class="border-0">TPE</th>
+        <th class="border-0">Montant</th>
+        <th class="border-0">Jeu</th>
+        <th class="border-0">Forumle des dons</th>
 
+            </tr>
+          </thead>
+          <tbody>
 
-                           <table class="table">
-                              <thead class="bg-light">
-                                <tr class="border-0">
-                           <th class="border-0">#</th>
-                        <th class="border-0">Date</th>
-                        <th class="border-0">Heure</th>
-                        <th class="border-0">Transaction</th>
-                        <th class="border-0">Donateur</th>
-                        <th class="border-0">Compagne</th>
-                        <th class="border-0">Terminal</th>
-                        <th class="border-0">Client</th>
-                        <th class="border-0">TPE</th>
-                        <th class="border-0">Montant</th>
-                        <th class="border-0">Jeu</th>
-                        <th class="border-0">Forumle des dons</th>
+            <tr
+              v-for="payment in result"
+              :key="payment.id"
+            >
+              <td>{{ payment.id }}</td>
+              <td>{{ payment.date }}</td>
+              <td>{{ none }}</td>
+               <td>
+                <span
+                  v-if="payment.status == 'Accepted'"
+                  class="text-success"
+                  >{{ payment.status }}</span
+                >
+                <span v-else class="text-danger">{{
+                  payment.status
+                }}</span>
+              </td>
+              <td>N° {{ payment.donator.id }}</td>
+              <td>{{ payment.campaign.name }} </td>
+              <td>{{ payment.terminal.name }} </td>
+             <td>{{ none }} </td>
+             <td>{{ none }} </td>
+             <td>{{ payment.amount }} </td>
+              <td>
+                <router-link to="/">
+                  <img
+                    :src="payment.game.logo"
+                    width="20"
+                    class="mr-2 campaign-logo-grayed"
+                    :alt="payment.game.name"
+                  />{{ payment.game.name }}</router-link
+                >
+              </td>
 
-                                </tr>
-                              </thead>
-                              <tbody>
-
-                                <tr
-                                  v-for="payment in result"
-                                  :key="payment.id"
-                                >
-                                  <td>{{ payment.id }}</td>
-                                  <td>{{ payment.date }}</td>
-                                  <td>{{ none }}</td>
-                                   <td>
-                                    <span
-                                      v-if="payment.status == 'Accepted'"
-                                      class="text-success"
-                                      >{{ payment.status }}</span
-                                    >
-                                    <span v-else class="text-danger">{{
-                                      payment.status
-                                    }}</span>
-                                  </td>
-                                  <td>N° {{ payment.donator.id }}</td>
-                                  <td>{{ payment.campaign.name }} </td>
-                                  <td>{{ payment.terminal.name }} </td>
-                                 <td>{{ none }} </td>
-                                 <td>{{ none }} </td>
-                                 <td>{{ payment.amount }} </td>
-
-
-                                  <td>
-                                    <router-link to="/">
-                                      <img
-                                        :src="payment.game.logo"
-                                        width="20"
-                                        class="mr-2 campaign-logo-grayed"
-                                        :alt="payment.game.name"
-                                      />{{ payment.game.name }}</router-link
-                                    >
-                                  </td>
-
-                                </tr>
-                              </tbody>
-                            </table>
-
-        <br>
-        <br>
-        <br>
-
+            </tr>
+          </tbody>
+        </table>
         </div>
 
       </div>
