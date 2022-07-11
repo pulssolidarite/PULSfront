@@ -104,6 +104,11 @@ Vue.config.productionTip = false;
 
 // Axios stuff
 const baseURL = process.env.VUE_APP_SERVER_URL;
+//const baseURL = "http://localhost:8000";
+
+
+console.log("debug", process.env);
+
 axios.defaults.baseURL = baseURL;
 Vue.prototype.$http = axios;
 const token = localStorage.getItem("accessToken");
