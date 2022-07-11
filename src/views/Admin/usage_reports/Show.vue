@@ -325,7 +325,6 @@ export default {
     this.result =  {}
 
     this.getFilterResults()
-
     },
 
     getFilterResults: function() {
