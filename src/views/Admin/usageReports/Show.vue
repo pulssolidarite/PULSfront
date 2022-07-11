@@ -76,17 +76,16 @@
                 >
               </select>
                   </div>
-                  <!--
+
                      <div class="form-group col">
                     <center> <label for="core">Formule de dons</label></center>
-                     <select class="custom-select mb-2"  @change="onChange" v-model="choosen_formule" >
+                     <select class="custom-select mb-2"  @change="onChange" v-model="choosen_formula" >
                       <option value ="all" selected > Tout </option>
-                <option>  Classique </option>
-                 <option> Mécénat,  </option>
-                  <option> Partage  </option>
+                <option value ="Classique">  Classique </option>
+                 <option value ="Mécénat"> Mécénat  </option>
+                  <option value ="Partage"> Partage  </option>
                   </select>
                   </div>
-                   -->
                      <div class="form-group col">
                     <center> <label for="core">Transaction</label></center>
                    <select class="custom-select mb-2" @change="onChange" v-model="choosen_transaction" >
@@ -120,7 +119,10 @@
                 >
                  </select>
                   </div>
+
+
                    <div class="form-group col">
+
                         <div class="form-group col">
                     <center> <label for="core"> A partir de </label></center>
                     <div class="input-group input-group-sm mb-3">
@@ -133,6 +135,7 @@
                     </div>
                   </div>
                   </div>
+
                  <div class="form-group col">
                    <center> <label for="core"> Jusqu’à </label><br></center>
                        <div class="input-group input-group-sm mb-3">
@@ -145,8 +148,7 @@
                     </div>
                   </div>
                   </div>
-                  </div>
-                    <div class="form-group col">
+                <div class="form-group col">
                     <center><label for="core">Période</label></center>
                            <select class="custom-select mb-2" @change="onChange" v-model="choosen_period" >
                           <option value ="all" selected> Tout </option>
@@ -161,6 +163,14 @@
                       <option  value ="LastYear" > L'année dernière  </option>
                       </select>
                   </div>
+
+                  </div>
+
+
+
+
+
+
                    <div class="form-group col">
                     <center><label for="core">Nombre de résultats</label></center>
                             <div class="input-group mb-3">
@@ -221,7 +231,7 @@
         <th class="border-0">TPE</th>
         <th class="border-0">Montant</th>
         <th class="border-0">Jeu</th>
-        <!-- <th class="border-0">Forumle des dons</th> -->
+        <th class="border-0">Forumle des dons</th>
             </tr>
           </thead>
           <tbody v-if="result.length > 0">
@@ -257,6 +267,12 @@
                  {{ payment.game.name }}</router-link
                 >
               </td>
+
+              <td>
+                <router-link to="/">
+                 {{ payment.terminal.donation_formula }}</router-link
+                >
+              </td>
             </tr>
           </tbody>
               <tbody v-else>
@@ -271,7 +287,7 @@
                       </tr>
                     </tbody>
         </table>
-        </div>
+        </div><br>
                       <div
                         class="d-flex align-items-center justify-content-between my-2"
                       >
@@ -281,10 +297,12 @@
                             id="DataTables_Table_0_info"
                             role="status"
                             aria-live="polite"
+
                           >
-                            Afficher 1 à {{ perPage }} de
-                            {{ allPayments.length }} entrées
+                            <div style="color:white; color:#1C7DCE ;display:inline; "> Afficher :  &nbsp;&nbsp;</div> <strong>1 à {{ perPage }} de
+                            {{ allPayments.length }} entrées </strong>
                           </div>
+                          <div style="color:white; color:#1C7DCE ;display:inline; "> Nombre Total de résultats : </div> &nbsp;&nbsp;<strong>{{ TotalResults }} entrées</strong>
                         </div>
                         <div
                           class="col-sm-12 col-md-7 d-flex justify-content-end"
@@ -366,7 +384,7 @@ export default {
       choosen_compaign : "all",
       choosen_terminal : "all" ,
       choosen_client : "all" ,
-      choosen_formule : "all" ,
+      choosen_formula : "all" ,
       choosen_transaction : "all" ,
       choosen_game : "all" ,
       choosen_tpe : "all" ,
@@ -383,6 +401,7 @@ export default {
       perPage: 12,
       pages: [],
       results_number : 50,
+      TotalResults : 0,
     };
   },
 
@@ -423,7 +442,7 @@ export default {
       this.$http.get("payment/exportCSV/?campaign_id="+ this.choosen_compaign +"&terminal_id="+ this.choosen_terminal+"&client_id=" + this.choosen_client +
       "&status="+ this.choosen_transaction+"&game_id=" + this.choosen_game +"&date=" + this.choosen_period  +
       "&date_start="+ this.choosen_date_start+"&date_end=" + this.choosen_date_end + "&results_number=" + this.results_number  +
-      "&payment_terminal="+ this.choosen_tpe )
+      "&payment_terminal="+ this.choosen_tpe + "&donation_formula="+ this.choosen_formula )
        .then((response) => {
         const url = window.URL.createObjectURL(new Blob([response.data]));
         const link = document.createElement('a');
@@ -449,7 +468,7 @@ export default {
      this.choosen_compaign = "all",
       this.choosen_terminal = "all" ,
       this.choosen_client = "all" ,
-      this.choosen_formule = "all" ,
+      this.choosen_formula = "all" ,
       this.choosen_transaction = "all" ,
       this.choosen_game = "all" ,
       this.choosen_tpe = "all" ,
@@ -458,6 +477,8 @@ export default {
       this.choosen_time = "all" ,
       this.choosen_period = "all",
       this.results_number = 50,
+      this.TotalResults = 0,
+      this.choosen_formula = "all",
       this.getFilterResults()
 
     },
@@ -470,6 +491,7 @@ export default {
     this.avg =  0
     this.total_games = 0
     this.result =  []
+    this.TotalResults = 0
     this.getFilterResults()
     },
     getFilterResults: function() {
@@ -478,12 +500,13 @@ export default {
         .get("/payment/filtered/?campaign_id="+ this.choosen_compaign +"&terminal_id="+ this.choosen_terminal+"&client_id=" + this.choosen_client +
       "&status="+ this.choosen_transaction+"&game_id=" + this.choosen_game +"&date=" + this.choosen_period  +
       "&date_start="+ this.choosen_date_start+"&date_end=" + this.choosen_date_end + "&results_number=" + this.results_number +
-      "&payment_terminal="+ this.choosen_tpe )
+      "&payment_terminal="+ this.choosen_tpe + "&donation_formula="+ this.choosen_formula )
         .then((resp) => {
           this.result = resp.data.payments;
            this.sum = resp.data.amountSum;
            this.avg  = resp.data.amountAvg;
            this.total_games = resp.data.total_games;
+           this.TotalResults = resp.data.TotalResults;
             this.message = "Aucun résultat correspond à votre recherche"
         })
         .catch(() => {
