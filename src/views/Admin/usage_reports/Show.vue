@@ -21,7 +21,7 @@
                 aria-controls="submenu-export"
                 >
 
-                <center><button class="btn btn-primary mb-1" ><font-awesome-icon icon="plus" class="mr-2" />Export Results</button></center>
+                <center><button class="btn btn-primary mb-1" ><font-awesome-icon icon="file" class="mr-2" />Export Results</button></center>
                 </router-link
               >
 
@@ -35,7 +35,7 @@
 
                   <li class="nav-item">
                     <router-link class="nav-link" to=""
-                      ><center><button class="btn btn-primary"  STYLE=" background-color:black; "  > As XLSX </button></center></router-link
+                      ><center><button class="btn btn-primary"   STYLE=" background-color:black; "  > As XLSX </button></center></router-link
                     >
                   </li>
                 </ul>
@@ -63,7 +63,7 @@
 
            <div class="row">
                  <div class="form-group col">
-                    <center> <label for="core">Compagne</label></center>
+                    <center> <label for="core">Campagne</label></center>
             <select class="custom-select mb-2" name="fruit" @change="onChange" v-model="choosen_compaign" >
                 <option value ="all"  > Tout </option>
                 <option
@@ -100,6 +100,8 @@
                 >
               </select>
                   </div>
+
+                  <!--
                      <div class="form-group col">
                     <center> <label for="core">Formule de dons</label></center>
                      <select class="custom-select mb-2"  @change="onChange" v-model="choosen_formule" >
@@ -110,6 +112,11 @@
 
                   </select>
                   </div>
+
+                    -->
+
+
+
                      <div class="form-group col">
                     <center> <label for="core">Transaction</label></center>
 
@@ -122,7 +129,7 @@
                   </select>
                   </div>
                      <div class="form-group col">
-                   <center>  <label for="core">jeux</label></center>
+                   <center>  <label for="core">Jeux</label></center>
                           <select class="custom-select mb-2" @change="onChange" v-model="choosen_game"  >
                          <option value ="all" selected> Tout </option>
                 <option
@@ -133,6 +140,10 @@
                 >
               </select>
                   </div>
+
+
+                  <!--
+
                    <div class="form-group col">
                     <center> <label for="core">TPE</label></center>
                             <select class="custom-select mb-2" @change="onChange" v-model="choosen_tpe"  >
@@ -140,6 +151,7 @@
                  </select>
                   </div>
 
+                    -->
 
                    <div class="form-group col">
 
@@ -147,7 +159,22 @@
                         <div class="form-group col">
                     <center> <label for="core"> A partir de </label></center>
 
-                        <input type="datetime-local" id="date_start" name="date_start" step="1" @change="onChange" v-model="choosen_date_start"  >
+
+
+                    <div class="input-group input-group-sm mb-3">
+                    <div class="input-group-prepend">
+                      <span class="input-group-text"
+                        ><font-awesome-icon icon="clock"
+                      />
+
+                      </span>
+
+                    <datetime format="DD-MM-YYYY H:i:s"  @input="onChange"  v-model=choosen_date_start   style = " text-align: center; color: #2c3e50;  font-family: Helvetica;  "></datetime>
+                    </div>
+
+                  </div>
+
+
 
                   </div>
 
@@ -155,12 +182,29 @@
                  <div class="form-group col">
                    <center> <label for="core"> Jusqu’à </label><br></center>
 
-                         <input type="datetime-local" id="date_end" name="date_end" step="1" @change="onChange" v-model="choosen_date_end"  >
+
+
+                       <div class="input-group input-group-sm mb-3">
+                    <div class="input-group-prepend">
+                      <span class="input-group-text"
+                        ><font-awesome-icon icon="clock"
+                      />
+
+                      </span>
+                      <datetime format="DD-MM-YYYY H:i:s"  @input="onChange" v-model=choosen_date_end  style = " text-align: center; color: #2c3e50;  font-family: Helvetica;  "></datetime>
+                    </div>
+
+                  </div>
+
+
                   </div>
 
 
 
                   </div>
+
+
+
 
 
                     <div class="form-group col">
@@ -183,7 +227,27 @@
 
                   </div>
 
+                   <div class="form-group col">
+
+                    <center><label for="core">Nombre de résultats</label></center>
+
+                            <div class="input-group mb-3">
+                      <div class="input-group-prepend">
+                        <span class="input-group-text" id="basic-addon1">
+                          <font-awesome-icon icon="file" text = "dsfs"/>
+                        </span>
+                      </div>
+                      <input type="number" step="1" pattern="\d+" class="form-control" @change="onChange" v-model="results_number"  />
+
+
+                    </div>
+
+
+                  </div>
+
                 </div></div>
+
+
 
      </div>
         <div class="row">
@@ -231,16 +295,15 @@
                 <tr class="border-0">
            <th class="border-0">#</th>
         <th class="border-0">Date</th>
-        <th class="border-0">Heure</th>
         <th class="border-0">Transaction</th>
         <th class="border-0">Donateur</th>
-        <th class="border-0">Compagne</th>
+        <th class="border-0">Campagne</th>
         <th class="border-0">Terminal</th>
         <th class="border-0">Client</th>
-        <th class="border-0">TPE</th>
+        <!-- <th class="border-0">TPE</th> -->
         <th class="border-0">Montant</th>
         <th class="border-0">Jeu</th>
-        <th class="border-0">Forumle des dons</th>
+        <!-- <th class="border-0">Forumle des dons</th> -->
 
             </tr>
           </thead>
@@ -257,7 +320,6 @@
             >
               <td>{{ payment.id }}</td>
               <td>{{ payment.date }}</td>
-              <td>{{ none }}</td>
                <td>
                 <span
                   v-if="payment.status == 'Accepted'"
@@ -279,17 +341,10 @@
               <td>{{ payment.campaign.name }} </td>
               <td>{{ payment.terminal.name }} </td>
               <td>{{ payment.terminal.owner.customer.company }} </td>
-
-             <td>{{ none }} </td>
              <td>{{ payment.amount }} € </td>
               <td>
                 <router-link to="/">
-                  <img
-                    :src="payment.game.logo"
-                    width="20"
-                    class="mr-2 campaign-logo-grayed"
-                    :alt="payment.game.name"
-                  />{{ payment.game.name }}</router-link
+                 {{ payment.game.name }}</router-link
                 >
               </td>
 
@@ -375,22 +430,29 @@
 
 
 
-
-
       </div>
     </div>
   </div>
 </template>
 
+
+
 <script>
+
+
+import datetime from 'vuejs-datetimepicker';
+
 
 
 export default {
   name: "Home",
+   components: { datetime },
 
 
   data: function() {
     return {
+
+
       terminals: {},
       collected: 0,
       nb_donators: 0,
@@ -401,6 +463,9 @@ export default {
       games : {},
       campaigns: {},
       result : [],
+         types: [
+
+      ],
       nb_donators_last: 0,
       key : "",
       choosen_compaign : "all",
@@ -410,8 +475,8 @@ export default {
       choosen_transaction : "all" ,
       choosen_game : "all" ,
       choosen_tpe : "all" ,
-      choosen_date_start : "all" ,
-      choosen_date_end : "all" ,
+      choosen_date_start : "DD-MM-YYYY" ,
+      choosen_date_end : "DD-MM-YYYY" ,
       choosen_time : "all" ,
       choosen_period : "all",
       sum : 0,
@@ -422,14 +487,13 @@ export default {
       page: 1,
       perPage: 12,
       pages: [],
-
-
+      results_number : 50,
 
     };
   },
 
   mounted: function() {
-    this.getStats();
+    this.getSelectItems();
     this.message = "Loading results , please be patient this can take long..."
     this.getFilterResults();
 
@@ -474,13 +538,14 @@ export default {
   exportCSV(event) {
 
 
+     let loader = this.$loading.show();
 
 
       this.$http.get("payment/exportCSV/?campaign_id="+ this.choosen_compaign +"&terminal_id="+ this.choosen_terminal+"&client_id=" + this.choosen_client +
 
       "&status="+ this.choosen_transaction+"&game_id=" + this.choosen_game +"&date=" + this.choosen_period  +
 
-      "&date_start="+ this.choosen_date_start+"&date_end=" + this.choosen_date_end )
+      "&date_start="+ this.choosen_date_start+"&date_end=" + this.choosen_date_end + "&results_number=" + this.results_number   )
 
        .then((response) => {
         const url = window.URL.createObjectURL(new Blob([response.data]));
@@ -489,8 +554,18 @@ export default {
         link.setAttribute('download', 'Export_date.csv'); //or any other extension
         document.body.appendChild(link);
         link.click();
-})
+        })
+        .catch(() => {
+          this.errors = {
+            visible: true,
+            type: "danger",
+            message: "Probléme avec l'export CSV.",
+          };
+        })
 
+          .finally(() => {
+          loader.hide();
+        });
 
     },
 
@@ -498,7 +573,14 @@ export default {
     exportXLSX(event) {
 
 
-      this.$http.get("payment/exportXLSX/")
+     let loader = this.$loading.show();
+
+
+      this.$http.get("payment/exportXLSX/?campaign_id="+ this.choosen_compaign +"&terminal_id="+ this.choosen_terminal+"&client_id=" + this.choosen_client +
+
+      "&status="+ this.choosen_transaction+"&game_id=" + this.choosen_game +"&date=" + this.choosen_period  +
+
+      "&date_start="+ this.choosen_date_start+"&date_end=" + this.choosen_date_end + "&results_number=" + this.results_number  )
 
        .then((response) => {
         const url = window.URL.createObjectURL(new Blob([response.data]));
@@ -507,7 +589,18 @@ export default {
         link.setAttribute('download', 'Export_date.xlsx'); //or any other extension
         document.body.appendChild(link);
         link.click();
-});
+        })
+         .catch(() => {
+          this.errors = {
+            visible: true,
+            type: "danger",
+            message: "Probléme avec l'export XLSX.",
+          };
+        })
+
+          .finally(() => {
+          loader.hide();
+        });
 
   },
 
@@ -528,12 +621,15 @@ export default {
     },
 
     getFilterResults: function() {
+
+      let loader = this.$loading.show();
+
       this.$http
         .get("/payment/filtered/?campaign_id="+ this.choosen_compaign +"&terminal_id="+ this.choosen_terminal+"&client_id=" + this.choosen_client +
 
       "&status="+ this.choosen_transaction+"&game_id=" + this.choosen_game +"&date=" + this.choosen_period  +
 
-      "&date_start="+ this.choosen_date_start+"&date_end=" + this.choosen_date_end )
+      "&date_start="+ this.choosen_date_start+"&date_end=" + this.choosen_date_end + "&results_number=" + this.results_number )
 
         .then((resp) => {
           this.result = resp.data.payments;
@@ -549,14 +645,21 @@ export default {
             type: "danger",
             message: "Probléme avec la liste des payments.",
           };
+        })
+        .finally(() => {
+          loader.hide();
         });
     },
 
 
 
-    getStats: function() {
+    getSelectItems: function() {
+
+
+     // let loader = this.$loading.show();
+
       this.$http
-        .get("payment/stats/")
+        .get("payment/SelectItems/")
         .then(resp => {
           this.campaigns = resp.data.campaigns;
           this.terminals = resp.data.terminals;
@@ -572,8 +675,17 @@ export default {
               "Impossible de récupérer les données, contactez le webmaster."
           };
         });
+
+          /*
+          .finally(() => {
+          loader.hide();
+        }); */
     },
 
   }
 };
 </script>
+
+
+
+
