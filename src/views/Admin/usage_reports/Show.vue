@@ -110,12 +110,31 @@
                          <option value ="all" selected > Tout </option>
                  </select>
                   </div>
+
+
                    <div class="form-group col">
                     <label for="core">Période</label>
 
+                           <select class="custom-select mb-2" @change="onChange" v-model="choosen_period" >
+                          <option value ="all" selected> Tout </option>
+                    <option  value ="Today" >  Today </option>
+                     <option  value ="Yesterday" >Yesterday  </option>
+                      <option  value ="7days" > Last 7 days  </option>
+                      <option  value ="CurrentWeek" > Current Week  </option>
+                      <option  value ="LastWeek" > Last Week  </option>
+                      <option  value ="CurrentMonth" > Current Month  </option>
+                      <option  value ="LastMonth" > Last Month  </option>
+                      <option  value ="ThisYear" > This Year  </option>
+                      <option  value ="LastYear" > Last Year  </option>
+
+                      </select>
+
+                  </div>
+
+                   <div class="form-group col">
+                    <label for="core">Date</label>
+
                         <input type="datetime-local" id="date" name="date" step="1" @change="onChange" v-model="choosen_date"  >
-
-
 
                   </div>
 
@@ -126,7 +145,6 @@
                   </div>
 
                 </div></div>
-
 
      </div>
         <div class="row">
@@ -270,6 +288,7 @@ export default {
       choosen_tpe : "all" ,
       choosen_date : "all" ,
       choosen_time : "all" ,
+      choosen_period : "all"
 
     };
   },
@@ -294,7 +313,7 @@ export default {
 
     getFilterResults: function() {
       this.$http
-        .get("/payment/filtered/?campaign_id="+ this.choosen_compaign +"&terminal_id="+ this.choosen_terminal+"&client_id=" + this.choosen_client +"&status="+ this.choosen_transaction+"&game_id=" + this.choosen_game )
+        .get("/payment/filtered/?campaign_id="+ this.choosen_compaign +"&terminal_id="+ this.choosen_terminal+"&client_id=" + this.choosen_client +"&status="+ this.choosen_transaction+"&game_id=" + this.choosen_game +"&date=" + this.choosen_period   )
 
         .then((resp) => {
           this.result = resp.data.payments;
