@@ -431,7 +431,8 @@ export default {
 
   mounted: function() {
     this.getStats();
-    this.message = "Choose a filter to start the lookup..."
+    this.message = "Loading results , please be patient this can take long..."
+    this.getFilterResults();
 
 
   },
@@ -472,30 +473,9 @@ export default {
       return payments.slice(from, to);
     },
 
-
-
-
   exportCSV(event) {
 
 
-
-      if ( this.choosen_compaign == "all" &  this.choosen_terminal == "all"
-
-        & this.choosen_client == "all"
-
-          & this.choosen_transaction == "all" & this.choosen_game == "all"
-
-          & this.choosen_date_start == "all" & this.choosen_date_end == "all"
-
-          & this.choosen_time == "all" & this.choosen_period == "all"
-
-          ) {
-
-          this.message = "Choose a filter to start the lookup..."
-
-          }
-
-     else {
 
 
       this.$http.get("payment/exportCSV/?campaign_id="+ this.choosen_compaign +"&terminal_id="+ this.choosen_terminal+"&client_id=" + this.choosen_client +
@@ -513,7 +493,7 @@ export default {
         link.click();
 })
 
-           }
+
     },
 
 
@@ -546,31 +526,8 @@ export default {
     this.nbr_parties = 0
     this.result =  []
 
-    if ( this.choosen_compaign == "all" &  this.choosen_terminal == "all"
-
-        & this.choosen_client == "all"
-
-          & this.choosen_transaction == "all" & this.choosen_game == "all"
-
-          & this.choosen_date_start == "all" & this.choosen_date_end == "all"
-
-          & this.choosen_time == "all" & this.choosen_period == "all"
-
-          ) {
-
-          this.message = "Choose a filter to start the lookup..."
-
-          }
-
-     else {
-
-            this.getFilterResults()
-
-           }
+    this.getFilterResults()
     },
-
-
-
 
     getFilterResults: function() {
       this.$http
@@ -585,7 +542,8 @@ export default {
            this.sum = resp.data.amountSum;
            this.avg  = resp.data.amountAvg;
            this.nbr_parties = resp.data.nbr_parties;
-           this.message = "Aucun résultat correspond à votre recherche"
+            this.message = "Aucun résultat correspond à votre recherche"
+
         })
         .catch(() => {
           this.errors = {
