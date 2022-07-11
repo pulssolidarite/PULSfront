@@ -267,9 +267,39 @@
 				<div class="mb-3 form-check">
 					<input type="checkbox" class="form-check-input" v-model="terminal.is_free">
 					<label class="form-check-label" for="exampleCheck1">Jouer Gratuitement</label>
+					<small id="nameHelp" class="form-text text-muted"
+                      >Texte personnalisé </small
+                    >
+					 <textarea
+            class="form-control"
+            v-model="terminal.free_mode_text"
+            placeholder="Vous pouvez jouer gratuitement..."
+          ></textarea>
 				</div>
               </form>
             </div>
+             <div class="card-body border-top">
+            <div class="row">
+              <div class="col-6">
+                  <div class="form-group w-100">
+                    <h4>Numéro du Terminal de paiement</h4>
+                    <small id="nameHelp" class="form-text text-muted"
+                      >Indiquer le réfèrence fournisseur du terminal de paiement </small
+                    >
+                    <input
+                      type="text"
+                      placeholder="P6XXXXXXXXXX"
+                      class="form-control"
+                      aria-describedby="nameHelp"
+                      v-model="terminal.payment_terminal"
+                    />
+                  </div>
+                </div>
+                </div>
+            </div>
+
+
+
             <div class="card-body border-top">
               <h4 class="mb-0">Campagnes & jeux</h4>
               <p>

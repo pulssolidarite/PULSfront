@@ -103,7 +103,7 @@ Vue.use(VueProgressBar, {
 Vue.config.productionTip = false;
 
 // Axios stuff
-const baseURL = "http://localhost:8000";
+const baseURL = process.env.VUE_APP_SERVER_URL;
 
 console.log("debug", process.env);
 

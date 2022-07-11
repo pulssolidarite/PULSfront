@@ -20,7 +20,7 @@ import EditCore from "../views/Admin/Cores/Edit.vue";
 import AllClients from "../views/Admin/Clients/All.vue";
 import AddClient from "../views/Admin/Clients/Add.vue";
 import EditClient from "../views/Admin/Clients/Edit.vue";
-import usageReport from "../views/Admin/usage_reports/Show.vue";
+import usageReport from "../views/Admin/usageReports/Show.vue";
 
 
 Vue.use(VueRouter);
