@@ -151,8 +151,7 @@
               <div class="card-body">
 
                  <div class="metric-value d-inline-block">
-                  <h1 class="mb-1" v-if="collected > 0">{{ collected }} €</h1>
-                  <h1 class="mb-1" v-else>0 €</h1>
+                  <h1 class="mb-1" >{{ sum }} €</h1>
                 </div>
                 <h5 class="text-muted">Total des dons</h5>
 
@@ -165,10 +164,9 @@
               <div class="card-body">
 
                 <div class="metric-value d-inline-block">
-                  <h1 class="mb-1" v-if="collected > 0">{{ collected }} €</h1>
-                  <h1 class="mb-1" v-else>0 €</h1>
-                </div>
+                  <h1 class="mb-1" >{{ avg }} €</h1>
 
+                </div>
                 <h5 class="text-muted">Don moyen</h5>
 
 
@@ -180,7 +178,7 @@
               <div class="card-body">
 
                 <div class="metric-value d-inline-block">
-                  <h1 class="mb-1">0</h1>
+                  <h1 class="mb-1">{{ nbr_parties }}</h1>
                 </div>
                 <h5 class="text-muted">Nombre de parties</h5>
 
@@ -205,7 +203,7 @@
 
             </tr>
           </thead>
-          <tbody>
+          <tbody v-if="result.length > 0">
 
             <tr
               v-for="payment in result"
@@ -251,6 +249,18 @@
 
             </tr>
           </tbody>
+              <tbody v-else>
+                     <tr>
+                        <td colspan="13" class="text-center">
+
+                        </td>
+                      </tr>
+                      <tr>
+                        <td colspan="13" class="text-center">
+                             <h5> {{  message }} </h5>
+                        </td>
+                      </tr>
+                    </tbody>
         </table>
         </div>
 
@@ -263,6 +273,7 @@
 
 export default {
   name: "Home",
+
   data: function() {
     return {
       terminals: {},
@@ -286,7 +297,11 @@ export default {
       choosen_tpe : "all" ,
       choosen_date : "all" ,
       choosen_time : "all" ,
-      choosen_period : "all"
+      choosen_period : "all",
+      sum : 0,
+      avg :  0,
+      nbr_parties : 0,
+      message : "Aucun résultat correspond à votre recherche"
 
     };
   },
@@ -302,7 +317,11 @@ export default {
 
    onChange(event) {
 
+   this.message = "Loading results , please be patient this can take long..."
 
+    this.sum =  0
+    this.avg =  0
+    this.nbr_parties = 0
     this.result =  {}
 
     this.getFilterResults()
@@ -315,6 +334,10 @@ export default {
 
         .then((resp) => {
           this.result = resp.data.payments;
+           this.sum = resp.data.amountSum;
+           this.avg  = resp.data.amountAvg;
+           this.nbr_parties = resp.data.nbr_parties;
+           this.message = "Aucun résultat correspond à votre recherche"
         })
         .catch(() => {
           this.errors = {
