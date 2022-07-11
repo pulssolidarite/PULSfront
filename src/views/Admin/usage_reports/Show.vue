@@ -35,23 +35,24 @@
            <div class="row">
                  <div class="form-group col">
                     <label for="core">Compagne</label>
-            <select class="custom-select mb-2" >
-                <option> Tout </option>
+            <select class="custom-select mb-2" name="fruit" @change="onChange" v-model="choosen_compaign" >
+                <option value ="all"  > Tout </option>
                 <option
                   v-for="Compagne in campaigns"
-                  :value="Compagne"
+                  :value="Compagne.id"
                   :key="Compagne.id"
                   >{{ Compagne.name }}</option
                 >
               </select>
+
                   </div>
                   <div class="form-group col">
                     <label for="core">Terminal</label>
-                            <select class="custom-select mb-2" >
-                             <option> Tout </option>
+                            <select class="custom-select mb-2" @change="onChange" v-model="choosen_terminal" >
+                             <option value ="all" selected> Tout </option>
                 <option
                   v-for="terminal in terminals"
-                  :value="terminal"
+                  :value="terminal.id"
                   :key="terminal.id"
                   >{{ terminal.name }} </option
                 >
@@ -59,11 +60,11 @@
                   </div>
                      <div class="form-group col">
                     <label for="core">Client</label>
-                        <select class="custom-select mb-2"  >
-                         <option> Tout </option>
+                        <select class="custom-select mb-2" @change="onChange" v-model="choosen_client"  >
+                         <option value ="all" selected> Tout </option>
                 <option
                   v-for="customer in customers"
-                  :value="customer"
+                  :value="customer.id"
                   :key="customer.id"
                   >{{ customer.company }} -
                   {{ customer.representative }}</option
@@ -72,8 +73,8 @@
                   </div>
                      <div class="form-group col">
                     <label for="core">Formule de dons</label>
-                     <select class="custom-select mb-2"  >
-                      <option > Tout </option>
+                     <select class="custom-select mb-2"  @change="onChange" v-model="choosen_formule" >
+                      <option value ="all" selected > Tout </option>
                 <option>  Classique </option>
                  <option> Mécénat,  </option>
                   <option> Partage  </option>
@@ -83,21 +84,21 @@
                      <div class="form-group col">
                     <label for="core">Transaction</label>
 
-                   <select class="custom-select mb-2" >
-                      <option> Tout </option>
-                <option class="text-success">  Acceptée </option>
-                 <option class="text-danger">Refusée  </option>
-                  <option class="text-warning"> Skipe  </option>
+                   <select class="custom-select mb-2" @change="onChange" v-model="choosen_transaction" >
+                      <option value ="all" selected> Tout </option>
+                <option class="text-success" value ="Accepted" >  Acceptée </option>
+                 <option class="text-danger" value ="Refused" >Refusée  </option>
+                  <option class="text-warning" value ="Skiped" > Skipe  </option>
 
                   </select>
                   </div>
                      <div class="form-group col">
                     <label for="core">jeux</label>
-                          <select class="custom-select mb-2" >
-                         <option > Tout </option>
+                          <select class="custom-select mb-2" @change="onChange" v-model="choosen_game"  >
+                         <option value ="all" selected> Tout </option>
                 <option
                   v-for="g in games"
-                  :value="g"
+                  :value="g.id"
                   :key="g.id"
                   >{{ g.name }} </option
                 >
@@ -105,23 +106,28 @@
                   </div>
                    <div class="form-group col">
                     <label for="core">TPE</label>
-                            <select class="custom-select mb-2"  >
-                         <option > Tout </option>
+                            <select class="custom-select mb-2" @change="onChange" v-model="choosen_tpe"  >
+                         <option value ="all" selected > Tout </option>
                  </select>
                   </div>
                    <div class="form-group col">
                     <label for="core">Période</label>
 
-                        <input type="datetime-local" id="date" name="date" step="1"  >
+                        <input type="datetime-local" id="date" name="date" step="1" @change="onChange" v-model="choosen_date"  >
+
+
+
                   </div>
 
                     <div class="form-group col">
                     <label for="core">Time</label><br>
 
-                        <input type="time" id="time" name="time" step="1"  >
+                        <input type="time" id="time" name="time" step="1" @change="onChange" v-model="choosen_time"   >
                   </div>
 
                 </div></div>
+
+
      </div>
         <div class="row">
           <div class="col-xl-3 col-lg-6 col-md-6 col-sm-12 col-12">
@@ -198,16 +204,24 @@
                   class="text-success"
                   >{{ payment.status }}</span
                 >
-                <span v-else class="text-danger">{{
+
+                 <span
+                  v-else-if="payment.status == 'Refused'"
+                  class="text-danger"
+                  >{{ payment.status }}</span
+                >
+                <span v-else class="text-warning">{{
                   payment.status
                 }}</span>
+
               </td>
               <td>N° {{ payment.donator.id }}</td>
               <td>{{ payment.campaign.name }} </td>
               <td>{{ payment.terminal.name }} </td>
+              <td>{{ payment.terminal.owner.customer.company }} </td>
+
              <td>{{ none }} </td>
-             <td>{{ none }} </td>
-             <td>{{ payment.amount }} </td>
+             <td>{{ payment.amount }} € </td>
               <td>
                 <router-link to="/">
                   <img
@@ -230,6 +244,7 @@
 </template>
 
 <script>
+
 export default {
   name: "Home",
   data: function() {
@@ -245,22 +260,42 @@ export default {
       campaigns: {},
       result : {},
       nb_donators_last: 0,
+      key : "",
+      choosen_compaign : "all",
+      choosen_terminal : "all" ,
+      choosen_client : "all" ,
+      choosen_formule : "all" ,
+      choosen_transaction : "all" ,
+      choosen_game : "all" ,
+      choosen_tpe : "all" ,
+      choosen_date : "all" ,
+      choosen_time : "all" ,
 
     };
   },
 
 
   mounted: function() {
-    this.getFilterResults();
     this.getStats();
-    this.getGames();
-    this.getCustomers();
+    this.getFilterResults();
+
+
   },
   methods: {
 
+   onChange(event) {
+
+
+    this.result =  {}
+
+    this.getFilterResults()
+
+    },
+
     getFilterResults: function() {
       this.$http
-        .get("/payment/filtered/1/" )
+        .get("/payment/filtered/?campaign_id="+ this.choosen_compaign +"&terminal_id="+ this.choosen_terminal+"&client_id=" + this.choosen_client +"&status="+ this.choosen_transaction+"&game_id=" + this.choosen_game )
+
         .then((resp) => {
           this.result = resp.data.payments;
         })
@@ -273,73 +308,24 @@ export default {
         });
     },
 
-    getCustomers: function() {
-      this.$http
-        .get("customer/")
-        .then((resp) => {
-          this.customers = resp.data;
-        })
-        .catch(() => {
-          this.errors = {
-            visible: true,
-            type: "danger",
-            message: "Impossible de charger la liste des clients.",
-          };
-        });
-    },
-
-  getGames: function() {
-
-        this.$http
-        .get("game/")
-        .then((resp) => {
-          this.games = resp.data;
-        })
-        .catch(() => {
-          this.errors = {
-            visible: true,
-            type: "danger",
-            message: "Impossible de charger la liste des jeux.",
-          };
-        });
-
-    },
 
 
     getStats: function() {
       this.$http
-        .get("dashboard/")
+        .get("payment/stats/")
         .then(resp => {
           this.campaigns = resp.data.campaigns;
           this.terminals = resp.data.terminals;
-          this.collected = resp.data.collected;
-          this.nb_donators = resp.data.nb_donators;
-          this.nb_terminals = resp.data.nb_terminals;
-          this.total_gamesession = resp.data.total_gamesession;
+          this.games = resp.data.games;
+          this.customers = resp.data.customers;
 
-          if ((resp.data.collected_last == 0) | !resp.data.collected_last) {
-            this.collected_last = 0;
-          } else {
-            this.collected_last =
-              (resp.data.collected - resp.data.collected_last) /
-              resp.data.collected_last;
-          }
-
-
-          if ((resp.data.nb_donators_last == 0) | !resp.data.nb_donators_last) {
-            this.nb_donators = 0;
-          } else {
-            this.nb_donators_last =
-              (resp.data.nb_donators - resp.data.nb_donators_last) /
-              resp.data.nb_donators_last;
-          }
         })
         .catch(() => {
           this.errors = {
             visible: true,
             type: "danger",
             message:
-              "Impossible de récupérer les statistiques, contactez le webmaster."
+              "Impossible de récupérer les données, contactez le webmaster."
           };
         });
     },
