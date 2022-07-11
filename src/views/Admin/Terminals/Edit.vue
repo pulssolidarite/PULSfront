@@ -183,6 +183,10 @@
 				  <div class="mb-3 form-check">
 					<input type="checkbox" class="form-check-input" v-model="terminal.is_free">
 					<label class="form-check-label" for="exampleCheck1" >Jouer Gratuitement</label>
+          <textarea
+            class="form-control"
+            v-model="terminal.free_mode_text"
+          ></textarea>
 				</div>
                 </div>
               </div>
