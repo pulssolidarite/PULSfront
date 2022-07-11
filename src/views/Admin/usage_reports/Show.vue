@@ -428,7 +428,6 @@ export default {
     };
   },
 
-
   mounted: function() {
     this.getStats();
     this.message = "Loading results , please be patient this can take long..."
@@ -436,7 +435,6 @@ export default {
 
 
   },
-
 
   watch: {
     allPayments() {
