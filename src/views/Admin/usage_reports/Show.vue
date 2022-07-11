@@ -268,7 +268,7 @@ export default {
           this.errors = {
             visible: true,
             type: "danger",
-            message: "Impossible de charger la liste des clients.",
+            message: "Probleme avec la liste des payments.",
           };
         });
     },
