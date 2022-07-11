@@ -268,7 +268,7 @@ export default {
           this.errors = {
             visible: true,
             type: "danger",
-            message: "Probleme avec la liste des payments.",
+            message: "Probléme avec la liste des payments.",
           };
         });
     },
