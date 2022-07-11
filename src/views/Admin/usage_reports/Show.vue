@@ -8,11 +8,40 @@
           <div class="d-flex justify-content-between">
             <h2 class="pageheader-title">Rapport d'utilisation</h2>
 
-            <router-link
-                class="btn btn-primary mb-1"
-                :to="{ name: '' }"
-                ><font-awesome-icon  class="mr-2" /> Export </router-link
+              <li class="nav-item" style="list-style: none;">
+              <router-link
+                to=""
+                class="nav-link first"
+                exact
+                :event="''"
+                href=""
+                data-toggle="collapse"
+                aria-expanded="false"
+                data-target="#submenu-export"
+                aria-controls="submenu-export"
+                >
+
+                <center><button class="btn btn-primary mb-1" ><font-awesome-icon icon="plus" class="mr-2" />Export Results</button></center>
+                </router-link
               >
+
+              <div id="submenu-export" class="collapse submenu" style="">
+                <ul class="nav flex-column">
+                  <li class="nav-item">
+                    <router-link class="nav-link" to=""
+                      > <center><button class="btn btn-primary"  @click="exportCSV" STYLE=" background-color:black; " > As CSV </button></center></router-link
+                    >
+                  </li>
+
+                  <li class="nav-item">
+                    <router-link class="nav-link" to=""
+                      ><center><button class="btn btn-primary"  STYLE=" background-color:black; "  > As XLSX </button></center></router-link
+                    >
+                  </li>
+                </ul>
+              </div>
+            </li>
+
             </div>
             <div class="page-breadcrumb">
               <nav aria-label="breadcrumb">
@@ -34,7 +63,7 @@
 
            <div class="row">
                  <div class="form-group col">
-                    <label for="core">Compagne</label>
+                    <center> <label for="core">Compagne</label></center>
             <select class="custom-select mb-2" name="fruit" @change="onChange" v-model="choosen_compaign" >
                 <option value ="all"  > Tout </option>
                 <option
@@ -47,7 +76,7 @@
 
                   </div>
                   <div class="form-group col">
-                    <label for="core">Terminal</label>
+                   <center>  <label for="core">Terminal</label></center>
                             <select class="custom-select mb-2" @change="onChange" v-model="choosen_terminal" >
                              <option value ="all" selected> Tout </option>
                 <option
@@ -59,7 +88,7 @@
               </select>
                   </div>
                      <div class="form-group col">
-                    <label for="core">Client</label>
+                    <center> <label for="core">Client</label></center>
                         <select class="custom-select mb-2" @change="onChange" v-model="choosen_client"  >
                          <option value ="all" selected> Tout </option>
                 <option
@@ -72,7 +101,7 @@
               </select>
                   </div>
                      <div class="form-group col">
-                    <label for="core">Formule de dons</label>
+                    <center> <label for="core">Formule de dons</label></center>
                      <select class="custom-select mb-2"  @change="onChange" v-model="choosen_formule" >
                       <option value ="all" selected > Tout </option>
                 <option>  Classique </option>
@@ -82,7 +111,7 @@
                   </select>
                   </div>
                      <div class="form-group col">
-                    <label for="core">Transaction</label>
+                    <center> <label for="core">Transaction</label></center>
 
                    <select class="custom-select mb-2" @change="onChange" v-model="choosen_transaction" >
                       <option value ="all" selected> Tout </option>
@@ -93,7 +122,7 @@
                   </select>
                   </div>
                      <div class="form-group col">
-                    <label for="core">jeux</label>
+                   <center>  <label for="core">jeux</label></center>
                           <select class="custom-select mb-2" @change="onChange" v-model="choosen_game"  >
                          <option value ="all" selected> Tout </option>
                 <option
@@ -105,7 +134,7 @@
               </select>
                   </div>
                    <div class="form-group col">
-                    <label for="core">TPE</label>
+                    <center> <label for="core">TPE</label></center>
                             <select class="custom-select mb-2" @change="onChange" v-model="choosen_tpe"  >
                          <option value ="all" selected > Tout </option>
                  </select>
@@ -113,7 +142,30 @@
 
 
                    <div class="form-group col">
-                    <label for="core">Période</label>
+
+
+                        <div class="form-group col">
+                    <center> <label for="core"> A partir de </label></center>
+
+                        <input type="datetime-local" id="date_start" name="date_start" step="1" @change="onChange" v-model="choosen_date_start"  >
+
+                  </div>
+
+
+                 <div class="form-group col">
+                   <center> <label for="core"> Jusqu’à </label><br></center>
+
+                         <input type="datetime-local" id="date_end" name="date_end" step="1" @change="onChange" v-model="choosen_date_end"  >
+                  </div>
+
+
+
+                  </div>
+
+
+                    <div class="form-group col">
+
+                    <center><label for="core">Période</label></center>
 
                            <select class="custom-select mb-2" @change="onChange" v-model="choosen_period" >
                           <option value ="all" selected> Tout </option>
@@ -128,18 +180,7 @@
                       <option  value ="LastYear" > Last Year  </option>
 
                       </select>
-                  </div>
-                   <div class="form-group col">
-                    <label for="core">Date</label>
 
-                        <input type="datetime-local" id="date" name="date" step="1" @change="onChange" v-model="choosen_date"  >
-
-                  </div>
-
-                    <div class="form-group col">
-                    <label for="core">Time</label><br>
-
-                        <input type="time" id="time" name="time" step="1" @change="onChange" v-model="choosen_time"   >
                   </div>
 
                 </div></div>
@@ -205,9 +246,14 @@
           </thead>
           <tbody v-if="result.length > 0">
 
+
+
+
+
+
             <tr
-              v-for="payment in result"
-              :key="payment.id"
+              v-for="(payment, index) in displayedPayments"
+                              :key="index"
             >
               <td>{{ payment.id }}</td>
               <td>{{ payment.date }}</td>
@@ -264,6 +310,73 @@
         </table>
         </div>
 
+
+                      <div
+                        class="d-flex align-items-center justify-content-between my-2"
+                      >
+                        <div class="col-sm-12 col-md-5">
+                          <div
+                            class="dataTables_info"
+                            id="DataTables_Table_0_info"
+                            role="status"
+                            aria-live="polite"
+                          >
+                            Afficher 1 à {{ perPage }} de
+                            {{ allPayments.length }} entrées
+                          </div>
+                        </div>
+                        <div
+                          class="col-sm-12 col-md-7 d-flex justify-content-end"
+                        >
+                          <nav
+                            aria-label="Page navigation example"
+                            class="w-100"
+                          >
+                            <ul
+                              class="pagination w-100  d-flex justify-content-end"
+                            >
+                              <li class="page-item">
+                                <a
+                                  class="page-link"
+                                  v-if="page != 1"
+                                  @click.prevent="page--"
+                                  href="#"
+                                  >Previous</a
+                                >
+                              </li>
+                              <li
+                                class="page-item"
+                                v-for="pageNumber in pages.slice(
+                                  page - 1,
+                                  page + 5
+                                )"
+                                :key="pageNumber"
+                              >
+                                <a
+                                  class="page-link"
+                                  @click.prevent="page = pageNumber"
+                                  href="#"
+                                  >{{ pageNumber }}</a
+                                >
+                              </li>
+                              <li class="page-item">
+                                <a
+                                  class="page-link"
+                                  @click.prevent="page++"
+                                  v-if="page < pages.length"
+                                  href="#"
+                                  >Next</a
+                                >
+                              </li>
+                            </ul>
+                          </nav>
+                        </div>
+                      </div>
+
+
+
+
+
       </div>
     </div>
   </div>
@@ -271,8 +384,10 @@
 
 <script>
 
+
 export default {
   name: "Home",
+
 
   data: function() {
     return {
@@ -285,7 +400,7 @@ export default {
       customers: {},
       games : {},
       campaigns: {},
-      result : {},
+      result : [],
       nb_donators_last: 0,
       key : "",
       choosen_compaign : "all",
@@ -295,13 +410,20 @@ export default {
       choosen_transaction : "all" ,
       choosen_game : "all" ,
       choosen_tpe : "all" ,
-      choosen_date : "all" ,
+      choosen_date_start : "all" ,
+      choosen_date_end : "all" ,
       choosen_time : "all" ,
       choosen_period : "all",
       sum : 0,
       avg :  0,
       nbr_parties : 0,
-      message : "Aucun résultat correspond à votre recherche"
+      message : "Aucun résultat correspond à votre recherche",
+      downloadFile : "",
+      page: 1,
+      perPage: 12,
+      pages: [],
+
+
 
     };
   },
@@ -309,27 +431,154 @@ export default {
 
   mounted: function() {
     this.getStats();
-    this.getFilterResults();
+    this.message = "Choose a filter to start the lookup..."
 
 
   },
+
+
+  watch: {
+    allPayments() {
+      this.setPages();
+    }
+  },
+
+  computed: {
+    allPayments() {
+      return this.result;
+    },
+    displayedPayments() {
+      return this.paginate(this.allPayments);
+    }
+  },
+
+
+
   methods: {
+
+
+
+  setPages() {
+      let numberOfPages = Math.ceil(this.allPayments.length / this.perPage);
+      for (let index = 1; index <= numberOfPages; index++) {
+        this.pages.push(index);
+      }
+    },
+    paginate(payments) {
+      let page = this.page;
+      let perPage = this.perPage;
+      let from = page * perPage - perPage;
+      let to = page * perPage;
+      return payments.slice(from, to);
+    },
+
+
+
+
+  exportCSV(event) {
+
+
+
+      if ( this.choosen_compaign == "all" &  this.choosen_terminal == "all"
+
+        & this.choosen_client == "all"
+
+          & this.choosen_transaction == "all" & this.choosen_game == "all"
+
+          & this.choosen_date_start == "all" & this.choosen_date_end == "all"
+
+          & this.choosen_time == "all" & this.choosen_period == "all"
+
+          ) {
+
+          this.message = "Choose a filter to start the lookup..."
+
+          }
+
+     else {
+
+
+      this.$http.get("payment/exportCSV/?campaign_id="+ this.choosen_compaign +"&terminal_id="+ this.choosen_terminal+"&client_id=" + this.choosen_client +
+
+      "&status="+ this.choosen_transaction+"&game_id=" + this.choosen_game +"&date=" + this.choosen_period  +
+
+      "&date_start="+ this.choosen_date_start+"&date_end=" + this.choosen_date_end )
+
+       .then((response) => {
+        const url = window.URL.createObjectURL(new Blob([response.data]));
+        const link = document.createElement('a');
+        link.href = url;
+        link.setAttribute('download', 'Export_date.csv'); //or any other extension
+        document.body.appendChild(link);
+        link.click();
+})
+
+           }
+    },
+
+
+    exportXLSX(event) {
+
+
+      this.$http.get("payment/exportXLSX/")
+
+       .then((response) => {
+        const url = window.URL.createObjectURL(new Blob([response.data]));
+        const link = document.createElement('a');
+        link.href = url;
+        link.setAttribute('download', 'Export_date.xlsx'); //or any other extension
+        document.body.appendChild(link);
+        link.click();
+});
+
+  },
 
    onChange(event) {
 
    this.message = "Loading results , please be patient this can take long..."
 
+      this.page= 1,
+      this.perPage= 12,
+      this.pages= [],
+
     this.sum =  0
     this.avg =  0
     this.nbr_parties = 0
-    this.result =  {}
+    this.result =  []
 
-    this.getFilterResults()
+    if ( this.choosen_compaign == "all" &  this.choosen_terminal == "all"
+
+        & this.choosen_client == "all"
+
+          & this.choosen_transaction == "all" & this.choosen_game == "all"
+
+          & this.choosen_date_start == "all" & this.choosen_date_end == "all"
+
+          & this.choosen_time == "all" & this.choosen_period == "all"
+
+          ) {
+
+          this.message = "Choose a filter to start the lookup..."
+
+          }
+
+     else {
+
+            this.getFilterResults()
+
+           }
     },
+
+
+
 
     getFilterResults: function() {
       this.$http
-        .get("/payment/filtered/?campaign_id="+ this.choosen_compaign +"&terminal_id="+ this.choosen_terminal+"&client_id=" + this.choosen_client +"&status="+ this.choosen_transaction+"&game_id=" + this.choosen_game +"&date=" + this.choosen_period   )
+        .get("/payment/filtered/?campaign_id="+ this.choosen_compaign +"&terminal_id="+ this.choosen_terminal+"&client_id=" + this.choosen_client +
+
+      "&status="+ this.choosen_transaction+"&game_id=" + this.choosen_game +"&date=" + this.choosen_period  +
+
+      "&date_start="+ this.choosen_date_start+"&date_end=" + this.choosen_date_end )
 
         .then((resp) => {
           this.result = resp.data.payments;
