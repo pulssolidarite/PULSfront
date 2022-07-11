@@ -161,6 +161,19 @@
                 </ul>
               </div>
             </li>
+
+            <li class="nav-item">
+              <router-link class="nav-link" to="/UsageReport">
+               Rapport d'utilisation</router-link
+              >
+            </li>
+
+            <li class="nav-item">
+              <router-link class="nav-link" to="/Screensaver">
+               Média d'écran de veille</router-link
+              >
+            </li>
+
           </ul>
         </div>
       </nav>
