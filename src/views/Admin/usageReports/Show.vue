@@ -444,31 +444,6 @@ export default {
         });
 
     },
-    exportXLSX(event) {
-     let loader = this.$loading.show();
-      this.$http.get("payment/exportXLSX/?campaign_id="+ this.choosen_compaign +"&terminal_id="+ this.choosen_terminal+"&client_id=" + this.choosen_client +
-      "&status="+ this.choosen_transaction+"&game_id=" + this.choosen_game +"&date=" + this.choosen_period  +
-      "&date_start="+ this.choosen_date_start+"&date_end=" + this.choosen_date_end + "&results_number=" + this.results_number +
-      "&payment_terminal="+ this.choosen_tpe )
-       .then((response) => {
-        const url = window.URL.createObjectURL(new Blob([response.data]));
-        const link = document.createElement('a');
-        link.href = url;
-        link.setAttribute('download', 'Export_date.xlsx'); //or any other extension
-        document.body.appendChild(link);
-        link.click();
-        })
-         .catch(() => {
-          this.errors = {
-            visible: true,
-            type: "danger",
-            message: "Probléme avec l'export XLSX.",
-          };
-        })
-          .finally(() => {
-          loader.hide();
-        });
-  },
   clearAll(event) {
 
      this.choosen_compaign = "all",
