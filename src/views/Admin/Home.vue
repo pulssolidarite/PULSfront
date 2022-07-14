@@ -128,7 +128,7 @@
                         <th class="border-0">Status</th>
                         <th class="border-0">Nom</th>
                         <th class="border-0">Client</th>
-                        <th class="border-0">Campagnes</th>
+                        <th class="border-0">Campsagnes</th>
                         <th class="border-0">Total dons</th>
                       </tr>
                     </thead>
