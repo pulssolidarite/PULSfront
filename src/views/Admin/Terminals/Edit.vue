@@ -185,20 +185,20 @@
                     <label for="core">Formule de dons</label>
                            <select class="custom-select mb-2"  v-model="terminal.donation_formula" >
                     <option value ="Classique" selected> Classique </option>
+                    <option value ="Gratuit"> Gratuit </option>
                     <option  value ="Mécénat" >  Mécénat </option>
                      <option  value ="Partage" >Partage  </option>
 
                       </select>
                   </div></div>
 				  <div class="mb-3 form-check">
-					<input type="checkbox" class="form-check-input" v-model="terminal.is_free">
-					<label class="form-check-label" for="exampleCheck1" >Jouer Gratuitement</label>
 					<small id="nameHelp" class="form-text text-muted"
                       >Texte personnalisé </small
                     >
           <textarea
             class="form-control"
             v-model="terminal.free_mode_text"
+            :disabled="terminal.donation_formula !== 'Gratuit'"
           ></textarea>
 				</div>
                 </div>
