@@ -82,6 +82,7 @@
                      <select class="custom-select mb-2"  @change="onChange" v-model="choosen_formula" >
                       <option value ="all" selected > Tout </option>
                 <option value ="Classique">  Classique </option>
+                <option value ="Gratuit"> Gratuit </option>
                  <option value ="Mécénat"> Mécénat  </option>
                   <option value ="Partage"> Partage  </option>
                   </select>
