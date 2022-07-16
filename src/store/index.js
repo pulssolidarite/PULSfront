@@ -85,7 +85,7 @@ export default new Vuex.Store({
             console.error(err.response);
             reject({
               message:
-                "Impossible de se connecter avec ces identifiants. Veuillez réessayer.",
+                "Impossible de se connecter avec ces identifiants. Veuillez réessayer."+err,
             });
           });
       });
