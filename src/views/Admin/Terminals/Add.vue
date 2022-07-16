@@ -268,7 +268,7 @@
                   <div class="form-group col-md-6 col-12">
                     <label for="core">Formule de dons</label>
                            <select class="custom-select mb-2"  v-model="terminal.donation_formula" >
-                    <option value ="Classique" selected> Classique </option>
+                    <option value ="Classique"> Classique </option>
                     <option value ="Gratuit"> Gratuit </option>
                     <option  value ="Mécénat" >  Mécénat </option>
                      <option  value ="Partage" >Partage  </option>
@@ -432,6 +432,8 @@ export default {
       terminal: {
         campaigns: [],
         games: [],
+        payment_terminal: null,
+        donation_formula: 'Classique',
       },
       formVisible: false,
       customers: {},
