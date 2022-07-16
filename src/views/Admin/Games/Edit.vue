@@ -365,6 +365,38 @@
                     </div>
                   </div>
                 </div>
+
+                <div class="row">
+                  <div class="form-group col">
+                    <label for="cover">Cover</label>
+                    <div>
+                      <img
+                        :src="game.cover"
+                        width="740"
+                        height="350"
+                        style="object-fit: contain;"
+                        class="rounded border mx-auto my-3 d-block"
+                      />
+                      <div class="upload-btn-wrapper w-100 text-center ">
+                        <button
+                          type="button"
+                          class="btn btn-outline-danger btn-sm"
+                          ref="text-cover"
+                        >
+                          Ajouter une photo
+                        </button>
+                        <input
+                          type="file"
+                          id="cover"
+                          name="cover"
+                          ref="cover"
+                          required="required"
+                          @change="editCover"
+                        />
+                      </div>
+                    </div>
+                  </div>
+                </div>
               </form>
             </div>
           </div>
@@ -477,6 +509,32 @@ export default {
         this.$refs["text-" + e.target.id].classList.add("btn-success");
         let form = new FormData();
         form.append("logo", this.$refs.logo.files[0]);
+        this.$http
+          .patch("game/" + this.$route.params.id + "/update/", form, {
+            headers: {
+              "Content-Type": "multipart/form-data",
+            },
+          })
+          .then((resp) => {
+            this.game = resp.data;
+            this.$router.push("/games");
+          })
+          .finally(() => {
+            loader.hide();
+          });
+      }
+    },
+    editCover: function(e) {
+      if (this.game) {
+        let loader = this.$loading.show();
+
+        this.$refs["text-" + e.target.id].innerText = "Enregistrement...";
+        this.$refs["text-" + e.target.id].classList.remove(
+          "btn-outline-danger"
+        );
+        this.$refs["text-" + e.target.id].classList.add("btn-success");
+        let form = new FormData();
+        form.append("cover", this.$refs.cover.files[0]);
         this.$http
           .patch("game/" + this.$route.params.id + "/update/", form, {
             headers: {

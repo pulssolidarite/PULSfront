@@ -164,6 +164,68 @@
                   </div>
                 </div>
                 <div class="row">
+                  <div class="form-group col">
+                    <label for="squared_image">Image carré</label>
+                    <div>
+                      <img
+                        :src="campaign.squared_image"
+                        width="200"
+                        height="200"
+                        style="object-fit: contain;"
+                        class="rounded border mx-auto my-3 d-block"
+                      />
+                      <div class="upload-btn-wrapper w-100 text-center ">
+                        <button
+                          type="button"
+                          class="btn btn-outline-danger btn-sm"
+                          ref="text-squared_image"
+                        >
+                          Ajouter une photo
+                        </button>
+                        <input
+                          type="file"
+                          id="squared_image"
+                          name="squared_image"
+                          ref="squared_image"
+                          required="required"
+                          @change="editSquaredImage"
+                        />
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div class="row">
+                  <div class="form-group col">
+                    <label for="cover">Cover</label>
+                    <div>
+                      <img
+                        :src="campaign.cover"
+                        width="740"
+                        height="350"
+                        style="object-fit: contain;"
+                        class="rounded border mx-auto my-3 d-block"
+                      />
+                      <div class="upload-btn-wrapper w-100 text-center ">
+                        <button
+                          type="button"
+                          class="btn btn-outline-danger btn-sm"
+                          ref="text-cover"
+                        >
+                          Ajouter une photo
+                        </button>
+                        <input
+                          type="file"
+                          id="cover"
+                          name="cover"
+                          ref="cover"
+                          required="required"
+                          @change="editCover"
+                        />
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div class="row">
                   <div class="card-body border-top">
                     <div class="col">
                       <div class="row">
@@ -351,6 +413,58 @@ export default {
       this.$refs["text-" + e.target.id].classList.add("btn-success");
       let form = new FormData();
       form.append("logo", this.$refs.logo.files[0]);
+      this.$http
+        .patch("campaign/" + this.campaign.id + "/", form, {
+          headers: {
+            "Content-Type": "multipart/form-data"
+          }
+        })
+        .then(resp => {
+          this.campaign = resp.data;
+          this.$refs["text-" + e.target.id].innerText = "Enregistré";
+          this.$toasted.global.success({
+            message: "La photo a été sauvegardé avec succès."
+          });
+        })
+        .catch(err => {
+          console.log(err.response);
+          this.$toasted.global.error({
+            message: "Impossible d'uploader la photo."
+          });
+        });
+    },
+    editSquaredImage: function(e) {
+      this.$refs["text-" + e.target.id].innerText = "Enregistrement...";
+      this.$refs["text-" + e.target.id].classList.remove("btn-outline-danger");
+      this.$refs["text-" + e.target.id].classList.add("btn-success");
+      let form = new FormData();
+      form.append("squared_image", this.$refs.squared_image.files[0]);
+      this.$http
+        .patch("campaign/" + this.campaign.id + "/", form, {
+          headers: {
+            "Content-Type": "multipart/form-data"
+          }
+        })
+        .then(resp => {
+          this.campaign = resp.data;
+          this.$refs["text-" + e.target.id].innerText = "Enregistré";
+          this.$toasted.global.success({
+            message: "La photo a été sauvegardé avec succès."
+          });
+        })
+        .catch(err => {
+          console.log(err.response);
+          this.$toasted.global.error({
+            message: "Impossible d'uploader la photo."
+          });
+        });
+    },
+    editCover: function(e) {
+      this.$refs["text-" + e.target.id].innerText = "Enregistrement...";
+      this.$refs["text-" + e.target.id].classList.remove("btn-outline-danger");
+      this.$refs["text-" + e.target.id].classList.add("btn-success");
+      let form = new FormData();
+      form.append("cover", this.$refs.cover.files[0]);
       this.$http
         .patch("campaign/" + this.campaign.id + "/", form, {
           headers: {

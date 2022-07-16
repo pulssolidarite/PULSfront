@@ -140,6 +140,39 @@
                     </small>
                   </div>
                 </div>
+
+                <div class="row">
+                  <div class="form-group col">
+                    <label for="squared_image">Image carré</label>
+                    <input
+                      type="file"
+                      class="form-control-file"
+                      aria-describedby="fileHelpId"
+                      name="squared_image"
+                      ref="squared_image"
+                    />
+                    <small id="fileHelpId" class="form-text text-muted"
+                      >Image carré PNG, JPEG ou SVG permettant d'identifier clairement
+                      l'association.</small
+                    >
+                  </div>
+                </div>
+
+                <div class="row">
+                  <div class="form-group col">
+                    <label for="cover">Cover</label>
+                    <input
+                      type="file"
+                      class="form-control-file"
+                      aria-describedby="fileHelpId"
+                      name="cover"
+                      ref="cover"
+                    />
+                    <small id="fileHelpId" class="form-text text-muted"
+                      >Image PNG, JPEG ou SVG en dimensions 1480 x 700.</small
+                    >
+                  </div>
+                </div>
               </form>
             </div>
             <div class="card-body text-center">
@@ -185,6 +218,8 @@ export default {
         form.append("description", this.campaign.description);
         form.append("video", this.campaign.video);
         form.append("logo", this.$refs.logo.files[0]);
+        form.append("cover", this.$refs.cover.files[0]);
+        form.append("squared_image", this.$refs.squared_image.files[0]);
         form.append("donationSteps", this.campaign.donationSteps);
         this.$http
           .post("campaign/", form, {

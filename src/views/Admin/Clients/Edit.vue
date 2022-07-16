@@ -106,6 +106,46 @@
                 Modifier le client
               </button>
             </div>
+            <div class="card-body border-top">
+              <h4 class="mb-0">Médias</h4>
+              <p>
+                Il est important de compresser les images au maximum avant de
+                les uploader.
+              </p>
+              <form>
+                <div class="row">
+                  <div class="form-group col">
+                    <label for="logo">Logo</label>
+                    <div>
+                      <img
+                        :src="customer.logo"
+                        width="200"
+                        height="200"
+                        style="object-fit: contain;"
+                        class="rounded border mx-auto my-3 d-block"
+                      />
+                      <div class="upload-btn-wrapper w-100 text-center ">
+                        <button
+                          type="button"
+                          class="btn btn-outline-danger btn-sm"
+                          ref="text-logo"
+                        >
+                          Ajouter une photo
+                        </button>
+                        <input
+                          type="file"
+                          id="logo"
+                          name="logo"
+                          ref="logo"
+                          required="required"
+                          @change="editLogo"
+                        />
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </form>
+            </div>
           </div>
         </div>
       </div>
@@ -134,6 +174,32 @@ export default {
       this.$http.get("customer/" + this.$route.params.id + "/").then((resp) => {
         this.customer = resp.data;
       });
+    },
+    editLogo: function(e) {
+      if (this.customer) {
+        let loader = this.$loading.show();
+
+        this.$refs["text-" + e.target.id].innerText = "Enregistrement...";
+        this.$refs["text-" + e.target.id].classList.remove(
+          "btn-outline-danger"
+        );
+        this.$refs["text-" + e.target.id].classList.add("btn-success");
+        let form = new FormData();
+        form.append("logo", this.$refs.logo.files[0]);
+        this.$http
+          .patch("customer/" + this.$route.params.id + '/', form, {
+            headers: {
+              "Content-Type": "multipart/form-data",
+            },
+          })
+          .then((resp) => {
+            this.customer = resp.data;
+            this.$router.push("/clients");
+          })
+          .finally(() => {
+            loader.hide();
+          });
+      }
     },
     editClient: function() {
       this.$http
