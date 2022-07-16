@@ -313,6 +313,22 @@
                     >
                   </div>
                 </div>
+
+                <div class="row">
+                  <div class="form-group col">
+                    <label for="cover">Cover</label>
+                    <input
+                      type="file"
+                      class="form-control-file"
+                      aria-describedby="fileHelpId"
+                      name="cover"
+                      ref="cover"
+                    />
+                    <small id="fileHelpId" class="form-text text-muted"
+                      >Image PNG, JPEG ou SVG en dimensions 1480 x 700.</small
+                    >
+                  </div>
+                </div>
               </form>
             </div>
             <div class="card-body text-center">
@@ -429,6 +445,7 @@ export default {
           form.append("file", this.game.file.id);
           form.append("description", this.game.description);
           form.append("logo", this.$refs.logo.files[0]);
+          form.append("cover", this.$refs.cover.files[0]);
           form.append("is_video", this.game.is_video);
           form.append("j_up", this.game.j_up);
           form.append("j_down", this.game.j_down);
