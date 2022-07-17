@@ -95,6 +95,31 @@
                 </div>
               </form>
             </div>
+            <div class="card-body border-top">
+              <h4 class="mb-0">Médias</h4>
+              <p>
+                Il est important de compresser les images au maximum avant de
+                les uploader.
+              </p>
+              <form>
+                <div class="row">
+                  <div class="form-group col">
+                    <label for="logo">Logo</label>
+                    <input
+                      type="file"
+                      class="form-control-file"
+                      aria-describedby="fileHelpId"
+                      name="logo"
+                      ref="logo"
+                    />
+                    <small id="fileHelpId" class="form-text text-muted"
+                      >Logo PNG, JPEG ou SVG permettant d'identifier clairement
+                      l'entreprise.</small
+                    >
+                  </div>
+                </div>
+              </form>
+            </div>
             <div class="card-body text-center">
               <button class="btn btn-success" @click.prevent="addClient">
                 Ajouter le client
@@ -123,8 +148,21 @@ export default {
   mounted: function() {},
   methods: {
     addClient: function() {
+      const form = new FormData();
+      form.append("company", this.customer.company);
+      form.append("representative", this.customer.representative);
+      form.append("sales_type", this.customer.sales_type);
+
+      if (this.$refs.logo.files[0]) {
+        form.append("logo", this.$refs.logo.files[0]);
+      }
+
       this.$http
-        .post("customer/", this.customer)
+        .post("customer/", form, {
+          headers: {
+            "Content-Type": "multipart/form-data",
+          },
+        })
         .then(() => {
           this.$router.push("/clients");
         })
