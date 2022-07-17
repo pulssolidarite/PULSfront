@@ -283,7 +283,6 @@
             class="form-control"
             v-model="terminal.free_mode_text"
             placeholder="Vous pouvez jouer gratuitement..."
-            :disabled="terminal.donation_formula !== 'Gratuit'"
           ></textarea>
 				</div>
               </form>

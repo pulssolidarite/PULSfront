@@ -198,7 +198,6 @@
           <textarea
             class="form-control"
             v-model="terminal.free_mode_text"
-            :disabled="terminal.donation_formula !== 'Gratuit'"
           ></textarea>
 				</div>
                 </div>
