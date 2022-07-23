@@ -257,10 +257,10 @@
                   payment.status
                 }}</span>
               </td>
-              <td>N° {{ payment.donator.id }}</td>
+              <td v-if="payment.donator">N° {{ payment.donator.id }}</td>
               <td>{{ payment.campaign.name }} </td>
               <td>{{ payment.terminal.name }} </td>
-              <td>{{ payment.terminal.owner.customer.company }} </td>
+              <td>{{ getCustomerById(payment.terminal.owner).company }} </td>
               <td>{{ payment.terminal.payment_terminal }} </td>
              <td>{{ payment.amount }} € </td>
               <td>
@@ -520,6 +520,15 @@ export default {
         .finally(() => {
           loader.hide();
         });
+    },
+    getCustomerById(customerId) {
+      for (const customer of this.customers) {
+        if (customer['id'] === customerId) {
+          return customer;
+        }
+      }
+
+      return undefined;
     },
 
     getSelectItems: function() {
