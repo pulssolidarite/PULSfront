@@ -268,9 +268,9 @@
               <td>{{ payment.terminal.payment_terminal }} </td>
              <td>{{ payment.amount }} € </td>
               <td>
-                <router-link to="/">
-                 {{ payment.game.name }}</router-link
-                >
+                <router-link v-if="payment.game" to="/">
+                  {{ payment.game.name }}
+                </router-link>
               </td>
 
               <td>
