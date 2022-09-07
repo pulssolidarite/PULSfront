@@ -257,7 +257,11 @@
                   payment.status
                 }}</span>
               </td>
-              <td>{{payment.donator ? `N° ${payment.donator.id}` : '' }}</td>
+              <td>
+                <span v-if="payment.donator">
+                  {{ payment.donator.email ? payment.donator.email : `N° ${payment.donator.id}` }}
+                </span>
+              </td>
               <td>{{ payment.campaign.name }} </td>
               <td>{{ payment.terminal.name }} </td>
               <td>{{ getCustomerById(payment.terminal.owner) }} </td>
