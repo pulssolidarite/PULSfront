@@ -66,7 +66,7 @@
               <div class="text-center">
                 <h2 class="font-24 mb-0">{{ terminal.name }}</h2>
                 <p>
-                  {{ terminal.owner.customer.company }}
+                  {{ terminal.customer.company }}
                   <span class="mx-2">|</span>
                   <span v-if="terminal.is_active" class="text-success"
                     >Activé</span
@@ -94,7 +94,7 @@
                 <ul class="list-unstyled mb-0">
                   <li class="mb-2">
                     <font-awesome-icon icon="envelope" class="mr-2" />{{
-                      terminal.owner.customer.representative
+                      terminal.customer.representative
                     }}
                   </li>
                   <li class="mb-0">

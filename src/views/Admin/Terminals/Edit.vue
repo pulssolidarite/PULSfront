@@ -98,7 +98,7 @@
                       class="form-control"
                       disabled
                       aria-describedby="ownerHelp"
-                      v-model="terminal.owner.customer.company"
+                      v-model="terminal.customer.company"
                     />
                     <small id="nameHelp" class="form-text text-muted"
                       >Le client rattaché au terminal.</small

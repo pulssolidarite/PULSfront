@@ -144,7 +144,7 @@
                         <td>{{ terminal.name }}</td>
                         <td>
                           <router-link to="/clients">{{
-                            terminal.owner.customer.company
+                            terminal.customer.company
                           }}</router-link>
                         </td>
                         <td>
