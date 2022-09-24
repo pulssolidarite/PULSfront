@@ -115,19 +115,17 @@ export default new Vuex.Store({
     isLoggedIn: (state) => {
       return state.refreshToken != "";
     },
-    isStaff: (state) => {
-      if (
-        state.refreshToken != "" &&
-        state.currentUser.is_staff &&
-        !state.currentUser.is_superuser
-      ) {
-        return true;
-      } else {
-        return false;
-      }
-    },
     isAdmin: (state) => {
-      return state.refreshToken != "" && state.currentUser.is_superuser;
+      return state.currentUser.is_staff;
+    },
+    isSuperuser: (state) => {
+      return state.currentUser.is_superuser;
+    },
+    isCustomer: (state) => {
+      return !state.currentUser.is_staff; // TODO should have a better way to identify customer user, because the terminal user will also pass this check
+    },
+    username: (state) => {
+      return state.currentUser.username;
     },
   },
   modules: {},

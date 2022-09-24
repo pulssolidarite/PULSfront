@@ -8,17 +8,18 @@
             <div class="d-flex justify-content-between">
               <h2 class="pageheader-title">Terminaux</h2>
               <router-link
+                v-if="isAdmin"
                 class="btn btn-primary mb-1"
-                :to="{ name: 'addTerminal' }"
-                ><font-awesome-icon icon="plus" class="mr-2" />Ajouter un
-                terminal</router-link
-              >
+                :to="{ name: 'addTerminal' }">
+                <font-awesome-icon icon="plus" class="mr-2" />
+                Ajouter un terminal
+              </router-link>
             </div>
             <div class="page-breadcrumb">
               <nav aria-label="breadcrumb">
                 <ol class="breadcrumb d-flex align-items-center">
                   <li class="breadcrumb-item">
-                    <router-link to="/home" class="breadcrumb-link"
+                    <router-link :to="{ name: 'home' }" class="breadcrumb-link"
                       >Dashboard</router-link
                     >
                   </li>
@@ -183,6 +184,14 @@ export default {
         message: "",
       },
     };
+  },
+  computed: {
+    isAdmin: function() {
+      return this.$store.getters.isAdmin;
+    },
+    isCustomer: function() {
+      return this.$store.getters.isCustomer;
+    },
   },
   mounted: function() {
     this.getTerminals();

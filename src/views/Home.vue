@@ -10,15 +10,12 @@
               <nav aria-label="breadcrumb">
                 <ol class="breadcrumb d-flex align-items-center">
                   <li class="breadcrumb-item">
-                    <router-link to="/" class="breadcrumb-link"
-                      >Dashboard</router-link
-                    >
+                    <router-link to="/" class="breadcrumb-link">Dashboard</router-link>
                   </li>
                   <font-awesome-icon
                     icon="angle-right"
                     size="xs"
-                    class="mx-1"
-                  />
+                    class="mx-1" />
                   <li class="breadcrumb-item active" aria-current="page">
                     Général
                   </li>
@@ -182,6 +179,7 @@
 </template>
 
 <script>
+  
 export default {
   name: "Home",
   data: function() {
