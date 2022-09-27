@@ -12,7 +12,7 @@
               <nav aria-label="breadcrumb">
                 <ol class="breadcrumb d-flex align-items-center">
                   <li class="breadcrumb-item">
-                    <router-link to="/home" class="breadcrumb-link">Dashboard</router-link>
+                    <router-link :to="{ name: 'home' }" class="breadcrumb-link">Dashboard</router-link>
                   </li>
                   <font-awesome-icon icon="angle-right" size="xs" class="mx-1" />
                   <li class="breadcrumb-item">

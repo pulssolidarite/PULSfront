@@ -6,19 +6,20 @@
         <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">
           <div class="page-header">
             <div class="d-flex justify-content-between">
-              <h2 class="pageheader-title">Campagnes</h2>
+              <h2 class="pageheader-title">Jeux</h2>
               <router-link
+                v-if="isAdmin"
                 class="btn btn-primary mb-1"
-                :to="{ name: 'addCampaign' }"
-                ><font-awesome-icon icon="plus" class="mr-2" />Ajouter une
-                campagne</router-link
-              >
+                :to="{ name: 'addGame' }">
+                <font-awesome-icon icon="plus" class="mr-2" />
+                Ajouter un jeu
+              </router-link>
             </div>
             <div class="page-breadcrumb">
               <nav aria-label="breadcrumb">
                 <ol class="breadcrumb d-flex align-items-center">
                   <li class="breadcrumb-item">
-                    <router-link to="/home" class="breadcrumb-link"
+                    <router-link :to="{ name: 'home' }" class="breadcrumb-link"
                       >Dashboard</router-link
                     >
                   </li>
@@ -28,8 +29,8 @@
                     class="mx-1"
                   />
                   <li class="breadcrumb-item">
-                    <router-link to="/campaigns" class="breadcrumb-link"
-                      >Campagnes</router-link
+                    <router-link to="/games" class="breadcrumb-link"
+                      >Jeux</router-link
                     >
                   </li>
                   <font-awesome-icon
@@ -38,7 +39,7 @@
                     class="mx-1"
                   />
                   <li class="breadcrumb-item active" aria-current="page">
-                    Toutes les campagnes
+                    Tous les jeux
                   </li>
                 </ol>
               </nav>
@@ -58,7 +59,7 @@
         <div class="row">
           <div class="col-12">
             <div class="card">
-              <h5 class="card-header">Campagnes</h5>
+              <h5 class="card-header">Jeux</h5>
               <div class="card-body p-0">
                 <div class="table-responsive">
                   <table class="table">
@@ -68,46 +69,32 @@
                         <th class="border-0">Logo</th>
                         <th class="border-0">Nom</th>
                         <th class="border-0">Description</th>
-                        <th class="border-0">Dons collectés</th>
                         <th class="border-0">Terminaux associés</th>
                         <th class="border-0"></th>
                         <th class="border-0"></th>
                       </tr>
                     </thead>
                     <tbody>
-                      <tr v-for="(campaign, index) in campaigns" :key="index">
-                        <td>{{ campaign.id }}</td>
+                      <tr v-for="(game, index) in games" :key="index">
+                        <td>{{ game.id }}</td>
                         <td>
                           <span class="text-success"
-                            ><img
-                              :src="campaign.logo"
-                              height="30"
-                              :alt="campaign.name"
+                            ><img :src="game.logo" height="30" :alt="game.name"
                           /></span>
                         </td>
                         <td>
-                          {{ campaign.name }}
+                          {{ game.name }}
                         </td>
-                        <td>{{ stripCharacters(campaign.description) }}</td>
+                        <td>{{ stripCharacters(game.description) }}</td>
                         <td>
-                          {{ campaign.collected }}/{{ campaign.goal_amount }} €
-                        </td>
-                        <td>
-                          {{ campaign.nb_terminals }} termina<span
-                            v-if="campaign.nb_terminals > 1"
+                          {{ game.nb_terminals }} termina<span
+                            v-if="game.nb_terminals > 1"
                             >ux</span
                           ><span v-else>l</span>
                         </td>
                         <td>
                           <router-link
-                            :to="'/campaigns/' + campaign.id"
-                            class="text-dark"
-                            ><font-awesome-icon icon="eye"
-                          /></router-link>
-                        </td>
-                        <td>
-                          <router-link
-                            :to="'/campaign/' + campaign.id + '/edit'"
+                            :to="'/game/' + game.id + '/edit'"
                             class="text-primary"
                             ><font-awesome-icon icon="pen"
                           /></router-link>
@@ -115,7 +102,7 @@
                         <td>
                           <a
                             href=""
-                            @click.prevent="deleteCampaign(campaign.id)"
+                            @click.prevent="deleteGame(game.id)"
                             class="text-danger"
                             ><font-awesome-icon icon="trash-alt"
                           /></a>
@@ -135,10 +122,10 @@
 
 <script>
 export default {
-  name: "AllCampaigns",
+  name: "AllGames",
   data: function() {
     return {
-      campaigns: {},
+      games: {},
       errors: {
         visible: false,
         type: "danger",
@@ -146,8 +133,16 @@ export default {
       },
     };
   },
+  computed: {
+    isAdmin: function() {
+      return this.$store.getters.isAdmin;
+    },
+    isCustomer: function() {
+      return this.$store.getters.isCustomer;
+    },
+  },
   mounted: function() {
-    this.getCampaigns();
+    this.getGames();
   },
   methods: {
     stripCharacters: function(text) {
@@ -159,32 +154,29 @@ export default {
     },
     showDetail: function(id) {
       this.$router.push({
-        name: "campaign",
+        name: "game",
         params: { id: id },
       });
     },
-    editCampaign: function(id) {
-      this.$router.push({
-        name: "edit-campaign",
-        params: { id: id },
+    editGame: function(id) {
+      this.$router.push("/game/" + id + "/edit");
+    },
+    deleteGame: function(id) {
+      this.$http.delete("/game/" + id + "/").then(() => {
+        this.getGames();
       });
     },
-    deleteCampaign: function(id) {
-      this.$http.delete("/campaign/" + id + "/").then(() => {
-        this.getCampaigns();
-      });
-    },
-    getCampaigns: function() {
+    getGames: function() {
       let loader = this.$loading.show();
 
       this.$http
-        .get("campaign/")
+        .get("game/")
         .then((resp) => {
-          this.campaigns = resp.data;
+          this.games = resp.data;
         })
         .catch(() => {
           this.$toasted.global.error({
-            message: "Impossible de récupérer la liste des campagnes.",
+            message: "Impossible de récupérer la liste des jeux.",
           });
         })
         .finally(() => {

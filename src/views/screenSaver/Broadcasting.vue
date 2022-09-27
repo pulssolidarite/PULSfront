@@ -6,21 +6,19 @@
         <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">
           <div class="page-header">
             <div class="d-flex justify-content-between">
-              <h2 class="pageheader-title">Cores</h2>
+              <h2 class="pageheader-title">Ecran de veille</h2>
               <router-link
                 class="btn btn-primary mb-1"
-                :to="{ name: 'addCore' }"
-                ><font-awesome-icon icon="plus" class="mr-2" />Ajouter un
-                core</router-link
-              >
+                :to="{ name: 'screensaverSettings' }">
+                <font-awesome-icon icon="plus" class="mr-2" />
+                Paramétrer la diffusion
+              </router-link>
             </div>
             <div class="page-breadcrumb">
               <nav aria-label="breadcrumb">
                 <ol class="breadcrumb d-flex align-items-center">
                   <li class="breadcrumb-item">
-                    <router-link :to="{ name: 'home' }" class="breadcrumb-link"
-                      >Dashboard</router-link
-                    >
+                    <router-link :to="{ name: 'home' }" class="breadcrumb-link">Dashboard</router-link>
                   </li>
                   <font-awesome-icon
                     icon="angle-right"
@@ -28,17 +26,14 @@
                     class="mx-1"
                   />
                   <li class="breadcrumb-item">
-                    <router-link to="/cores" class="breadcrumb-link"
-                      >Cores</router-link
-                    >
+                    <router-link :to="{ name: 'screensaver' }" class="breadcrumb-link">Ecran de veille</router-link>
                   </li>
                   <font-awesome-icon
                     icon="angle-right"
                     size="xs"
-                    class="mx-1"
-                  />
+                    class="mx-1" />
                   <li class="breadcrumb-item active" aria-current="page">
-                    Tous les cores
+                    Diffusion des médias
                   </li>
                 </ol>
               </nav>
@@ -58,49 +53,36 @@
         <div class="row">
           <div class="col-12">
             <div class="card">
-              <h5 class="card-header">Cores</h5>
+              <h5 class="card-header">Diffusion des médias</h5>
               <div class="card-body p-0">
                 <div class="table-responsive">
                   <table class="table">
                     <thead class="bg-light">
                       <tr class="border-0">
                         <th class="border-0">#</th>
-                        <th class="border-0">Nom</th>
-                        <th class="border-0">Description</th>
-                        <th class="border-0">Jeux associés</th>
-                        <th class="border-0"></th>
+                        <th class="border-0">Client</th>
+                        <th class="border-0">Media</th>
+                        <th class="border-0">Visibilité</th>
                         <th class="border-0"></th>
                       </tr>
                     </thead>
                     <tbody>
-                      <tr v-for="(core, index) in cores" :key="index">
-                        <td>{{ core.id }}</td>
+                      <tr v-for="(broadcast, index) in broadcasts" :key="index">
+                        <td>{{ broadcast.id }}</td>
                         <td>
-                          {{ core.name }}
-                        </td>
-                        <td>{{ stripCharacters(core.description) }}</td>
-                        <td>
-                          <span v-if="core.nb_games">
-                            {{ core.nb_games }} jeu<span
-                              v-if="core.nb_games > 1"
-                              >x</span
-                            >
-                          </span>
+                          {{ broadcast.customer }}
                         </td>
                         <td>
-                          <router-link
-                            :to="'/core/' + core.id + '/edit'"
-                            class="text-primary"
-                            ><font-awesome-icon icon="pen"
-                          /></router-link>
+                          {{ broadcast.media }}
                         </td>
+                        <td>{{ broadcast.visibility }}</td>
                         <td>
                           <a
                             href=""
-                            @click.prevent="deleteCore(core.id)"
-                            class="text-danger"
-                            ><font-awesome-icon icon="trash-alt"
-                          /></a>
+                            @click.prevent="deleteBroadcast(broadcast.id)"
+                            class="text-danger">
+                            <font-awesome-icon icon="trash-alt"/>
+                          </a>
                         </td>
                       </tr>
                     </tbody>
@@ -111,16 +93,19 @@
           </div>
         </div>
       </div>
+
+
+      
     </div>
   </div>
 </template>
 
 <script>
 export default {
-  name: "AllCores",
+  name: "ScreenSaverBroadcasting",
   data: function() {
     return {
-      cores: [],
+      broadcast: {},
       errors: {
         visible: false,
         type: "danger",
@@ -129,46 +114,31 @@ export default {
     };
   },
   mounted: function() {
-    this.getCores();
+    this.fetchBroadcast();
   },
   methods: {
-    stripCharacters: function(text) {
-      if (text.length > 70) {
-        return text.substring(0, 70) + "..";
-      } else {
-        return text;
-      }
-    },
-    showDetail: function(id) {
-      this.$router.push({
-        name: "core",
-        params: { id: id },
-      });
-    },
-    editCore: function(id) {
-      this.$router.push("/core/" + id + "/edit");
-    },
-    deleteCore: function(id) {
-      this.$http.delete("game/core/" + id + "/").then(() => {
-        this.getCores();
-      });
-    },
-    getCores: function() {
+    fetchBroadcast: function() {
       let loader = this.$loading.show();
 
       this.$http
-        .get("game/core/")
+        .get("screensaver-broadcasts/")
         .then((resp) => {
-          this.cores = resp.data;
+          this.broadcast = resp.data;
         })
-        .catch(() => {
+        .catch((err) => {
           this.$toasted.global.error({
-            message: "Impossible de récupérer la liste des cores.",
+            message: "Impossible de récupérer la liste des diffusions.",
           });
+          throw err;
         })
         .finally(() => {
           loader.hide();
         });
+    },
+    deleteBroadcast: function(id) {
+      this.$http.delete("/screensaver-broadcasts/" + id + "/").then(() => {
+        this.fetchBroadcast();
+      });
     },
   },
 };
