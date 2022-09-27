@@ -198,7 +198,7 @@
                   >Désactiver</a
                 >
               </li>
-              <li class="nav-item">
+              <li v-if="isAdmin" class="nav-item">
                 <a class="nav-link text-danger" id="pills-review-tab"
                   >Supprimer</a
                 >
@@ -443,7 +443,13 @@ export default {
     },
     displayedPayments() {
       return this.paginate(this.allPayments);
-    }
+    },
+    isAdmin() {
+      return this.$store.getters.isAdmin;
+    },
+    isCustomer() {
+      return this.$store.getters.isCustomer;
+    },
   },
   methods: {
     getTerminal: function() {
@@ -500,7 +506,7 @@ export default {
             this.errors = {
               visible: true,
               type: "danger",
-              message: "Impossible de d'activer le terminal."
+              message: "Impossible d'activer le terminal."
             };
           });
       } else {

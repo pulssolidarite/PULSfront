@@ -74,8 +74,8 @@
                         <th class="border-0">Total dons</th>
                         <th class="border-0"></th>
                         <th class="border-0"></th>
-                        <th class="border-0"></th>
-                        <th class="border-0"></th>
+                        <th v-if="isAdmin" class="border-0"></th>
+                        <th v-if="isAdmin" class="border-0"></th>
                       </tr>
                     </thead>
                     <tbody>
@@ -144,14 +144,14 @@
                             ><font-awesome-icon icon="power-off"
                           /></a>
                         </td>
-                        <td>
+                        <td v-if="isAdmin">
                           <router-link
                             :to="'/terminal/' + terminal.id + '/edit'"
                             class="text-primary"
                             ><font-awesome-icon icon="pen"
                           /></router-link>
                         </td>
-                        <td>
+                        <td v-if="isAdmin">
                           <a
                             href=""
                             @click.prevent="deleteTerminal(index)"
