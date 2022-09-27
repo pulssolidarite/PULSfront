@@ -33,12 +33,14 @@ import AllClients from "@/views/Admin/Clients/All";
 import AddClient from "@/views/Admin/Clients/Add";
 import EditClient from "@/views/Admin/Clients/Edit";
 
-// ScreenSaver
-import AllScreenSaverMedia from "@/views/screenSaver/All";
-import EditScreenSaverMedia from "@/views/screenSaver/Edit";
-import AddScreenSaverMedia from "@/views/screenSaver/Add";
-import ScreenSaverBroadcasting from "@/views/screenSaver/Broadcasting";
-import ScreenSaverSettings from "@/views/screenSaver/Settings";
+// ScreenSaver medias
+import AllScreenSaverMedia from "@/views/screenSaverMedias/All";
+import EditScreenSaverMedia from "@/views/screenSaverMedias/Edit";
+import AddScreenSaverMedia from "@/views/screenSaverMedias/Add";
+
+// ScreenSaver broadcasts
+import AllScreenSaverBroadcast from "@/views/screenSaverBroadcasts/All";
+import AddScreenSaverBroadcast from "@/views/screenSaverBroadcasts/Add";
 
 
 
@@ -232,34 +234,18 @@ const routes = [
     },
   },
 
-  // Screensaver
+  // Screensaver medias
 
   {
-    path: "/screensaver",
-    name: "screensaver",
+    path: "/screensaver/medias",
+    name: "screensaverMedias",
     component: AllScreenSaverMedia,
     meta: {
       requiresAuth: true,
     },
   },
   {
-    path: "/screensaver/broadcasting",
-    name: "screensaverBroadcasting",
-    component: ScreenSaverBroadcasting,
-    meta: {
-      requiresAuth: true,
-    },
-  },
-  {
-    path: "/screensaver/settings",
-    name: "screensaverSettings",
-    component: ScreenSaverSettings,
-    meta: {
-      requiresAuth: true,
-    },
-  },
-  {
-    path: "/screensaver/add",
+    path: "/screensaver/medias/add",
     name: "addScreensaverMedia",
     component: AddScreenSaverMedia,
     meta: {
@@ -267,13 +253,32 @@ const routes = [
     },
   },
   {
-    path: "/screensaver/:id/edit",
+    path: "/screensaver/medias/:id/edit",
     name: "editScreensaverMedia",
     component: EditScreenSaverMedia,
     meta: {
       requiresAuth: true,
     },
   },
+
+  // Screensaver broadcasts
+
+  {
+    path: "/screensaver/broadcasts",
+    name: "screensaverBroadcasts",
+    component: AllScreenSaverBroadcast,
+    meta: {
+      requiresAuth: true,
+    },
+  },
+  {
+    path: "/screensaver/broadcasts/add",
+    name: "addScreensaverBroadcast",
+    component: AddScreenSaverBroadcast,
+    meta: {
+      requiresAuth: true,
+    },
+  },  
   
 ];
 

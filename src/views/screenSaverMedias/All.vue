@@ -9,9 +9,9 @@
               <h2 class="pageheader-title">Ecran de veille</h2>
               <router-link
                 class="btn btn-primary mb-1"
-                :to="{ name: 'screensaverSettings' }">
+                :to="{ name: 'addScreensaverMedia' }">
                 <font-awesome-icon icon="plus" class="mr-2" />
-                Paramétrer la diffusion
+                Ajouter un média
               </router-link>
             </div>
             <div class="page-breadcrumb">
@@ -26,14 +26,14 @@
                     class="mx-1"
                   />
                   <li class="breadcrumb-item">
-                    <router-link :to="{ name: 'screensaver' }" class="breadcrumb-link">Ecran de veille</router-link>
+                    <router-link :to="{ name: 'screensaverMedias' }" class="breadcrumb-link">Ecran de veille</router-link>
                   </li>
                   <font-awesome-icon
                     icon="angle-right"
                     size="xs"
                     class="mx-1" />
                   <li class="breadcrumb-item active" aria-current="page">
-                    Diffusion des médias
+                    Tous les médias
                   </li>
                 </ol>
               </nav>
@@ -53,36 +53,62 @@
         <div class="row">
           <div class="col-12">
             <div class="card">
-              <h5 class="card-header">Diffusion des médias</h5>
+              <h5 class="card-header">Médias</h5>
               <div class="card-body p-0">
                 <div class="table-responsive">
                   <table class="table">
                     <thead class="bg-light">
                       <tr class="border-0">
                         <th class="border-0">#</th>
-                        <th class="border-0">Client</th>
-                        <th class="border-0">Media</th>
-                        <th class="border-0">Visibilité</th>
+                        <th class="border-0">Nom</th>
+                        <th v-if="isAdmin" class="border-0">Editeur</th>
+                        <th v-if="isAdmin" class="border-0">Portée</th>
+                        <th class="border-0">Terminaux associés</th>
+                        <th class="border-0"></th>
+                        <th class="border-0"></th>
                         <th class="border-0"></th>
                       </tr>
                     </thead>
                     <tbody>
-                      <tr v-for="(broadcast, index) in broadcasts" :key="index">
-                        <td>{{ broadcast.id }}</td>
+                      <tr v-for="(media, index) in medias" :key="index">
+                        <td>{{ media.id }}</td>
                         <td>
-                          {{ broadcast.customer }}
+                          {{ media.title }}
+                        </td>
+                        <td v-if="isAdmin">
+                          {{ media.owner.username }}
+                        </td>
+                        <td v-if="isAdmin">
+                          <span v-if="media.scope == 'private'">Privé</span>
+                          <span v-else-if="media.scope == 'public'">Publique</span>
                         </td>
                         <td>
-                          {{ broadcast.media }}
+                          {{ media.nb_terminals }} termina<span
+                            v-if="media.nb_terminals > 1"
+                            >ux</span
+                          ><span v-else>l</span>
                         </td>
-                        <td>{{ broadcast.visibility }}</td>
+                        <td>
+                          <router-link
+                            :to="{ name: 'editScreensaverMedia', params: { id: media.id } }"
+                            class="text-primary">
+                            <font-awesome-icon icon="pen" />
+                          </router-link>
+                        </td>
                         <td>
                           <a
                             href=""
-                            @click.prevent="deleteBroadcast(broadcast.id)"
+                            @click.prevent="deleteMedia(media.id)"
                             class="text-danger">
                             <font-awesome-icon icon="trash-alt"/>
                           </a>
+                        </td>
+                        <td>
+                          <router-link
+                            :to="{ name: 'addScreensaverBroadcast', params: { media_id: media.id } }"
+                            class="text-primary">
+                            <font-awesome-icon icon="bell" />
+                          </router-link>
                         </td>
                       </tr>
                     </tbody>
@@ -93,19 +119,16 @@
           </div>
         </div>
       </div>
-
-
-      
     </div>
   </div>
 </template>
 
 <script>
 export default {
-  name: "ScreenSaverBroadcasting",
+  name: "AllScreenSaverMedia",
   data: function() {
     return {
-      broadcast: {},
+      medias: {},
       errors: {
         visible: false,
         type: "danger",
@@ -113,32 +136,40 @@ export default {
       },
     };
   },
+  computed: {
+    isAdmin: function() {
+      return this.$store.getters.isAdmin;
+    },
+    isCustomer: function() {
+      return this.$store.getters.isCustomer;
+    },
+  },
   mounted: function() {
-    this.fetchBroadcast();
+    this.fetchMedias();
   },
   methods: {
-    fetchBroadcast: function() {
+    deleteMedia: function(id) {
+      this.$http.delete("/screensaver-medias/" + id + "/").then(() => {
+        this.fetchMedias();
+      });
+    },
+    fetchMedias: function() {
       let loader = this.$loading.show();
 
       this.$http
-        .get("screensaver-broadcasts/")
+        .get("screensaver-medias/")
         .then((resp) => {
-          this.broadcast = resp.data;
+          this.medias = resp.data;
         })
         .catch((err) => {
           this.$toasted.global.error({
-            message: "Impossible de récupérer la liste des diffusions.",
+            message: "Impossible de récupérer la liste des médias.",
           });
           throw err;
         })
         .finally(() => {
           loader.hide();
         });
-    },
-    deleteBroadcast: function(id) {
-      this.$http.delete("/screensaver-broadcasts/" + id + "/").then(() => {
-        this.fetchBroadcast();
-      });
     },
   },
 };

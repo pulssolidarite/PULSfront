@@ -175,7 +175,7 @@
 
             <li class="nav-item">
               <router-link
-                :to="{ name: 'screensaver' }"
+                :to="{ name: 'screensaverMedias' }"
                 class="nav-link first"
                 exact
                 :event="''"
@@ -189,7 +189,7 @@
               <div id="submenu-screensaver" class="collapse submenu" style="">
                 <ul class="nav flex-column">
                   <li class="nav-item">
-                    <router-link class="nav-link" :to="{ name: 'screensaver' }">
+                    <router-link class="nav-link" :to="{ name: 'screensaverMedias' }">
                       Tous les médias
                     </router-link>
                   </li>
@@ -199,13 +199,13 @@
                     </router-link>
                   </li>
                   <li class="nav-item">
-                    <router-link class="nav-link" :to="{ name: 'screensaverBroadcasting' }">
+                    <router-link class="nav-link" :to="{ name: 'screensaverBroadcasts' }">
                       Diffusion des médias
                     </router-link>
                   </li>
                   <li class="nav-item">
-                    <router-link class="nav-link" :to="{ name: 'screensaverSettings' }">
-                      Paramétrage des diffusions
+                    <router-link class="nav-link" :to="{ name: 'addScreensaverBroadcast' }">
+                      Créer une diffusion
                     </router-link>
                   </li>
                 </ul>
