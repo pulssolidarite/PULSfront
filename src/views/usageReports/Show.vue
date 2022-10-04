@@ -46,7 +46,7 @@
                 <select
                   class="custom-select mb-2"
                   name="fruit"
-                  @change="onChange"
+                  @change="onFilterChange"
                   v-model="choosen_compaign">
                   <option value="all">Tout</option>
                   <option
@@ -61,7 +61,7 @@
                 <center><label for="core">Terminal</label></center>
                 <select
                   class="custom-select mb-2"
-                  @change="onChange"
+                  @change="onFilterChange"
                   v-model="choosen_terminal"
                 >
                   <option value="all" selected>Tout</option>
@@ -78,7 +78,7 @@
                 <center><label for="core">Client</label></center>
                 <select
                   class="custom-select mb-2"
-                  @change="onChange"
+                  @change="onFilterChange"
                   v-model="choosen_client"
                 >
                   <option value="all" selected>Tout</option>
@@ -96,7 +96,7 @@
                 <center><label for="core">Formule de dons</label></center>
                 <select
                   class="custom-select mb-2"
-                  @change="onChange"
+                  @change="onFilterChange"
                   v-model="choosen_formula"
                 >
                   <option value="all" selected>Tout</option>
@@ -110,7 +110,7 @@
                 <center><label for="core">Transaction</label></center>
                 <select
                   class="custom-select mb-2"
-                  @change="onChange"
+                  @change="onFilterChange"
                   v-model="choosen_transaction"
                 >
                   <option value="all" selected>Tout</option>
@@ -125,7 +125,7 @@
                 <center><label for="core">Jeu</label></center>
                 <select
                   class="custom-select mb-2"
-                  @change="onChange"
+                  @change="onFilterChange"
                   v-model="choosen_game"
                 >
                   <option value="all" selected>Tout</option>
@@ -138,7 +138,7 @@
                 <center><label for="core">TPE</label></center>
                 <select
                   class="custom-select mb-2"
-                  @change="onChange"
+                  @change="onFilterChange"
                   v-model="choosen_tpe"
                 >
                   <option value="all" selected>Tout</option>
@@ -163,7 +163,7 @@
                       <datetime
                         format="DD-MM-YYYY H:i:s"
                         lang="fr"
-                        @input="onChange"
+                        @input="onFilterChange"
                         v-model="choosen_date_start"
                         style="
                           text-align: center;
@@ -184,7 +184,7 @@
                       </span>
                       <datetime
                         format="DD-MM-YYYY H:i:s"
-                        @input="onChange"
+                        @input="onFilterChange"
                         v-model="choosen_date_end"
                         style="
                           text-align: center;
@@ -199,7 +199,7 @@
                   <center><label for="core">Période</label></center>
                   <select
                     class="custom-select mb-2"
-                    @change="onChange"
+                    @change="onFilterChange"
                     v-model="choosen_period"
                   >
                     <option value="all" selected>Tout</option>
@@ -229,7 +229,7 @@
                     step="1"
                     pattern="\d+"
                     class="form-control"
-                    @change="onChange"
+                    @change="onFilterChange"
                     v-model="results_number"
                   />
                 </div>
@@ -237,7 +237,7 @@
             </div>
             <button
               class="btn btn-primary"
-              @click="clearAll"
+              @click="resetAllFilters"
               STYLE=" background-color:black; float : right"
             >
               Effacer Tout
@@ -269,9 +269,29 @@
             <div class="card">
               <div class="card-body">
                 <div class="metric-value d-inline-block">
-                  <h1 class="mb-1">{{ total_games }}</h1>
+                  <h1 class="mb-1">{{ payments.length }}</h1>
                 </div>
                 <h5 class="text-muted">Nombre de parties</h5>
+              </div>
+            </div>
+          </div>
+          <div class="col-xl-3 col-lg-6 col-md-6 col-sm-12 col-12">
+            <div class="card">
+              <div class="card-body">
+                <div class="metric-value d-inline-block">
+                  <h1 class="mb-1">{{ amountDonated }} €</h1>
+                </div>
+                <h5 class="text-muted">Total des dons</h5>
+              </div>
+            </div>
+          </div>
+          <div class="col-xl-3 col-lg-6 col-md-6 col-sm-12 col-12">
+            <div class="card">
+              <div class="card-body">
+                <div class="metric-value d-inline-block">
+                  <h1 class="mb-1">{{ amountForOwner }} €</h1>
+                </div>
+                <h5 class="text-muted">Recette personnelle</h5>
               </div>
             </div>
           </div>
@@ -291,7 +311,7 @@
                 <th class="border-0">Forumle des dons</th>
               </tr>
             </thead>
-            <tbody v-if="result.length > 0">
+            <tbody v-if="payments.length > 0">
               <tr v-for="(payment, index) in displayedPayments" :key="index">
                 <td>{{ payment.id }}</td>
                 <td>{{ payment.date }}</td>
@@ -364,7 +384,7 @@
             <div style="color: white; color: #1c7dce; display: inline">
               Nombre Total de résultats :
             </div>
-            &nbsp;&nbsp;<strong>{{ TotalResults }} entrées</strong>
+            &nbsp;&nbsp;<strong>{{ totalNumberOfPayments }} entrées</strong>
           </div>
           <div class="col-sm-12 col-md-7 d-flex justify-content-end">
             <nav aria-label="Page navigation example" class="w-100">
@@ -418,23 +438,27 @@ import datetime from 'vuejs-datetimepicker';
 
 export default {
   name: "ShowUsageReport",
-   components: { datetime },
+  components: { datetime },
   data: function() {
     return {
       terminals: {},
-      collected: 0,
-      nb_donators: 0,
-      nb_terminals: 0,
-      total_gamesession: 0,
-      collected_last: 0,
       customers: {},
       games : {},
       campaigns: {},
-      result : [],
-         types: [
-      ],
-      nb_donators_last: 0,
+      payments : [],
       key : "",
+      sum : 0,
+      avg :  0,
+      amountDonated: 0,
+      amountForOwner: 0,
+      page: 1,
+      perPage: 12,
+      pages: [],
+      results_number : 50,
+      totalNumberOfPayments : 0,
+
+      // Filters
+
       choosen_compaign : "all",
       choosen_terminal : "all" ,
       choosen_client : "all" ,
@@ -446,23 +470,16 @@ export default {
       choosen_date_end : "DD-MM-YYYY" ,
       choosen_time : "all" ,
       choosen_period : "all",
-      sum : 0,
-      avg :  0,
-      total_games : 0,
-      message : "Aucun résultat correspond à votre recherche",
-      downloadFile : "",
-      page: 1,
-      perPage: 12,
-      pages: [],
-      results_number : 50,
-      TotalResults : 0,
+
+      // Message
+      message : "Aucun résultat correspond à votre recherche",      
     };
   },
 
   mounted: function() {
     this.getSelectItems();
     this.message = "Loading results , please be patient this can take long..."
-    this.getFilterResults();
+    this.fetchPayments();
   },
   watch: {
     allPayments() {
@@ -471,7 +488,7 @@ export default {
   },
   computed: {
     allPayments() {
-      return this.result;
+      return this.payments;
     },
     displayedPayments() {
       return this.paginate(this.allPayments);
@@ -523,9 +540,8 @@ export default {
         });
 
     },
-    clearAll(event) {
-
-     this.choosen_compaign = "all",
+    resetAllFilters(event) {
+      this.choosen_compaign = "all",
       this.choosen_terminal = "all" ,
       this.choosen_client = "all" ,
       this.choosen_formula = "all" ,
@@ -537,24 +553,25 @@ export default {
       this.choosen_time = "all" ,
       this.choosen_period = "all",
       this.results_number = 50,
-      this.TotalResults = 0,
+      this.totalNumberOfPayments = 0,
       this.choosen_formula = "all",
-      this.getFilterResults()
-
+      this.fetchPayments()
     },
-    onChange(event) {
-      this.message = "Loading results , please be patient this can take long...";
+    resetPayments() {
       this.page= 1,
       this.perPage= 12,
       this.pages= [],
       this.sum =  0
       this.avg =  0
-      this.total_games = 0
-      this.result =  []
-      this.TotalResults = 0
-      this.getFilterResults()
+      this.payments =  []
+      this.totalNumberOfPayments = 0
     },
-    getFilterResults: function() {
+    onFilterChange(event) {
+      this.message = "Loading results , please be patient this can take long...";
+      this.resetPayments();
+      this.fetchPayments()
+    },
+    fetchPayments: function() {
       let loader = this.$loading.show();
       this.$http
         .get("/payment/filtered/?" +
@@ -571,12 +588,13 @@ export default {
           "&donation_formula="+ this.choosen_formula
         )
         .then((resp) => {
-          this.result = resp.data.payments;
-           this.sum = resp.data.amountSum;
-           this.avg  = resp.data.amountAvg;
-           this.total_games = resp.data.total_games;
-           this.TotalResults = resp.data.TotalResults;
-            this.message = "Aucun résultat correspond à votre recherche"
+          this.payments = resp.data.payments;
+          this.sum = resp.data.payments_amount;
+          this.avg  = resp.data.average_payments_amount;
+          this.totalNumberOfPayments = resp.data.total_number_of_payments;
+          this.amountDonated = resp.data.amount_donated;
+          this.amountForOwner = resp.data.amount_for_owner;           
+          this.message = "Aucun résultat correspond à votre recherche"
         })
         .catch(() => {
           this.errors = {
