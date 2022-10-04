@@ -445,6 +445,7 @@ export default {
     edit: function () {
       if (this.terminal) {
         let sentTerminal = { ...this.terminal };
+
         // Rearranging data for serializer reasons
         delete sentTerminal.payments;
         delete sentTerminal.avg_gametimesession;
@@ -453,18 +454,24 @@ export default {
         delete sentTerminal.total_donations;
 
         sentTerminal.owner = sentTerminal.owner.id;
+
+        sentTerminal.customer = sentTerminal.customer.id;
+
         let games_id = [];
         for (let index = 0; index < sentTerminal.games.length; index++) {
           const element = sentTerminal.games[index].id;
           games_id.push(element);
         }
         sentTerminal.games = games_id;
+
         let campaigns_id = [];
         for (let index = 0; index < sentTerminal.campaigns.length; index++) {
           const element = sentTerminal.campaigns[index].id;
           campaigns_id.push(element);
         }
         sentTerminal.campaigns = campaigns_id;
+
+
 
         this.$http
           .put("terminal/" + sentTerminal.id + "/", sentTerminal)
