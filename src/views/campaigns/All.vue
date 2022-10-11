@@ -55,6 +55,33 @@
         @dismiss="errors.visible = false"
       />
 
+      <div v-if="featuredCampaign" class="ecommerce-widget">
+        <div class="row">
+          <div class="col-12">
+            <div class="card">
+              <div class="card-header">
+                <h5>Campagne à la une</h5>
+                <small>La campagne à la une sera mis en avant sur tous les terminaux.</small>
+              </div>
+              <div class="card-body">
+                <div class="row">
+                  <div class="col">
+                    <h1>{{ featuredCampaign.name }}</h1>
+                    <p>{{ featuredCampaign.description }}</p>
+                  </div>
+                  <div class="col text-right">
+                    <img
+                      :src="featuredCampaign.logo"
+                      height="30"
+                      :alt="featuredCampaign.name">
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
       <div class="ecommerce-widget">
         <div class="row">
           <div class="col-12">
@@ -71,6 +98,8 @@
                         <th class="border-0">Description</th>
                         <th class="border-0">Dons collectés</th>
                         <th class="border-0">Terminaux associés</th>
+                        <th class="border-0" style="text-align: center;">Mis en avant</th>
+                        <th class="border-0"></th>
                         <th class="border-0"></th>
                         <th class="border-0"></th>
                       </tr>
@@ -98,6 +127,20 @@
                             v-if="campaign.nb_terminals > 1"
                             >ux</span
                           ><span v-else>l</span>
+                        </td>
+                        <td style="text-align: center;">
+                          <a
+                            href=""
+                            v-if="campaign.featured"
+                            @click.prevent="setNotFeatured(campaign)">
+                            <span class="badge-dot badge-success mr-1"></span>
+                          </a>
+                          <a
+                            href=""
+                            v-else
+                            @click.prevent="setFeatured(campaign)">
+                            <span class="badge-dot badge-light mr-1"></span>
+                          </a>
                         </td>
                         <td>
                           <router-link
@@ -139,7 +182,7 @@ export default {
   name: "AllCampaigns",
   data: function() {
     return {
-      campaigns: {},
+      campaigns: null,
       errors: {
         visible: false,
         type: "danger",
@@ -153,6 +196,13 @@ export default {
     },
     isCustomer: function() {
       return this.$store.getters.isCustomer;
+    },
+    featuredCampaign() {
+      if (this.campaigns) {
+        return this.campaigns.find(campaign => campaign.featured);
+      }
+
+      return null;
     },
   },
   mounted: function() {
@@ -182,6 +232,30 @@ export default {
       this.$http.delete("/campaign/" + id + "/").then(() => {
         this.getCampaigns();
       });
+    },
+    setFeatured(campaign) {
+      this.$http.post("campaign/" + campaign.id + "/featured/")
+      .then((resp) => {
+        this.getCampaigns();
+      })
+      .catch((err) => {
+        this.$toasted.global.error({
+          message: "Impossible de mettre la campagne en avant.",
+        });
+        throw err;
+      })
+    },
+    setNotFeatured(campaign) {
+      this.$http.post("campaign/" + campaign.id + "/not_featured/")
+      .then((resp) => {
+        this.getCampaigns();
+      })
+      .catch((err) => {
+        this.$toasted.global.error({
+          message: "Impossible de démettre la campagne en avant.",
+        });
+        throw err;
+      })
     },
     getCampaigns: function() {
       let loader = this.$loading.show();

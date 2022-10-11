@@ -55,6 +55,33 @@
         @dismiss="errors.visible = false"
       />
 
+      <div v-if="featuredGame" class="ecommerce-widget">
+        <div class="row">
+          <div class="col-12">
+            <div class="card">
+              <div class="card-header">
+                <h5>Jeu à la une</h5>
+                <small>Le jeu à la une sera mis en avant sur tous les terminaux.</small>
+              </div>
+              <div class="card-body">
+                <div class="row">
+                  <div class="col">
+                    <h1>{{ featuredGame.name }}</h1>
+                    <p>{{ featuredGame.description }}</p>
+                  </div>
+                  <div class="col text-right">
+                    <img
+                      :src="featuredGame.logo"
+                      height="100"
+                      :alt="featuredGame.name">
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
       <div class="ecommerce-widget">
         <div class="row">
           <div class="col-12">
@@ -70,6 +97,7 @@
                         <th class="border-0">Nom</th>
                         <th class="border-0">Description</th>
                         <th class="border-0">Terminaux associés</th>
+                        <th class="border-0" style="text-align: center;">Mis en avant</th>
                         <th class="border-0"></th>
                         <th class="border-0"></th>
                       </tr>
@@ -91,6 +119,20 @@
                             v-if="game.nb_terminals > 1"
                             >ux</span
                           ><span v-else>l</span>
+                        </td>
+                        <td style="text-align: center;">
+                          <a
+                            href=""
+                            v-if="game.featured"
+                            @click.prevent="setNotFeatured(game)">
+                            <span class="badge-dot badge-success mr-1"></span>
+                          </a>
+                          <a
+                            href=""
+                            v-else
+                            @click.prevent="setFeatured(game)">
+                            <span class="badge-dot badge-light mr-1"></span>
+                          </a>
                         </td>
                         <td>
                           <router-link
@@ -125,7 +167,7 @@ export default {
   name: "AllGames",
   data: function() {
     return {
-      games: {},
+      games: null,
       errors: {
         visible: false,
         type: "danger",
@@ -139,6 +181,13 @@ export default {
     },
     isCustomer: function() {
       return this.$store.getters.isCustomer;
+    },
+    featuredGame() {
+      if (this.games) {
+        return this.games.find(game => game.featured);
+      }
+
+      return null;
     },
   },
   mounted: function() {
@@ -162,15 +211,39 @@ export default {
       this.$router.push("/game/" + id + "/edit");
     },
     deleteGame: function(id) {
-      this.$http.delete("/game/" + id + "/").then(() => {
+      this.$http.delete("/games/" + id + "/").then(() => {
         this.getGames();
       });
+    },
+    setFeatured(game) {
+      this.$http.post("games/" + game.id + "/featured/")
+      .then((resp) => {
+        this.getGames();
+      })
+      .catch((err) => {
+        this.$toasted.global.error({
+          message: "Impossible de mettre le jeu en avant.",
+        });
+        throw err;
+      })
+    },
+    setNotFeatured(game) {
+      this.$http.post("games/" + game.id + "/not_featured/")
+      .then((resp) => {
+        this.getGames();
+      })
+      .catch((err) => {
+        this.$toasted.global.error({
+          message: "Impossible de démettre le jeu en avant.",
+        });
+        throw err;
+      })
     },
     getGames: function() {
       let loader = this.$loading.show();
 
       this.$http
-        .get("game/")
+        .get("games/")
         .then((resp) => {
           this.games = resp.data;
         })

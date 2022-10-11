@@ -369,7 +369,7 @@ export default {
   methods: {
     getGames: function () {
       this.$http
-        .get("game/")
+        .get("games/")
         .then((resp) => {
           this.games = resp.data;
         })

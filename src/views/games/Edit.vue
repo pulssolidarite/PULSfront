@@ -447,7 +447,7 @@ export default {
       let loader = this.$loading.show();
 
       this.$http
-        .get("game/" + this.$route.params.id + "/")
+        .get("games/" + this.$route.params.id + "/")
         .then((resp) => {
           this.game = resp.data;
         })
@@ -469,7 +469,7 @@ export default {
       let form_file = new FormData();
       form_file.append("file", this.$refs.romFile.files[0]);
       this.$http
-        .post("game/upload/", form_file, {
+        .post("games/upload/", form_file, {
           headers: {
             "Content-Type": "multipart/form-data",
           },
@@ -479,7 +479,7 @@ export default {
           let form = new FormData();
           form.append("file", this.game.file.id);
           this.$http
-            .patch("game/" + this.$route.params.id + "/update/", form, {
+            .patch("games/" + this.$route.params.id + "/", form, {
               headers: {
                 "Content-Type": "multipart/form-data",
               },
@@ -510,7 +510,7 @@ export default {
         let form = new FormData();
         form.append("logo", this.$refs.logo.files[0]);
         this.$http
-          .patch("game/" + this.$route.params.id + "/update/", form, {
+          .patch("games/" + this.$route.params.id + "/", form, {
             headers: {
               "Content-Type": "multipart/form-data",
             },
@@ -536,7 +536,7 @@ export default {
         let form = new FormData();
         form.append("cover", this.$refs.cover.files[0]);
         this.$http
-          .patch("game/" + this.$route.params.id + "/update/", form, {
+          .patch("games/" + this.$route.params.id + "/", form, {
             headers: {
               "Content-Type": "multipart/form-data",
             },
@@ -574,7 +574,7 @@ export default {
         form.append("type", this.game.type);
         form.append("nb_players", this.game.nb_players);
         this.$http
-          .patch("game/" + this.$route.params.id + "/update/", form)
+          .patch("games/" + this.$route.params.id + "/", form)
           .then((resp) => {
             this.game = resp.data;
             this.$router.push("/games");

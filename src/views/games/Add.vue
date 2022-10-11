@@ -414,7 +414,7 @@ export default {
       let form_file = new FormData();
       form_file.append("file", this.$refs.romFile.files[0]);
       this.$http
-        .post("game/upload/", form_file, {
+        .post("games/upload/", form_file, {
           headers: {
             "Content-Type": "multipart/form-data",
           },
@@ -462,7 +462,7 @@ export default {
           form.append("type", this.game.type);
           form.append("nb_players", this.game.nb_players);
           this.$http
-            .post("game/create/", form, {
+            .post("games/", form, {
               headers: {
                 "Content-Type": "multipart/form-data",
               },
