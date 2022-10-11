@@ -100,8 +100,8 @@
                         <th class="border-0">Terminaux associés</th>
                         <th class="border-0" style="text-align: center;">Mis en avant</th>
                         <th class="border-0"></th>
-                        <th class="border-0"></th>
-                        <th class="border-0"></th>
+                        <th v-if="isAdmin" class="border-0"></th>
+                        <th v-if="isAdmin" class="border-0"></th>
                       </tr>
                     </thead>
                     <tbody>
@@ -128,7 +128,7 @@
                             >ux</span
                           ><span v-else>l</span>
                         </td>
-                        <td style="text-align: center;">
+                        <td v-if="isAdmin" style="text-align: center;">
                           <a
                             href=""
                             v-if="campaign.featured"
@@ -142,6 +142,10 @@
                             <span class="badge-dot badge-light mr-1"></span>
                           </a>
                         </td>
+                        <td v-else style="text-align: center;">
+                          <span v-if="campaign.featured" class="badge-dot badge-success mr-1"></span>
+                          <span v-else class="badge-dot badge-light mr-1"></span>
+                        </td>
                         <td>
                           <router-link
                             :to="'/campaigns/' + campaign.id"
@@ -149,14 +153,14 @@
                             ><font-awesome-icon icon="eye"
                           /></router-link>
                         </td>
-                        <td>
+                        <td v-if="isAdmin">
                           <router-link
                             :to="'/campaign/' + campaign.id + '/edit'"
                             class="text-primary"
                             ><font-awesome-icon icon="pen"
                           /></router-link>
                         </td>
-                        <td>
+                        <td v-if="isAdmin">
                           <a
                             href=""
                             @click.prevent="deleteCampaign(campaign.id)"

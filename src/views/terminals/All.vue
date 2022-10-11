@@ -128,7 +128,7 @@
                             ><font-awesome-icon icon="eye"
                           /></router-link>
                         </td>
-                        <td>
+                        <td v-if="isAdmin">
                           <a
                             href=""
                             v-if="terminal.is_active"

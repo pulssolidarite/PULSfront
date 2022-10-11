@@ -167,8 +167,14 @@
 
             <li class="nav-item">
               <router-link class="nav-link" to="/UsageReport">
-               Rapport d'utilisation</router-link
-              >
+                Rapport d'utilisation
+              </router-link>
+            </li>
+
+            <li v-if="isCustomer" class="nav-item">
+              <router-link class="nav-link" :to="{ name: 'customer-space' }">
+                Mon espace
+              </router-link>
             </li>
 
             <!-- Screensaver -->

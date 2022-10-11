@@ -5,6 +5,7 @@ import store from "@/store/index.js";
 // General
 import Home from "@/views/Home";
 import UsageReports from "@/views/usageReports/Show";
+import CustomerSpace from "@/views/customerSpace/Show";
 
 // Terminals
 import AllTerminals from "@/views/terminals/All";
@@ -229,6 +230,17 @@ const routes = [
     path: "/UsageReport",
     name: "UsageReport",
     component: UsageReports,
+    meta: {
+      requiresAuth: true,
+    },
+  },
+
+  // Customer space
+
+  {
+    path: "/mon-espace",
+    name: "customer-space",
+    component: CustomerSpace,
     meta: {
       requiresAuth: true,
     },

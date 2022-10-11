@@ -127,6 +127,9 @@ export default new Vuex.Store({
     username: (state) => {
       return state.currentUser.username;
     },
+    currentUser: (state) => {
+      return state.currentUser;
+    },
   },
   modules: {},
 });
