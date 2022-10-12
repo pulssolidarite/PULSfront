@@ -69,7 +69,7 @@
             </div>
             <div class="card-body" v-if="terminal.owner">
               <h4>Informations sur le terminal</h4>
-              <div class="row">
+              <div v-if="isAdmin" class="row">
                 <div class="col-6">
                   <div class="form-group w-100">
                     <label for="name">Nom du terminal</label>
@@ -84,7 +84,7 @@
                     >
                   </div>
                 </div>
-                <div v-if="isAdmin" class="col-6">
+                <div class="col-6">
                   <div class="form-group w-100">
                     <label for="owner">Client</label>
                     <input
@@ -136,7 +136,7 @@
               </div>
               <div class="row">
                 <div class="col">
-                  <div class="form-group">
+                  <div v-if="isAdmin" class="form-group">
                     <label for="location">Localisation</label>
                     <div class="input-group input-group-sm mb-3">
                       <div class="input-group-prepend">
