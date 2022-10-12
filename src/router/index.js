@@ -23,6 +23,7 @@ import EditCampaign from "@/views/campaigns/Edit";
 import AllGames from "@/views/games/All";
 import AddGame from "@/views/games/Add";
 import EditGame from "@/views/games/Edit";
+import ShowGame from "@/views/games/Show";
 
 // Cores
 import AllCores from "@/views/Admin/Cores/All";
@@ -96,7 +97,6 @@ const routes = [
     component: EditTerminal,
     meta: {
       requiresAuth: true,
-      requiresAdmin: true, // Only for admin
     },
   },
   {
@@ -113,7 +113,6 @@ const routes = [
     component: ShowCampaign,
     meta: {
       requiresAuth: true,
-      requiresAdmin: true,
     },
   },
   {
@@ -182,6 +181,14 @@ const routes = [
     meta: {
       requiresAuth: true,
       requiresAdmin: true, // Only for admin
+    },
+  },
+  {
+    path: "/game/:id",
+    name: "showGame",
+    component: ShowGame,
+    meta: {
+      requiresAuth: true,
     },
   },
   {

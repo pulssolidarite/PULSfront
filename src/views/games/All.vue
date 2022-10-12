@@ -98,6 +98,7 @@
                         <th class="border-0">Description</th>
                         <th class="border-0">Terminaux associés</th>
                         <th class="border-0" style="text-align: center;">Mis en avant</th>
+                        <th class="border-0"></th>
                         <th v-if="isAdmin" class="border-0"></th>
                         <th v-if="isAdmin" class="border-0"></th>
                       </tr>
@@ -137,6 +138,13 @@
                         <td v-else style="text-align: center;">
                           <span v-if="game.featured" class="badge-dot badge-success mr-1"></span>
                           <span v-else class="badge-dot badge-light mr-1"></span>
+                        </td>
+                        <td>
+                          <router-link
+                            :to="'/game/' + game.id"
+                            class="text-dark"
+                            ><font-awesome-icon icon="eye"
+                          /></router-link>
                         </td>
                         <td v-if="isAdmin">
                           <router-link

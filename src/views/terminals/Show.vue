@@ -198,6 +198,14 @@
                   >Désactiver</a
                 >
               </li>
+              <li class="nav-item">
+                <router-link
+                  :to="'/terminal/' + terminal.id + '/edit'"
+                  class="nav-link text-warning"
+                  id="pills-review-tab"
+                  >Editer</router-link
+                >
+              </li>
               <li v-if="isAdmin" class="nav-item">
                 <a class="nav-link text-danger" id="pills-review-tab"
                   >Supprimer</a

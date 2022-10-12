@@ -60,18 +60,12 @@
         @dismiss="errors.visible = false"
       />
 
-      <div class="row">
+      <div v-if="terminal" class="row">
         <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">
           <div class="card">
             <div
-              class="
-                card-header
-                d-flex
-                align-items-center
-                justify-content-between
-              "
-            >
-              <h5 class="mb-0">Ajouter un terminal</h5>
+              class="card-header d-flex align-items-center justify-content-between">
+              <h5 class="mb-0">Editer un terminal</h5>
             </div>
             <div class="card-body" v-if="terminal.owner">
               <h4>Informations sur le terminal</h4>
@@ -90,7 +84,7 @@
                     >
                   </div>
                 </div>
-                <div class="col-6">
+                <div v-if="isAdmin" class="col-6">
                   <div class="form-group w-100">
                     <label for="owner">Client</label>
                     <input
@@ -100,13 +94,13 @@
                       aria-describedby="ownerHelp"
                       v-model="terminal.customer.company"
                     />
-                    <small id="nameHelp" class="form-text text-muted"
-                      >Le client rattaché au terminal.</small
-                    >
+                    <small id="nameHelp" class="form-text text-muted">
+                      Le client rattaché au terminal.
+                    </small>
                   </div>
                 </div>
               </div>
-              <div class="row">
+              <div v-if="isAdmin" class="row">
                 <div class="col-6">
                   <div class="form-group w-100">
                     <label for="owner">Username</label>
@@ -191,8 +185,8 @@
 
                       </select>
                   </div></div>
-				  <div class="mb-3 form-check">
-					<small id="nameHelp" class="form-text text-muted"
+				          <div class="mb-3 form-check">
+                  <small id="nameHelp" class="form-text text-muted"
                       >Texte personnalisé </small
                     >
           <textarea
@@ -203,7 +197,7 @@
                 </div>
               </div>
             </div>
-            <div class="card-body border-top">
+            <div v-if="isAdmin" class="card-body border-top">
             <div class="row">
               <div class="col-6">
                   <div class="form-group w-100">
@@ -347,7 +341,7 @@ export default {
   name: "EditTerminal",
   data: function () {
     return {
-      terminal: "",
+      terminal: null,
       campaigns: {},
       games: {},
       user: {},

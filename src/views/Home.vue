@@ -28,39 +28,17 @@
 
       <div class="ecommerce-widget">
         <div class="row">
-          <div class="col-xl-3 col-lg-6 col-md-6 col-sm-12 col-12">
+          <div class="col-xl-4 col-lg-6 col-md-6 col-sm-12 col-12">
             <div class="card">
               <div class="card-body">
-                <h5 class="text-muted">Collecté ce mois</h5>
+                <h5 class="text-muted">Nombre de terminaux</h5>
                 <div class="metric-value d-inline-block">
-                  <h1 class="mb-1" v-if="collected > 0">{{ collected }} €</h1>
-                  <h1 class="mb-1" v-else>0 €</h1>
-                </div>
-                <div
-                  class="metric-label d-inline-block float-right text-success font-weight-bold"
-                  v-if="collected_last > 0"
-                >
-                  <span><font-awesome-icon icon="arrow-up" class="mr-1"/></span
-                  ><span>+{{ collected_last * 100 }} %</span>
-                </div>
-                <div
-                  class="metric-label d-inline-block float-right text-danger font-weight-bold"
-                  v-else-if="collected_last < 0"
-                >
-                  <span
-                    ><font-awesome-icon icon="arrow-down" class="mr-1"/></span
-                  ><span>{{ collected_last * 100 }} %</span>
-                </div>
-                <div
-                  class="metric-label d-inline-block float-right text-warning font-weight-bold"
-                  v-else
-                >
-                  <span>+{{ collected_last }} %</span>
+                  <h1 class="mb-1">{{ nb_terminals }}</h1>
                 </div>
               </div>
             </div>
           </div>
-          <div class="col-xl-3 col-lg-6 col-md-6 col-sm-12 col-12">
+          <div class="col-xl-4 col-lg-6 col-md-6 col-sm-12 col-12">
             <div class="card">
               <div class="card-body">
                 <h5 class="text-muted">Nombre de donateurs</h5>
@@ -91,17 +69,7 @@
               </div>
             </div>
           </div>
-          <div class="col-xl-3 col-lg-6 col-md-6 col-sm-12 col-12">
-            <div class="card">
-              <div class="card-body">
-                <h5 class="text-muted">Nombre de terminaux</h5>
-                <div class="metric-value d-inline-block">
-                  <h1 class="mb-1">{{ nb_terminals }}</h1>
-                </div>
-              </div>
-            </div>
-          </div>
-          <div class="col-xl-3 col-lg-6 col-md-6 col-sm-12 col-12">
+          <div class="col-xl-4 col-lg-6 col-md-6 col-sm-12 col-12">
             <div class="card">
               <div class="card-body">
                 <h5 class="text-muted">Temps total de jeu</h5>
@@ -111,9 +79,102 @@
               </div>
             </div>
           </div>
+          <div class="col-xl-4 col-lg-6 col-md-6 col-sm-12 col-12">
+            <div class="card">
+              <div class="card-body">
+                <h5 class="text-muted">Total des recettes</h5>
+                <div class="metric-value d-inline-block">
+                  <h1 class="mb-1" v-if="collected > 0">{{ collected }} €</h1>
+                  <h1 class="mb-1" v-else>0 €</h1>
+                </div>
+                <div
+                  class="metric-label d-inline-block float-right text-success font-weight-bold"
+                  v-if="collected_last > 0"
+                >
+                  <span><font-awesome-icon icon="arrow-up" class="mr-1"/></span
+                  ><span>+{{ collected_last * 100 }} %</span>
+                </div>
+                <div
+                  class="metric-label d-inline-block float-right text-danger font-weight-bold"
+                  v-else-if="collected_last < 0"
+                >
+                  <span
+                    ><font-awesome-icon icon="arrow-down" class="mr-1"/></span
+                  ><span>{{ collected_last * 100 }} %</span>
+                </div>
+                <div
+                  class="metric-label d-inline-block float-right text-warning font-weight-bold"
+                  v-else
+                >
+                  <span>+{{ collected_last }} %</span>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="col-xl-4 col-lg-6 col-md-6 col-sm-12 col-12">
+            <div class="card">
+              <div class="card-body">
+                <h5 class="text-muted">Collecte de dons de ce mois-ci</h5>
+                <div class="metric-value d-inline-block">
+                  <h1 class="mb-1" v-if="donationCollectedThisMonth > 0">{{ donationCollectedThisMonth }} €</h1>
+                  <h1 class="mb-1" v-else>0 €</h1>
+                </div>
+                <div
+                  class="metric-label d-inline-block float-right text-success font-weight-bold"
+                  v-if="donationCollectedLastMonth > 0"
+                >
+                  <span><font-awesome-icon icon="arrow-up" class="mr-1"/></span
+                  ><span>+{{ donationCollectedLastMonth * 100 }} %</span>
+                </div>
+                <div
+                  class="metric-label d-inline-block float-right text-danger font-weight-bold"
+                  v-else-if="donationCollectedLastMonth < 0"
+                >
+                  <span
+                    ><font-awesome-icon icon="arrow-down" class="mr-1"/></span
+                  ><span>{{ donationCollectedLastMonth * 100 }} %</span>
+                </div>
+                <div
+                  class="metric-label d-inline-block float-right text-warning font-weight-bold"
+                  v-else
+                >
+                  <span>+{{ donationCollectedLastMonth }} %</span>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="col-xl-4 col-lg-6 col-md-6 col-sm-12 col-12">
+            <div class="card">
+              <div class="card-body">
+                <h5 class="text-muted">Recette de ce mois-ci</h5>
+                <div class="metric-value d-inline-block">
+                  <h1 class="mb-1" v-if="customerIncomeThisMonth > 0">{{ customerIncomeThisMonth }} €</h1>
+                  <h1 class="mb-1" v-else>0 €</h1>
+                </div>
+                <div
+                  class="metric-label d-inline-block float-right text-success font-weight-bold"
+                  v-if="customerIncomeLastMonth > 0">
+                  <span><font-awesome-icon icon="arrow-up" class="mr-1"/></span>
+                  <span>+{{ customerIncomeLastMonth * 100 }} %</span>
+                </div>
+                <div
+                  class="metric-label d-inline-block float-right text-danger font-weight-bold"
+                  v-else-if="customerIncomeLastMonth < 0">
+                  <span><font-awesome-icon icon="arrow-down" class="mr-1"/></span>
+                  <span>{{ customerIncomeLastMonth * 100 }} %</span>
+                </div>
+                <div
+                  class="metric-label d-inline-block float-right text-warning font-weight-bold"
+                  v-else>
+                  <span>+{{ customerIncomeLastMonth }} %</span>
+                </div>
+              </div>
+            </div>
+          </div>
         </div>
         <div class="row">
-          <div class="col-xl-9 col-lg-12 col-md-6 col-sm-12 col-12">
+          <div class="col-12">
             <div class="card">
               <h5 class="card-header">Terminaux allumés</h5>
               <div class="card-body p-0">
@@ -190,8 +251,18 @@ export default {
       nb_terminals: 0,
       total_gamesession: 0,
       collected_last: 0,
-      nb_donators_last: 0
+      nb_donators_last: 0,
+      donationCollectedThisMonth: 0,
+      donationCollectedLastMonth: 0,
     };
+  },
+  computed: {
+    customerIncomeThisMonth() {
+      return this.collected - this.donationCollectedThisMonth;
+    },
+    customerIncomeLastMonth() {
+      return this.collected_last - this.donationCollectedLastMonth;
+    },
   },
   mounted: function() {
     this.getStats();
@@ -201,27 +272,15 @@ export default {
       this.$http
         .get("dashboard/")
         .then(resp => {
-          this.terminals = resp.data.terminals;
-          this.collected = resp.data.collected;
-          this.nb_donators = resp.data.nb_donators;
-          this.nb_terminals = resp.data.nb_terminals;
-          this.total_gamesession = resp.data.total_gamesession;
-
-          if ((resp.data.collected_last == 0) | !resp.data.collected_last) {
-            this.collected_last = 0;
-          } else {
-            this.collected_last =
-              (resp.data.collected - resp.data.collected_last) /
-              resp.data.collected_last;
-          }
-
-          if ((resp.data.nb_donators_last == 0) | !resp.data.nb_donators_last) {
-            this.nb_donators = 0;
-          } else {
-            this.nb_donators_last =
-              (resp.data.nb_donators - resp.data.nb_donators_last) /
-              resp.data.nb_donators_last;
-          }
+          this.terminals = resp.data.terminals ? resp.data.terminals : 0;
+          this.collected = resp.data.collected ? resp.data.collected : 0;
+          this.collected_last = resp.data.collected_last ? resp.data.collected_last : 0;
+          this.donationCollectedThisMonth = resp.data.donated ? resp.data.donated : 0;
+          this.donationCollectedLastMonth = resp.data.donated_last ? resp.data.donated_last : 0;
+          this.nb_donators = resp.data.nb_donators ? resp.data.nb_donators : 0;
+          this.nb_donators_last = resp.data.nb_donators_last ? resp.data.nb_donators_last : 0;
+          this.nb_terminals = resp.data.nb_terminals ? resp.data.nb_terminals : 0;
+          this.total_gamesession = resp.data.total_gamesession ? resp.data.total_gamesession : 0;
         })
         .catch(() => {
           this.errors = {
