@@ -101,6 +101,12 @@ export default new Vuex.Store({
         commit("UPDATE_USER_INFO", resp.data);
       });
     },
+    refreshCurrentUser({ commit }) {
+      // Update user details
+      jwt.getUserInfo().then((resp) => {
+        commit("UPDATE_USER_INFO", resp.data);
+      });
+    },
     logout({ commit }) {
       return new Promise((resolve, reject) => {
         localStorage.removeItem("accessToken");

@@ -1,6 +1,6 @@
 <template>
   <div class="dashboard-header">
-    <nav class="navbar navbar-expand-lg bg-white fixed-top">
+    <nav class="navbar navbar-expand-md bg-white fixed-top">
       <router-link class="navbar-brand" to="/">
         <span v-if="isAdmin">Seth - Arcade for Good API</span>
         <span v-else-if="isCustomer">Arcade for Good - Espace client</span>

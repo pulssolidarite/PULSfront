@@ -35,94 +35,167 @@
             <div class="card">
               <h5 class="card-header">Mes informations</h5>
               <div class="card-body">
-                <div class="table-responsive">
-                  <table class="table">
-                    <tbody>
+                <table class="table">
+                  <tbody>
+                    <tr>
+                      <td>
+                        <strong>Mon nom d'utilisateur</strong>
+                      </td>
+                      <td>
+                        {{ currentUser.username }}
+                      </td>
+                    </tr>
                       <tr>
-                        <td>
-                          <strong>Mon nom d'utilisateur</strong>
-                        </td>
-                        <td>
-                          {{ currentUser.username }}
-                        </td>
-                      </tr>
-                        <tr>
-                        <td>
-                          <strong>Mon email</strong>
-                        </td>
-                        <td>
-                          {{ currentUser.email }}
-                        </td>
-                      </tr>
-                        <tr>
-                        <td>
-                          <strong>Mon mot de passe</strong>
-                        </td>
-                        <td>
-                        
-                        </td>
-                      </tr>
-                        <tr>
-                        <td>
-                          <strong>Mon entreprise</strong>
-                        </td>
-                        <td>
-                          {{ currentUser.customer.company }}
-                        </td>
-                      </tr>
-                        <tr>
-                        <td>
-                          <strong>Mon représentant</strong>
-                        </td>
-                        <td>
-                          {{ currentUser.customer.representative }}
-                        </td>
-                      </tr>
-                        <tr>
-                        <td>
-                          <strong>Mon logo</strong>
-                        </td>
-                        <td>
-                          <form>
-                            <div class="row">
-                              <div class="form-group col">
-                                <div>
-                                  <img
-                                    :src="currentUser.customer.logo"
-                                    width="200"
-                                    height="200"
-                                    style="object-fit: contain;"
-                                    class="rounded border mx-auto my-3 d-block" />
-                                  <div class="upload-btn-wrapper w-100 text-center ">
-                                    <button
-                                      type="button"
-                                      class="btn btn-outline-danger btn-sm"
-                                      ref="text-logo">
-                                      Ajouter une photo
-                                    </button>
-                                    <input
-                                      type="file"
-                                      id="logo"
-                                      name="logo"
-                                      ref="logo"
-                                      required="required"
-                                      @change="editLogo" />
-                                  </div>
-                                </div>
-                              </div>
-                            </div>
-                          </form>
-                        </td>
-                      </tr>
-                    </tbody>
-                  </table>
-                </div>
+                      <td>
+                        <strong>Mon email</strong>
+                      </td>
+                      <td>
+                        {{ currentUser.email }}
+                      </td>
+                    </tr>
+                      <tr>
+                      <td>
+                        <strong>Mon mot de passe</strong>
+                      </td>
+                      <td>
+                      </td>
+                    </tr>
+                      <tr>
+                      <td>
+                        <strong>Mon entreprise</strong>
+                      </td>
+                      <td>
+                        {{ currentUser.customer.company }}
+                      </td>
+                    </tr>
+                      <tr>
+                      <td>
+                        <strong>Mon représentant</strong>
+                      </td>
+                      <td>
+                        {{ currentUser.customer.representative }}
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+            <div class="card">
+              <h5 class="card-header">Mon logo</h5>
+              <div class="card-body">
+                <form>
+                  <div class="row">
+                    <div class="form-group col">
+                      <div>
+                        <img
+                          :src="currentUser.customer.logo"
+                          width="200"
+                          height="200"
+                          style="object-fit: contain;"
+                          class="rounded border mx-auto my-3 d-block" />
+                        <div class="upload-btn-wrapper w-100 text-center ">
+                          <button
+                            type="button"
+                            class="btn btn-outline-danger btn-sm"
+                            ref="text-logo">
+                            Ajouter une photo
+                          </button>
+                          <input
+                            type="file"
+                            id="logo"
+                            name="logo"
+                            ref="logo"
+                            required="required"
+                            @change="editLogo" />
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </form>
+              </div>
+            </div>
+            <div class="card">
+              <h5 class="card-header">Mes permissions</h5>
+              <div class="card-body">
+                <table class="table">
+                  <tbody>
+                    <tr>
+                      <td>
+                        <strong>Contenu à la une</strong><br>
+                        <small>Pouvoir modifier le contenu à la une sur l'ensemble de mes Arcades For Good</small>
+                      </td>
+                      <td>
+                        <span
+                          v-if="currentUser.customer.can_edit_featured_content"
+                          class="badge-dot badge-success" />
+                        <span
+                          v-else
+                          class="badge-dot badge-light" />
+                      </td>
+                    </tr>
+                    <tr>
+                      <td>
+                        <strong>Formule de don</strong><br>
+                        <small>Pouvoir modifier la formule de don sur chacune de mes Arcades For Good</small>
+                      </td>
+                      <td>
+                        <span
+                          v-if="currentUser.customer.can_edit_donation_formula"
+                          class="badge-dot badge-success" />
+                        <span
+                          v-else
+                          class="badge-dot badge-light" />
+                      </td>
+                    </tr>
+                    <tr>
+                      <td>
+                        <strong>Montant des dons</strong><br>
+                        <small>Pouvoir modifier le montant minimum et maximum sur chacune de mes Arcades For Good</small>
+                      </td>
+                      <td>
+                        <span
+                          v-if="currentUser.customer.can_edit_donation_amount"
+                          class="badge-dot badge-success" />
+                        <span
+                          v-else
+                          class="badge-dot badge-light" />
+                      </td>
+                    </tr>
+                    <tr>
+                      <td>
+                        <strong>Diffusion des écrans de veille</strong><br>
+                        <small>Pouvoir modifier les écrans de veille sur chacune de mes Arcades For Good</small>
+                      </td>
+                      <td>
+                        <span
+                          v-if="currentUser.customer.can_edit_screensaver_broadcasts"
+                          class="badge-dot badge-success" />
+                        <span
+                          v-else
+                          class="badge-dot badge-light" />
+                      </td>
+                    </tr>
+                    <tr>
+                      <td>
+                        <strong>Informations sur les joueurs</strong><br>
+                        <small>Pouvoir consulter les informations sur les joueurs de mes Arcades For Good</small>
+                      </td>
+                      <td>
+                        <span
+                          v-if="currentUser.customer.can_see_donators"
+                          class="badge-dot badge-success" />
+                        <span
+                          v-else
+                          class="badge-dot badge-light" />
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
               </div>
             </div>
           </div>
         </div>
       </div>
-
     </div>
   </div>
 </template>

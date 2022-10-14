@@ -33,10 +33,11 @@
                   />
                   <li class="breadcrumb-item" aria-current="page">
                     <router-link
+                      v-if="terminal"
                       :to="'/terminal/' + terminal.id"
-                      class="breadcrumb-link"
-                      >{{ terminal.name }}</router-link
-                    >
+                      class="breadcrumb-link">
+                      {{ terminal.name }}
+                    </router-link>
                   </li>
                   <font-awesome-icon
                     icon="angle-right"
@@ -174,26 +175,54 @@
                       />
                     </div>
                   </div>
-                    <div class="row">
-                  <div class="form-group col-md-6 col-12">
-                    <label for="core">Formule de dons</label>
-                           <select class="custom-select mb-2"  v-model="terminal.donation_formula" >
-                    <option value ="Classique" selected> Classique </option>
-                    <option value ="Gratuit"> Gratuit </option>
-                    <option  value ="Mécénat" >  Mécénat </option>
-                     <option  value ="Partage" >Partage  </option>
-
+                  <div v-if="canCurrentUserEditDonationFormula" class="row">
+                    <div class="form-group col-md-6 col-12">
+                      <label for="core">Formule de dons</label>
+                      <select class="custom-select mb-2"  v-model="terminal.donation_formula" >
+                        <option value="Classique" selected>Classique</option>
+                        <option value="Gratuit">Gratuit</option>
+                        <option value="Mécénat">Mécénat</option>
+                        <option value="Partage">Partage</option>
                       </select>
-                  </div></div>
-				          <div class="mb-3 form-check">
-                  <small id="nameHelp" class="form-text text-muted"
-                      >Texte personnalisé </small
-                    >
-          <textarea
-            class="form-control"
-            v-model="terminal.free_mode_text"
-          ></textarea>
-				</div>
+                    </div>
+                    <div v-if="canCurrentUserEditDonationAmount" class="form-group col-md-2 col-4">
+                      <label for="core">Montant min</label>
+                      <input
+                        v-model="terminal.donation_min_amount"
+                        type="number"
+                        min="1"
+                        :max="terminal.donation_max_amount"
+                        class="form-control"
+                      />
+                    </div>
+                    <div v-if="canCurrentUserEditDonationAmount" class="form-group col-md-2 col-4">
+                      <label for="core">Montant par défaut</label>
+                      <input
+                        v-model="terminal.donation_default_amount"
+                        type="number"
+                        :min="terminal.donation_min_amount"
+                        :max="terminal.donation_max_amount"
+                        class="form-control"
+                      />
+                    </div>
+                    <div v-if="canCurrentUserEditDonationAmount" class="form-group col-md-2 col-4">
+                      <label for="core">Montant max</label>
+                      <input
+                        v-model="terminal.donation_max_amount"
+                        type="number"
+                        :min="terminal.donation_min_amount"
+                        class="form-control"
+                      />
+                    </div>
+                  </div>
+				          <div class="row">
+                    <div class="form-group col-12">
+                      <label for="core">Montant max</label>
+                      <textarea
+                        class="form-control"
+                        v-model="terminal.free_mode_text" />
+                    </div>
+                  </div>
                 </div>
               </div>
             </div>
@@ -221,18 +250,6 @@
                 <div class="col" v-if="terminal.campaigns">
                   <label for="campaign"
                     >Campagnes actives :
-                    <!-- <span
-                      :class="[
-                        terminal.campaigns.length > maxCampaigns ||
-                        terminal.campaigns.length == 0
-                          ? 'text-danger'
-                          : '',
-                        'font-weight-bold',
-                      ]"
-                      >({{ terminal.campaigns.length }}/{{
-                        maxCampaigns
-                      }})</span
-                    > -->
                   </label>
                   <div class="row form-group">
                     <label
@@ -240,7 +257,7 @@
                       :key="campaign.id"
                       :for="campaign.id"
                       :class="[
-                        campaignExists(campaign.id) ? 'checked' : '',
+                        campaignIsSelected(campaign.id) ? 'checked' : '',
                         'card-checkbox',
                         'col-3',
                         'py-2',
@@ -276,33 +293,20 @@
               </div>
               <div class="row">
                 <div class="col" v-if="terminal.games">
-                  <label for="game"
-                    >Jeux actifs :
-                    <!-- <span
-                      :class="[
-                        terminal.games.length > maxGames ||
-                        terminal.games.length == 0
-                          ? 'text-danger'
-                          : '',
-                        'font-weight-bold',
-                      ]"
-                      >({{ terminal.games.length }}/{{ maxGames }})</span
-                    > -->
-                  </label>
+                  <label for="game">Jeux actifs :</label>
                   <div class="row form-group">
                     <label
                       v-for="game in games"
                       :for="game.id"
                       :class="[
-                        gameExists(game.id) ? 'checked' : '',
+                        gameIsSelected(game.id) ? 'checked' : '',
                         'card-checkbox',
                         'col-3',
                         'py-3',
                         'mx-2',
                       ]"
                       :key="game.id"
-                      @click.prevent="selectGame(game)"
-                    >
+                      @click.prevent="selectGame(game)">
                       <input type="radio" :value="game.id" />
                       <span
                         :class="[
@@ -310,8 +314,7 @@
                           'd-flex',
                           'align-items-center',
                           'justify-content-center',
-                        ]"
-                      >
+                        ]">
                         <font-awesome-icon icon="check" />
                       </span>
                       <span class="checkbox-icon">
@@ -325,7 +328,7 @@
             </div>
 
             <div class="card-body text-center">
-              <button class="btn btn-success" @click.prevent="edit">
+              <button class="btn btn-success" @click.prevent="submit">
                 Modifier le terminal
               </button>
             </div>
@@ -354,6 +357,37 @@ export default {
         message: "",
       },
     };
+  },
+  computed: {
+    isAdmin() {
+      return this.$store.getters.isAdmin;
+    },
+    isCustomer() {
+      return this.$store.getters.isCustomer;
+    },
+    currentUser() {
+      return this.$store.getters.currentUser;
+    },
+    canCurrentUserEditDonationFormula() {
+      if (this.isAdmin) {
+        return true;
+      }
+      const customer = this.currentUser.customer;
+      if (customer) {
+        return customer.can_edit_donation_formula;
+      }
+      return false;
+    },
+    canCurrentUserEditDonationAmount() {
+      if (this.isAdmin) {
+        return true;
+      }
+      const customer = this.currentUser.customer;
+      if (customer) {
+        return customer.can_edit_donation_amount;
+      }
+      return false;
+    },
   },
   mounted: function () {
     this.getTerminal();
@@ -391,52 +425,35 @@ export default {
           console.log(err.response);
         });
     },
-    campaignExists: function (id) {
-      for (let i = 0; i < this.terminal.campaigns.length; i++) {
-        if (this.terminal.campaigns[i].id == id) {
-          return true;
-        }
-      }
-      return false;
+    campaignIsSelected: function (id) {
+      return this.terminal.campaigns.includes(id);
     },
-    selectCampaign: function (campaign) {
-      if (!this.campaignExists(campaign.id)) {
-        // if (this.terminal.campaigns.length <= this.maxCampaigns) {
-        // Only if not max campaigns
-        this.terminal.campaigns.push(campaign);
+    selectCampaign: function (id) {
+      if (!this.campaignIsSelected(id)) {
+        this.terminal.campaigns.push(id);
         // }
       } else {
-        for (let index = 0; index < this.terminal.campaigns.length; index++) {
-          const element = this.terminal.campaigns[index];
-          if (element.id == campaign.id) {
-            this.$delete(this.terminal.campaigns, index);
-          }
+        var index = this.terminal.campaigns.indexOf(id);
+        if (index !== -1) {
+          this.terminal.campaigns.splice(index, 1);
         }
       }
     },
-    gameExists: function (id) {
-      for (let i = 0; i < this.terminal.games.length; i++) {
-        if (this.terminal.games[i].id == id) {
-          return true;
-        }
-      }
-      return false;
+    gameIsSelected: function (id) {
+      return this.terminal.games.includes(id);
     },
     selectGame: function (game) {
-      if (!this.gameExists(game.id)) {
-        // if (this.terminal.games.length <= this.maxGames) {
-        this.terminal.games.push(game);
+      if (!this.gameIsSelected(id)) {
+        this.terminal.games.push(id);
         // }
       } else {
-        for (let index = 0; index < this.terminal.games.length; index++) {
-          const element = this.terminal.games[index];
-          if (element.id == game.id) {
-            this.$delete(this.terminal.games, index);
-          }
+        var index = this.terminal.games.indexOf(id);
+        if (index !== -1) {
+          this.terminal.games.splice(index, 1);
         }
       }
     },
-    edit: function () {
+    submit: function () {
       if (this.terminal) {
         let sentTerminal = { ...this.terminal };
 
@@ -448,24 +465,7 @@ export default {
         delete sentTerminal.total_donations;
 
         sentTerminal.owner = sentTerminal.owner.id;
-
         sentTerminal.customer = sentTerminal.customer.id;
-
-        let games_id = [];
-        for (let index = 0; index < sentTerminal.games.length; index++) {
-          const element = sentTerminal.games[index].id;
-          games_id.push(element);
-        }
-        sentTerminal.games = games_id;
-
-        let campaigns_id = [];
-        for (let index = 0; index < sentTerminal.campaigns.length; index++) {
-          const element = sentTerminal.campaigns[index].id;
-          campaigns_id.push(element);
-        }
-        sentTerminal.campaigns = campaigns_id;
-
-
 
         this.$http
           .put("terminal/" + sentTerminal.id + "/", sentTerminal)

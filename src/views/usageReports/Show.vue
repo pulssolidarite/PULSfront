@@ -136,20 +136,11 @@
               </div>
               <div class="form-group col">
                 <center><label for="core">TPE</label></center>
-                <select
-                  class="custom-select mb-2"
-                  @change="onFilterChange"
+                <input
                   v-model="choosen_tpe"
-                >
-                  <option value="all" selected>Tout</option>
-                  <option
-                    v-for="terminal in terminals"
-                    :value="terminal.payment_terminal"
-                    :key="terminal.id"
-                  >
-                    {{ terminal.payment_terminal }}
-                  </option>
-                </select>
+                  type="text"
+                  class="form-control"
+                  @change="onFilterChange" />
               </div>
 
               <div class="form-group col">
@@ -465,7 +456,7 @@ export default {
       choosen_formula : "all" ,
       choosen_transaction : "all" ,
       choosen_game : "all" ,
-      choosen_tpe : "all" ,
+      choosen_tpe : null ,
       choosen_date_start : "DD-MM-YYYY" ,
       choosen_date_end : "DD-MM-YYYY" ,
       choosen_time : "all" ,
@@ -547,7 +538,7 @@ export default {
       this.choosen_formula = "all" ,
       this.choosen_transaction = "all" ,
       this.choosen_game = "all" ,
-      this.choosen_tpe = "all" ,
+      this.choosen_tpe = null,
       this.choosen_date_start = "01-01-2010 00:00:00" ,
       this.choosen_date_end = "DD-MM-YYYY" ,
       this.choosen_time = "all" ,

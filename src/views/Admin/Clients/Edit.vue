@@ -51,14 +51,10 @@
       <div class="row">
         <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">
           <div class="card">
-            <div
-              class="card-header d-flex align-items-center justify-content-between"
-            >
+            <div class="card-header d-flex align-items-center justify-content-between">
               <h5 class="mb-0">Modifier un client</h5>
             </div>
             <div class="card-body" v-if="customer.company">
-              <h4 class="mb-0">Nouveau client</h4>
-              <p>Le compte lié au nouveau terminal.</p>
               <form>
                 <div class="row">
                   <div class="form-group col">
@@ -97,6 +93,41 @@
                         >Location</option
                       >
                     </select>
+                  </div>
+                </div>
+                <div class="row">
+                  <div class="col">
+                    <label class="col-form-label">Permissions</label>
+                    <div class="form-check">
+                      <input v-model="customer.can_edit_featured_content" class="form-check-input" type="checkbox" value="" id="canEditFeaturedContentCheckbox">
+                      <label class="form-check-label" for="canEditFeaturedContentCheckbox">
+                        Peut sélectionner ses propres contenus à mettre en avant sur ses terminaux
+                      </label>
+                    </div>
+                    <div class="form-check">
+                      <input v-model="customer.can_edit_donation_formula" class="form-check-input" type="checkbox" value="" id="canEditDonationFormulaCheckbox">
+                      <label class="form-check-label" for="canEditDonationFormulaCheckbox">
+                        Peut éditer la formule de don de ses terminaux
+                      </label>
+                    </div>
+                    <div class="form-check">
+                      <input v-model="customer.can_edit_screensaver_broadcasts" class="form-check-input" type="checkbox" value="" id="canEditScreensaverBroadcasts">
+                      <label class="form-check-label" for="canEditScreensaverBroadcasts">
+                        Peut éditer les diffusions d'écrans de veille sur ses terminaux
+                      </label>
+                    </div>
+                    <div class="form-check">
+                      <input v-model="customer.can_see_donators" class="form-check-input" type="checkbox" value="" id="canSeeDonators">
+                      <label class="form-check-label" for="canSeeDonators">
+                        Peut consulter la liste des donateurs
+                      </label>
+                    </div>
+                    <div class="form-check">
+                      <input v-model="customer.can_edit_donation_amount" class="form-check-input" type="checkbox" value="" id="canEditDonationAmount">
+                      <label class="form-check-label" for="canEditDonationAmount">
+                        Peut éditer le montant max, min et par défaut des dons sur ses terminaux
+                      </label>
+                    </div>
                   </div>
                 </div>
               </form>
@@ -158,7 +189,7 @@ export default {
   name: "EditClient",
   data: function() {
     return {
-      customer: {},
+      customer: null,
       errors: {
         visible: false,
         type: "danger",
@@ -203,7 +234,8 @@ export default {
     },
     editClient: function() {
       this.$http
-        .put("customer/" + this.customer.id + "/", this.customer)
+        .put(
+          "customer/" + this.customer.id + "/", this.customer)
         .then(() => {
           this.$router.push("/clients");
         })

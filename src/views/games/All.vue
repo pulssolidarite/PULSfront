@@ -121,23 +121,23 @@
                             >ux</span
                           ><span v-else>l</span>
                         </td>
-                        <td v-if="isAdmin" style="text-align: center;">
+                        <td v-if="game == featuredGame" style="text-align: center;">
                           <a
+                            v-if="canCurrentUserUnselectFeaturedGame"
                             href=""
-                            v-if="game.featured"
-                            @click.prevent="setNotFeatured(game)">
-                            <span class="badge-dot badge-success mr-1"></span>
+                            @click.prevent="toggleFeaturedGame(game)">
+                            <span class="badge-dot badge-success mr-1" />
                           </a>
-                          <a
-                            href=""
-                            v-else
-                            @click.prevent="setFeatured(game)">
-                            <span class="badge-dot badge-light mr-1"></span>
-                          </a>
+                          <span v-else class="badge-dot badge-success mr-1" />
                         </td>
                         <td v-else style="text-align: center;">
-                          <span v-if="game.featured" class="badge-dot badge-success mr-1"></span>
-                          <span v-else class="badge-dot badge-light mr-1"></span>
+                          <a
+                            href=""
+                            v-if="canCurrentUserSelectFeaturedGame"
+                            @click.prevent="toggleFeaturedGame(game)">
+                            <span class="badge-dot badge-light mr-1" />
+                          </a>
+                          <span v-else class="badge-dot badge-light mr-1" />
                         </td>
                         <td>
                           <router-link
@@ -194,12 +194,42 @@ export default {
     isCustomer: function() {
       return this.$store.getters.isCustomer;
     },
+    currentUser() {
+      return this.$store.getters.currentUser;
+    },
+    canCurrentUserSelectFeaturedGame() {
+      if (this.isAdmin) {
+        return true
+      }
+      const customer = this.currentUser.customer;
+      if (customer) {
+        return customer.can_edit_featured_content;
+      }
+      return false;
+    },
+    canCurrentUserUnselectFeaturedGame() {
+      if (this.isAdmin) {
+        return true
+      }
+      const customer = this.currentUser.customer;
+      if (customer) {
+        return customer.can_edit_featured_content && customer.featured_game != null;
+      }
+      return false;
+    },
     featuredGame() {
-      if (this.games) {
-        return this.games.find(game => game.featured);
+      if (!this.games) {
+        return null;
       }
 
-      return null;
+      const currentUser = this.$store.getters.currentUser;
+      const featuredGameIdForCustomer = currentUser.customer?.featured_game;
+
+      if (featuredGameIdForCustomer) {
+        return this.games.find(game => game.id == featuredGameIdForCustomer);
+      }
+
+      return this.games.find(game => game.featured);
     },
   },
   mounted: function() {
@@ -227,26 +257,17 @@ export default {
         this.getGames();
       });
     },
-    setFeatured(game) {
-      this.$http.post("games/" + game.id + "/featured/")
+    toggleFeaturedGame(game) {
+      this.$http.post("games/" + game.id + "/toggle-featured/")
       .then((resp) => {
         this.getGames();
+        if (this.isCustomer) {
+          this.$store.dispatch("refreshCurrentUser");
+        }
       })
       .catch((err) => {
         this.$toasted.global.error({
           message: "Impossible de mettre le jeu en avant.",
-        });
-        throw err;
-      })
-    },
-    setNotFeatured(game) {
-      this.$http.post("games/" + game.id + "/not_featured/")
-      .then((resp) => {
-        this.getGames();
-      })
-      .catch((err) => {
-        this.$toasted.global.error({
-          message: "Impossible de démettre le jeu en avant.",
         });
         throw err;
       })

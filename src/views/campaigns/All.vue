@@ -128,24 +128,26 @@
                             >ux</span
                           ><span v-else>l</span>
                         </td>
-                        <td v-if="isAdmin" style="text-align: center;">
+
+                        <td v-if="campaign == featuredCampaign" style="text-align: center;">
                           <a
+                            v-if="canCurrentUserUnselectFeaturedCampaign"
                             href=""
-                            v-if="campaign.featured"
-                            @click.prevent="setNotFeatured(campaign)">
-                            <span class="badge-dot badge-success mr-1"></span>
+                            @click.prevent="toggleFeaturedCampaign(campaign)">
+                            <span class="badge-dot badge-success mr-1" />
                           </a>
-                          <a
-                            href=""
-                            v-else
-                            @click.prevent="setFeatured(campaign)">
-                            <span class="badge-dot badge-light mr-1"></span>
-                          </a>
+                          <span v-else class="badge-dot badge-success mr-1" />
                         </td>
                         <td v-else style="text-align: center;">
-                          <span v-if="campaign.featured" class="badge-dot badge-success mr-1"></span>
-                          <span v-else class="badge-dot badge-light mr-1"></span>
+                          <a
+                            href=""
+                            v-if="canCurrentUserSelectFeaturedCampaign"
+                            @click.prevent="toggleFeaturedCampaign(campaign)">
+                            <span class="badge-dot badge-light mr-1" />
+                          </a>
+                          <span v-else class="badge-dot badge-light mr-1" />
                         </td>
+
                         <td>
                           <router-link
                             :to="'/campaigns/' + campaign.id"
@@ -201,12 +203,42 @@ export default {
     isCustomer: function() {
       return this.$store.getters.isCustomer;
     },
+    currentUser() {
+      return this.$store.getters.currentUser;
+    },
+    canCurrentUserSelectFeaturedCampaign() {
+      if (this.isAdmin) {
+        return true
+      }
+      const customer = this.currentUser.customer;
+      if (customer) {
+        return customer.can_edit_featured_content;
+      }
+      return false;
+    },
+    canCurrentUserUnselectFeaturedCampaign() {
+      if (this.isAdmin) {
+        return true
+      }
+      const customer = this.currentUser.customer;
+      if (customer) {
+        return customer.can_edit_featured_content && customer.featured_campaign != null;
+      }
+      return false;
+    },
     featuredCampaign() {
-      if (this.campaigns) {
-        return this.campaigns.find(campaign => campaign.featured);
+      if (!this.campaigns) {
+        return null;
       }
 
-      return null;
+      const currentUser = this.$store.getters.currentUser;
+      const featuredCampaignIdForCustomer = currentUser.customer?.featured_campaign;
+
+      if (featuredCampaignIdForCustomer) {
+        return this.campaigns.find(campaign => campaign.id == featuredCampaignIdForCustomer);
+      }
+
+      return this.campaigns.find(campaign => campaign.featured);
     },
   },
   mounted: function() {
@@ -237,26 +269,17 @@ export default {
         this.getCampaigns();
       });
     },
-    setFeatured(campaign) {
-      this.$http.post("campaign/" + campaign.id + "/featured/")
+    toggleFeaturedCampaign(campaign) {
+      this.$http.post("campaign/" + campaign.id + "/toggle_featured/")
       .then((resp) => {
         this.getCampaigns();
+        if (this.isCustomer) {
+          this.$store.dispatch("refreshCurrentUser");
+        }
       })
       .catch((err) => {
         this.$toasted.global.error({
           message: "Impossible de mettre la campagne en avant.",
-        });
-        throw err;
-      })
-    },
-    setNotFeatured(campaign) {
-      this.$http.post("campaign/" + campaign.id + "/not_featured/")
-      .then((resp) => {
-        this.getCampaigns();
-      })
-      .catch((err) => {
-        this.$toasted.global.error({
-          message: "Impossible de démettre la campagne en avant.",
         });
         throw err;
       })
