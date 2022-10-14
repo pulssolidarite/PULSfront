@@ -136,6 +136,16 @@ export default new Vuex.Store({
     currentUser: (state) => {
       return state.currentUser;
     },
+    canCurrentUserEditScreensavers: (state) => {
+      if (state.currentUser.is_staff) {
+        return true
+      }
+      const customer = state.currentUser.customer;
+      if (customer) {
+        return customer.can_edit_screensaver_broadcasts;
+      }
+      return false;
+    },
   },
   modules: {},
 });

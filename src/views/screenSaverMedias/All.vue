@@ -8,6 +8,7 @@
             <div class="d-flex justify-content-between">
               <h2 class="pageheader-title">Ecran de veille</h2>
               <router-link
+                v-if="canCurrentUserEditScreensavers"
                 class="btn btn-primary mb-1"
                 :to="{ name: 'addScreensaverMedia' }">
                 <font-awesome-icon icon="plus" class="mr-2" />
@@ -64,9 +65,9 @@
                         <th v-if="isAdmin" class="border-0">Editeur</th>
                         <th v-if="isAdmin" class="border-0">Portée</th>
                         <th class="border-0">Terminaux associés</th>
-                        <th class="border-0"></th>
-                        <th class="border-0"></th>
-                        <th class="border-0"></th>
+                        <th v-if="canCurrentUserEditScreensavers" class="border-0"></th>
+                        <th v-if="canCurrentUserEditScreensavers" class="border-0"></th>
+                        <th v-if="canCurrentUserEditScreensavers" class="border-0"></th>
                       </tr>
                     </thead>
                     <tbody>
@@ -88,14 +89,14 @@
                             >ux</span
                           ><span v-else>l</span>
                         </td>
-                        <td>
+                        <td v-if="canCurrentUserEditScreensavers">
                           <router-link
                             :to="{ name: 'editScreensaverMedia', params: { id: media.id } }"
                             class="text-primary">
                             <font-awesome-icon icon="pen" />
                           </router-link>
                         </td>
-                        <td>
+                        <td v-if="canCurrentUserEditScreensavers">
                           <a
                             href=""
                             @click.prevent="deleteMedia(media.id)"
@@ -103,7 +104,7 @@
                             <font-awesome-icon icon="trash-alt"/>
                           </a>
                         </td>
-                        <td>
+                        <td v-if="canCurrentUserEditScreensavers">
                           <router-link
                             :to="{ name: 'addScreensaverBroadcast', params: { media_id: media.id } }"
                             class="text-primary">
@@ -142,6 +143,9 @@ export default {
     },
     isCustomer: function() {
       return this.$store.getters.isCustomer;
+    },
+    canCurrentUserEditScreensavers() {
+      return this.$store.getters.canCurrentUserEditScreensavers;
     },
   },
   mounted: function() {

@@ -8,6 +8,7 @@
             <div class="d-flex justify-content-between">
               <h2 class="pageheader-title">Diffusion d'écran de veille</h2>
               <router-link
+                v-if="canCurrentUserEditScreensavers"
                 class="btn btn-primary mb-1"
                 :to="{ name: 'addScreensaverBroadcast' }">
                 <font-awesome-icon icon="plus" class="mr-2" />
@@ -63,8 +64,8 @@
                         <th class="border-0">Terminal</th>
                         <th class="border-0">Média</th>
                         <th class="border-0"></th>
-                        <th class="border-0"></th>
-                        <th class="border-0"></th>
+                        <th v-if="canCurrentUserEditScreensavers" class="border-0"></th>
+                        <th v-if="canCurrentUserEditScreensavers" class="border-0"></th>
                       </tr>
                     </thead>
                     <tbody>
@@ -76,7 +77,7 @@
                         <td>
                           {{ broadcast.media.title }}
                         </td>
-                        <td>
+                        <td v-if="canCurrentUserEditScreensavers">
                           <a
                             href=""
                             v-if="broadcast.visible"
@@ -92,7 +93,7 @@
                             ><font-awesome-icon icon="power-off"
                           /></a>
                         </td>
-                        <td>
+                        <td v-if="canCurrentUserEditScreensavers">
                           <a
                             href=""
                             @click.prevent="deleteBroadcast(broadcast.id)"
@@ -132,6 +133,9 @@ export default {
     },
     isCustomer: function() {
       return this.$store.getters.isCustomer;
+    },
+    canCurrentUserEditScreensavers() {
+      return this.$store.getters.canCurrentUserEditScreensavers;
     },
   },
   mounted: function() {

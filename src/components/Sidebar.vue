@@ -199,7 +199,7 @@
                       Tous les médias
                     </router-link>
                   </li>
-                  <li class="nav-item">
+                  <li v-if="canCurrentUserEditScreensavers" class="nav-item">
                     <router-link class="nav-link" :to="{ name: 'addScreensaverMedia' }">
                       Ajouter un média
                     </router-link>
@@ -209,7 +209,7 @@
                       Diffusion des médias
                     </router-link>
                   </li>
-                  <li class="nav-item">
+                  <li v-if="canCurrentUserEditScreensavers" class="nav-item">
                     <router-link class="nav-link" :to="{ name: 'addScreensaverBroadcast' }">
                       Créer une diffusion
                     </router-link>
@@ -234,6 +234,9 @@ export default {
     },
     isCustomer: function() {
       return this.$store.getters.isCustomer;
+    },
+    canCurrentUserEditScreensavers() {
+      return this.$store.getters.canCurrentUserEditScreensavers;
     },
   },
 };
