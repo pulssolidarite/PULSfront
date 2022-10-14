@@ -41,132 +41,146 @@
         <div class="card">
           <div class="card-body">
             <div class="row">
-              <div class="form-group col">
-                <center><label for="core">Campagne</label></center>
-                <select
-                  class="custom-select mb-2"
-                  name="fruit"
-                  @change="onFilterChange"
-                  v-model="choosen_compaign">
-                  <option value="all">Tout</option>
-                  <option
-                    v-for="Compagne in campaigns"
-                    :value="Compagne.id"
-                    :key="Compagne.id">
-                    {{ Compagne.name }}
-                  </option>
-                </select>
-              </div>
-              <div class="form-group col">
-                <center><label for="core">Terminal</label></center>
-                <select
-                  class="custom-select mb-2"
-                  @change="onFilterChange"
-                  v-model="choosen_terminal"
-                >
-                  <option value="all" selected>Tout</option>
-                  <option
-                    v-for="terminal in terminals"
-                    :value="terminal.id"
-                    :key="terminal.id"
-                  >
-                    {{ terminal.name }}
-                  </option>
-                </select>
-              </div>
-              <div v-if="isAdmin" class="form-group col">
-                <center><label for="core">Client</label></center>
-                <select
-                  class="custom-select mb-2"
-                  @change="onFilterChange"
-                  v-model="choosen_client"
-                >
-                  <option value="all" selected>Tout</option>
-                  <option
-                    v-for="customer in customers"
-                    :value="customer.id"
-                    :key="customer.id"
-                  >
-                    {{ customer.company }} - {{ customer.representative }}
-                  </option>
-                </select>
+              <div class="col">
+                <div class="row">
+                  <div class="form-group col-3">
+                    <center><label for="core">Campagne</label></center>
+                    <select
+                      class="custom-select mb-2"
+                      name="fruit"
+                      @change="onFilterChange"
+                      v-model="filters.campaign">
+                      <option :value="null">Tout</option>
+                      <option
+                        v-for="Compagne in campaigns"
+                        :value="Compagne.id"
+                        :key="Compagne.id">
+                        {{ Compagne.name }}
+                      </option>
+                    </select>
+                  </div>
+                  <div class="form-group col-3">
+                    <center><label for="core">Terminal</label></center>
+                    <select
+                      class="custom-select mb-2"
+                      @change="onFilterChange"
+                      v-model="filters.terminal">
+                      <option :value="null">Tout</option>
+                      <option
+                        v-for="terminal in terminals"
+                        :value="terminal.id"
+                        :key="terminal.id">
+                        {{ terminal.name }}
+                      </option>
+                    </select>
+                  </div>
+                  <div v-if="isAdmin" class="form-group col-3">
+                    <center><label for="core">Client</label></center>
+                    <select
+                      class="custom-select mb-2"
+                      @change="onFilterChange"
+                      v-model="filters.customer">
+                      <option :value="null">Tout</option>
+                      <option
+                        v-for="customer in customers"
+                        :value="customer.id"
+                        :key="customer.id">
+                        {{ customer.company }} - {{ customer.representative }}
+                      </option>
+                    </select>
+                  </div>
+
+                  <div class="form-group col-3">
+                    <center><label for="core">Formule de dons</label></center>
+                    <select
+                      class="custom-select mb-2"
+                      @change="onFilterChange"
+                      v-model="filters.formula">
+                      <option :value="null">Tout</option>
+                      <option value="Classique">Classique</option>
+                      <option value="Gratuit">Gratuit</option>
+                      <option value="Mécénat">Mécénat</option>
+                      <option value="Partage">Partage</option>
+                    </select>
+                  </div>
+                  <div class="form-group col-3">
+                    <center><label for="core">Transaction</label></center>
+                    <select
+                      class="custom-select mb-2"
+                      @change="onFilterChange"
+                      v-model="filters.transaction"
+                    >
+                      <option :value="null">Tout</option>
+                      <option class="text-success" value="Accepted">
+                        Acceptée
+                      </option>
+                      <option class="text-danger" value="Refused">Refusée</option>
+                      <option class="text-warning" value="Skiped">Skipe</option>
+                    </select>
+                  </div>
+                  <div class="form-group col-3">
+                    <center><label for="core">Jeu</label></center>
+                    <select
+                      class="custom-select mb-2"
+                      @change="onFilterChange"
+                      v-model="filters.game">
+                      <option :value="null">Tout</option>
+                      <option v-for="g in games" :value="g.id" :key="g.id">
+                        {{ g.name }}
+                      </option>
+                    </select>
+                  </div>
+                  <div class="form-group col-3">
+                    <center><label for="core">Période</label></center>
+                    <select
+                      class="custom-select mb-2"
+                      @change="onFilterChange"
+                      v-model="filters.date">
+                      <option :value="null">Tout</option>
+                      <option value="Today">Aujourd'hui</option>
+                      <option value="Yesterday">Hier</option>
+                      <option value="7days">Les 7 derniers jours</option>
+                      <option value="CurrentWeek">Cette semaine</option>
+                      <option value="LastWeek">La semaine dernière</option>
+                      <option value="CurrentMonth">Mois en cours</option>
+                      <option value="LastMonth">Le mois dernier</option>
+                      <option value="ThisYear">Cette année</option>
+                      <option value="LastYear">L'année dernière</option>
+                    </select>
+                  </div>
+
+                  <div class="form-group col-3">
+                    <center><label for="core">TPE</label></center>
+                    <input
+                      v-model="filters.tpe"
+                      type="text"
+                      class="form-control"
+                      @change="onFilterChange" />
+                  </div>
+
+                </div>
               </div>
 
-              <div class="form-group col">
-                <center><label for="core">Formule de dons</label></center>
-                <select
-                  class="custom-select mb-2"
-                  @change="onFilterChange"
-                  v-model="choosen_formula"
-                >
-                  <option value="all" selected>Tout</option>
-                  <option value="Classique">Classique</option>
-                  <option value="Gratuit">Gratuit</option>
-                  <option value="Mécénat">Mécénat</option>
-                  <option value="Partage">Partage</option>
-                </select>
-              </div>
-              <div class="form-group col">
-                <center><label for="core">Transaction</label></center>
-                <select
-                  class="custom-select mb-2"
-                  @change="onFilterChange"
-                  v-model="choosen_transaction"
-                >
-                  <option value="all" selected>Tout</option>
-                  <option class="text-success" value="Accepted">
-                    Acceptée
-                  </option>
-                  <option class="text-danger" value="Refused">Refusée</option>
-                  <option class="text-warning" value="Skiped">Skipe</option>
-                </select>
-              </div>
-              <div class="form-group col">
-                <center><label for="core">Jeu</label></center>
-                <select
-                  class="custom-select mb-2"
-                  @change="onFilterChange"
-                  v-model="choosen_game"
-                >
-                  <option value="all" selected>Tout</option>
-                  <option v-for="g in games" :value="g.id" :key="g.id">
-                    {{ g.name }}
-                  </option>
-                </select>
-              </div>
-              <div class="form-group col">
-                <center><label for="core">TPE</label></center>
-                <input
-                  v-model="choosen_tpe"
-                  type="text"
-                  class="form-control"
-                  @change="onFilterChange" />
-              </div>
 
-              <div class="form-group col">
-                <div class="form-group col">
+              <div class="col-3">
+                <div class="form-group">
                   <center><label for="core"> A partir de </label></center>
                   <div class="input-group input-group-sm mb-3">
                     <div class="input-group-prepend">
-                      <span class="input-group-text"
-                        ><font-awesome-icon icon="clock" />
+                      <span class="input-group-text">
+                        <font-awesome-icon icon="clock" />
                       </span>
                       <datetime
                         format="DD-MM-YYYY H:i:s"
                         lang="fr"
                         @input="onFilterChange"
-                        v-model="choosen_date_start"
-                        style="
-                          text-align: center;
-                          color: #2c3e50;
-                          font-family: Helvetica;
-                        "
-                      ></datetime>
+                        v-model="filters.start_date"
+                        style="text-align: center; color: #2c3e50; font-family: Helvetica;" />
                     </div>
                   </div>
                 </div>
 
-                <div class="form-group col">
+                <div class="form-group">
                   <center><label for="core"> Jusqu’à </label><br /></center>
                   <div class="input-group input-group-sm mb-3">
                     <div class="input-group-prepend">
@@ -176,66 +190,23 @@
                       <datetime
                         format="DD-MM-YYYY H:i:s"
                         @input="onFilterChange"
-                        v-model="choosen_date_end"
-                        style="
-                          text-align: center;
-                          color: #2c3e50;
-                          font-family: Helvetica;
-                        "
-                      ></datetime>
+                        v-model="filters.end_date"
+                        style="text-align: center; color: #2c3e50; font-family: Helvetica;" />
                     </div>
                   </div>
                 </div>
-                <div class="form-group col">
-                  <center><label for="core">Période</label></center>
-                  <select
-                    class="custom-select mb-2"
-                    @change="onFilterChange"
-                    v-model="choosen_period"
-                  >
-                    <option value="all" selected>Tout</option>
-                    <option value="Today">Aujourd'hui</option>
-                    <option value="Yesterday">Hier</option>
-                    <option value="7days">Les 7 derniers jours</option>
-                    <option value="CurrentWeek">Cette semaine</option>
-                    <option value="LastWeek">La semaine dernière</option>
-                    <option value="CurrentMonth">Mois en cours</option>
-                    <option value="LastMonth">Le mois dernier</option>
-                    <option value="ThisYear">Cette année</option>
-                    <option value="LastYear">L'année dernière</option>
-                  </select>
-                </div>
               </div>
-
-              <div class="form-group col">
-                <center><label for="core">Nombre de résultats</label></center>
-                <div class="input-group mb-3">
-                  <div class="input-group-prepend">
-                    <span class="input-group-text" id="basic-addon1">
-                      <font-awesome-icon icon="file" text="dsfs" />
-                    </span>
-                  </div>
-                  <input
-                    type="number"
-                    step="1"
-                    pattern="\d+"
-                    class="form-control"
-                    @change="onFilterChange"
-                    v-model="results_number"
-                  />
-                </div>
-              </div>
+              
             </div>
             <button
               class="btn btn-primary"
               @click="resetAllFilters"
-              STYLE=" background-color:black; float : right"
-            >
+              style=" background-color:black; float : right">
               Effacer Tout
             </button>
           </div>
         </div>
-        <div class="row">
+        <div v-if="payments" class="row">
           <div class="col-xl-3 col-lg-6 col-md-6 col-sm-12 col-12">
             <div class="card">
               <div class="card-body">
@@ -260,13 +231,13 @@
             <div class="card">
               <div class="card-body">
                 <div class="metric-value d-inline-block">
-                  <h1 class="mb-1">{{ payments.length }}</h1>
+                  <h1 class="mb-1">{{ totalNumberOfPayments }}</h1>
                 </div>
                 <h5 class="text-muted">Nombre de parties</h5>
               </div>
             </div>
           </div>
-          <div class="col-xl-3 col-lg-6 col-md-6 col-sm-12 col-12">
+          <div v-if="amountDonated" class="col-xl-3 col-lg-6 col-md-6 col-sm-12 col-12">
             <div class="card">
               <div class="card-body">
                 <div class="metric-value d-inline-block">
@@ -276,7 +247,7 @@
               </div>
             </div>
           </div>
-          <div class="col-xl-3 col-lg-6 col-md-6 col-sm-12 col-12">
+          <div v-if="amountForOwner" class="col-xl-3 col-lg-6 col-md-6 col-sm-12 col-12">
             <div class="card">
               <div class="card-body">
                 <div class="metric-value d-inline-block">
@@ -299,11 +270,11 @@
                 <th class="border-0">TPE</th>
                 <th class="border-0">Montant</th>
                 <th class="border-0">Jeu</th>
-                <th class="border-0">Forumle des dons</th>
+                <th class="border-0">Formule des dons</th>
               </tr>
             </thead>
             <tbody v-if="payments.length > 0">
-              <tr v-for="(payment, index) in displayedPayments" :key="index">
+              <tr v-for="(payment, index) in payments" :key="index">
                 <td>{{ payment.id }}</td>
                 <td>{{ payment.date }}</td>
                 <td>
@@ -323,7 +294,7 @@
                 </td>
                 <td>
                   <span v-if="payment.donator">
-                    {{ payment.donator.email ? payment.donator.email : `N° ${payment.donator.id}` }}
+                    {{ payment.donator.email }}
                   </span>
                 </td>
                 <td>{{ payment.campaign.name }}</td>
@@ -357,25 +328,18 @@
           </table>
         </div>
         <br />
-        <div class="d-flex align-items-center justify-content-between my-2">
+        <div v-if="payments" class="d-flex align-items-center justify-content-between my-2">
           <div class="col-sm-12 col-md-5">
             <div
               class="dataTables_info"
               id="DataTables_Table_0_info"
               role="status"
-              aria-live="polite"
-            >
+              aria-live="polite">
               <div style="color: white; color: #1c7dce; display: inline">
                 Afficher : &nbsp;&nbsp;
               </div>
-              <strong
-                >1 à {{ perPage }} de {{ allPayments.length }} entrées
-              </strong>
+              <strong>{{ (page-1) * limit }} à {{ (page-1) * limit + payments.length }} de {{ totalNumberOfPayments }} paiements</strong>
             </div>
-            <div style="color: white; color: #1c7dce; display: inline">
-              Nombre Total de résultats :
-            </div>
-            &nbsp;&nbsp;<strong>{{ totalNumberOfPayments }} entrées</strong>
           </div>
           <div class="col-sm-12 col-md-7 d-flex justify-content-end">
             <nav aria-label="Page navigation example" class="w-100">
@@ -384,31 +348,15 @@
                   <a
                     class="page-link"
                     v-if="page != 1"
-                    @click.prevent="page--"
+                    @click.prevent="previousPage"
                     href="#"
                     >Previous</a
                   >
                 </li>
-                <li
-                  class="page-item"
-                  v-for="pageNumber in pages.slice(
-                                  page - 1,
-                                  page + 5
-                                )"
-                  :key="pageNumber"
-                >
+                <li v-if="haveMorePayments" class="page-item">
                   <a
                     class="page-link"
-                    @click.prevent="page = pageNumber"
-                    href="#"
-                    >{{ pageNumber }}</a
-                  >
-                </li>
-                <li class="page-item">
-                  <a
-                    class="page-link"
-                    @click.prevent="page++"
-                    v-if="page < pages.length"
+                    @click.prevent="nextPage"
                     href="#"
                     >Next</a
                   >
@@ -426,41 +374,42 @@
 
 import datetime from 'vuejs-datetimepicker';
 
-
 export default {
   name: "ShowUsageReport",
   components: { datetime },
   data: function() {
     return {
-      terminals: {},
-      customers: {},
-      games : {},
-      campaigns: {},
-      payments : [],
-      key : "",
-      sum : 0,
-      avg :  0,
+      terminals: null,
+      customers: null,
+      games : null,
+      campaigns: null,
+
+      // Payments list
+
+      payments : null,
+      page: 1,
+      limit: 10,
+      totalNumberOfPayments: 0,
+      sum: 0,
+      avg:  0,
       amountDonated: 0,
       amountForOwner: 0,
-      page: 1,
-      perPage: 12,
-      pages: [],
-      results_number : 50,
-      totalNumberOfPayments : 0,
-
+      
       // Filters
 
-      choosen_compaign : "all",
-      choosen_terminal : "all" ,
-      choosen_client : "all" ,
-      choosen_formula : "all" ,
-      choosen_transaction : "all" ,
-      choosen_game : "all" ,
-      choosen_tpe : null ,
-      choosen_date_start : "DD-MM-YYYY" ,
-      choosen_date_end : "DD-MM-YYYY" ,
-      choosen_time : "all" ,
-      choosen_period : "all",
+      filters: {
+        campaign: null,
+        terminal: null,
+        customer: null,
+        formula: null,
+        transaction: null,
+        game: null,
+        tpe: null,
+        time: null,
+        date: null,
+        start_date: " DD-MM-YYYY ",
+        end_date: " DD-MM-YYYY ",
+      },
 
       // Message
       message : "Aucun résultat correspond à votre recherche",      
@@ -472,44 +421,23 @@ export default {
     this.message = "Loading results , please be patient this can take long..."
     this.fetchPayments();
   },
-  watch: {
-    allPayments() {
-      this.setPages();
-    }
-  },
   computed: {
-    allPayments() {
-      return this.payments;
-    },
-    displayedPayments() {
-      return this.paginate(this.allPayments);
-    },
-    isAdmin: function() {
+    isAdmin() {
       return this.$store.getters.isAdmin;
     },
-    isCustomer: function() {
+    isCustomer() {
       return this.$store.getters.isCustomer;
+    },
+    haveMorePayments() {
+      return this.page * this.limit < this.totalNumberOfPayments;
     },
   },
   methods: {
-    setPages() {
-      let numberOfPages = Math.ceil(this.allPayments.length / this.perPage);
-      for (let index = 1; index <= numberOfPages; index++) {
-        this.pages.push(index);
-      }
-    },
-    paginate(payments) {
-      let page = this.page;
-      let perPage = this.perPage;
-      let from = page * perPage - perPage;
-      let to = page * perPage;
-      return payments.slice(from, to);
-    },
     exportCSV(event) {
      let loader = this.$loading.show();
       this.$http.get("payment/exportCSV/?campaign_id="+ this.choosen_compaign +"&terminal_id="+ this.choosen_terminal+"&client_id=" + this.choosen_client +
       "&status="+ this.choosen_transaction+"&game_id=" + this.choosen_game +"&date=" + this.choosen_period  +
-      "&date_start="+ this.choosen_date_start+"&date_end=" + this.choosen_date_end + "&results_number=" + this.results_number  +
+      "&date_start="+ this.choosen_date_start+"&date_end=" + this.choosen_date_end +
       "&payment_terminal="+ this.choosen_tpe + "&donation_formula="+ this.choosen_formula )
        .then((response) => {
         const url = window.URL.createObjectURL(new Blob([response.data]));
@@ -532,30 +460,27 @@ export default {
 
     },
     resetAllFilters(event) {
-      this.choosen_compaign = "all",
-      this.choosen_terminal = "all" ,
-      this.choosen_client = "all" ,
-      this.choosen_formula = "all" ,
-      this.choosen_transaction = "all" ,
-      this.choosen_game = "all" ,
-      this.choosen_tpe = null,
-      this.choosen_date_start = "01-01-2010 00:00:00" ,
-      this.choosen_date_end = "DD-MM-YYYY" ,
-      this.choosen_time = "all" ,
-      this.choosen_period = "all",
-      this.results_number = 50,
-      this.totalNumberOfPayments = 0,
-      this.choosen_formula = "all",
+      this.filters = {
+        campaign: null,
+        terminal: null,
+        customer: null,
+        formula: null,
+        transaction: null,
+        game: null,
+        tpe: null,
+        time: null,
+        date: null,
+        start_date: " DD-MM-YYYY ",
+        end_date: " DD-MM-YYYY ",
+      };
       this.fetchPayments()
     },
     resetPayments() {
-      this.page= 1,
-      this.perPage= 12,
-      this.pages= [],
-      this.sum =  0
-      this.avg =  0
-      this.payments =  []
-      this.totalNumberOfPayments = 0
+      this.payments = null;
+      this.page = 1;
+      this.totalNumberOfPayments = 0;
+      this.sum = 0;
+      this.avg = 0;
     },
     onFilterChange(event) {
       this.message = "Loading results , please be patient this can take long...";
@@ -564,24 +489,21 @@ export default {
     },
     fetchPayments: function() {
       let loader = this.$loading.show();
+
+      const args = [];
+
+      for (const [filter, value] of Object.entries(this.filters)) {
+        if (value != null && value != " DD-MM-YYYY ") {
+          args.push(`${filter}=${value}`);
+        }
+      }
+
       this.$http
-        .get("/payment/filtered/?" +
-          "campaign_id=" + this.choosen_compaign +
-          "&terminal_id="+ this.choosen_terminal +
-          "&client_id=" + this.choosen_client +
-          "&status=" + this.choosen_transaction +
-          "&game_id=" + this.choosen_game +
-          "&date=" + this.choosen_period +
-          "&date_start=" + this.choosen_date_start +
-          "&date_end=" + this.choosen_date_end +
-          "&results_number=" + this.results_number+
-          "&payment_terminal=" + this.choosen_tpe +
-          "&donation_formula="+ this.choosen_formula
-        )
+        .get("/payment/filtered/?page=" + this.page + "&" + args.join("&"))
         .then((resp) => {
           this.payments = resp.data.payments;
-          this.sum = resp.data.payments_amount;
-          this.avg  = resp.data.average_payments_amount;
+          this.sum = resp.data.amount_sum;
+          this.avg = resp.data.amount_avg;
           this.totalNumberOfPayments = resp.data.total_number_of_payments;
           this.amountDonated = resp.data.amount_donated;
           this.amountForOwner = resp.data.amount_for_owner;           
@@ -599,7 +521,6 @@ export default {
         });
     },
     getSelectItems: function() {
-     // let loader = this.$loading.show();
       this.$http
         .get("payment/SelectItems/")
         .then(resp => {
@@ -616,10 +537,14 @@ export default {
               "Impossible de récupérer les données, contactez le webmaster."
           };
         });
-          /*
-          .finally(() => {
-          loader.hide();
-        }); */
+    },
+    previousPage() {
+      this.page--;
+      this.fetchPayments();
+    },
+    nextPage() {
+      this.page++;
+      this.fetchPayments();
     },
   }
 };
