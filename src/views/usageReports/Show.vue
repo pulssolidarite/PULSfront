@@ -417,7 +417,7 @@ export default {
   },
 
   mounted: function() {
-    this.getSelectItems();
+    this.fetchFiltersOptions();
     this.message = "Loading results , please be patient this can take long..."
     this.fetchPayments();
   },
@@ -431,34 +431,19 @@ export default {
     haveMorePayments() {
       return this.page * this.limit < this.totalNumberOfPayments;
     },
+    filtersToUrlArgs() {
+      const args = [`page=${this.page}`];
+
+      for (const [filter, value] of Object.entries(this.filters)) {
+        if (value != null && value != " DD-MM-YYYY ") {
+          args.push(`${filter}=${value}`);
+        }
+      }
+
+      return "?" + args.join("&");
+    }
   },
   methods: {
-    exportCSV(event) {
-     let loader = this.$loading.show();
-      this.$http.get("payment/exportCSV/?campaign_id="+ this.choosen_compaign +"&terminal_id="+ this.choosen_terminal+"&client_id=" + this.choosen_client +
-      "&status="+ this.choosen_transaction+"&game_id=" + this.choosen_game +"&date=" + this.choosen_period  +
-      "&date_start="+ this.choosen_date_start+"&date_end=" + this.choosen_date_end +
-      "&payment_terminal="+ this.choosen_tpe + "&donation_formula="+ this.choosen_formula )
-       .then((response) => {
-        const url = window.URL.createObjectURL(new Blob([response.data]));
-        const link = document.createElement('a');
-        link.href = url;
-        link.setAttribute('download', 'Export_date.csv'); //or any other extension
-        document.body.appendChild(link);
-        link.click();
-        })
-        .catch(() => {
-          this.errors = {
-            visible: true,
-            type: "danger",
-            message: "Probléme avec l'export CSV.",
-          };
-        })
-          .finally(() => {
-          loader.hide();
-        });
-
-    },
     resetAllFilters(event) {
       this.filters = {
         campaign: null,
@@ -499,28 +484,63 @@ export default {
       }
 
       this.$http
-        .get("/payment/filtered/?page=" + this.page + "&" + args.join("&"))
-        .then((resp) => {
-          this.payments = resp.data.payments;
-          this.sum = resp.data.amount_sum;
-          this.avg = resp.data.amount_avg;
-          this.totalNumberOfPayments = resp.data.total_number_of_payments;
-          this.amountDonated = resp.data.amount_donated;
-          this.amountForOwner = resp.data.amount_for_owner;           
+        .get("/payment/filtered/" + this.filtersToUrlArgs)
+        .then((response) => {
+          this.payments = response.data.payments;
+          this.sum = response.data.amount_sum;
+          this.avg = response.data.amount_avg;
+          this.totalNumberOfPayments = response.data.total_number_of_payments;
+          this.amountDonated = response.data.amount_donated;
+          this.amountForOwner = response.data.amount_for_owner;           
           this.message = "Aucun résultat correspond à votre recherche"
         })
-        .catch(() => {
+        .catch((error) => {
           this.errors = {
             visible: true,
             type: "danger",
             message: "Probléme avec la liste des payments.",
           };
+          throw error;
         })
         .finally(() => {
           loader.hide();
         });
     },
-    getSelectItems: function() {
+    exportCSV(event) {
+     let loader = this.$loading.show();
+
+     const args = [];
+
+      for (const [filter, value] of Object.entries(this.filters)) {
+        if (value != null && value != " DD-MM-YYYY ") {
+          args.push(`${filter}=${value}`);
+        }
+      }
+
+      this.$http
+        .get("payment/filtered/to_csv/" + this.filtersToUrlArgs)
+        .then((response) => {
+          const url = window.URL.createObjectURL(new Blob([response.data]));
+          const link = document.createElement('a');
+          link.href = url;
+          link.setAttribute('download', 'Export_date.csv'); //or any other extension
+          document.body.appendChild(link);
+          link.click();
+        })
+        .catch((error) => {
+          this.errors = {
+            visible: true,
+            type: "danger",
+            message: "Probléme avec l'export CSV.",
+          };
+          throw error;
+        })
+        .finally(() => {
+          loader.hide();
+        });
+
+    },
+    fetchFiltersOptions: function() {
       this.$http
         .get("payment/SelectItems/")
         .then(resp => {
