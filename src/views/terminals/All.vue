@@ -8,17 +8,18 @@
             <div class="d-flex justify-content-between">
               <h2 class="pageheader-title">Terminaux</h2>
               <router-link
+                v-if="isAdmin"
                 class="btn btn-primary mb-1"
-                :to="{ name: 'addTerminal' }"
-                ><font-awesome-icon icon="plus" class="mr-2" />Ajouter un
-                terminal</router-link
-              >
+                :to="{ name: 'addTerminal' }">
+                <font-awesome-icon icon="plus" class="mr-2" />
+                Ajouter un terminal
+              </router-link>
             </div>
             <div class="page-breadcrumb">
               <nav aria-label="breadcrumb">
                 <ol class="breadcrumb d-flex align-items-center">
                   <li class="breadcrumb-item">
-                    <router-link to="/home" class="breadcrumb-link"
+                    <router-link :to="{ name: 'home' }" class="breadcrumb-link"
                       >Dashboard</router-link
                     >
                   </li>
@@ -74,7 +75,7 @@
                         <th class="border-0"></th>
                         <th class="border-0"></th>
                         <th class="border-0"></th>
-                        <th class="border-0"></th>
+                        <th v-if="isAdmin" class="border-0"></th>
                       </tr>
                     </thead>
                     <tbody>
@@ -103,7 +104,7 @@
                         <td>{{ terminal.name }}</td>
                         <td>
                           <router-link to="/clients">{{
-                            terminal.owner.customer.company
+                            terminal.customer.company
                           }}</router-link>
                         </td>
                         <td>
@@ -150,7 +151,7 @@
                             ><font-awesome-icon icon="pen"
                           /></router-link>
                         </td>
-                        <td>
+                        <td v-if="isAdmin">
                           <a
                             href=""
                             @click.prevent="deleteTerminal(index)"
@@ -183,6 +184,14 @@ export default {
         message: "",
       },
     };
+  },
+  computed: {
+    isAdmin: function() {
+      return this.$store.getters.isAdmin;
+    },
+    isCustomer: function() {
+      return this.$store.getters.isCustomer;
+    },
   },
   mounted: function() {
     this.getTerminals();

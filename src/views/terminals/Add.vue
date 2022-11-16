@@ -12,7 +12,7 @@
               <nav aria-label="breadcrumb">
                 <ol class="breadcrumb d-flex align-items-center">
                   <li class="breadcrumb-item">
-                    <router-link to="/home" class="breadcrumb-link"
+                    <router-link :to="{ name: 'home' }" class="breadcrumb-link"
                       >Dashboard</router-link
                     >
                   </li>
@@ -220,71 +220,60 @@
               </p>
               <form>
                 <div class="form-group">
-                  <label for="company" class="col-form-label"
-                    >Nom du terminal</label
-                  >
+                  <label for="company" class="col-form-label">Nom du terminal</label>
                   <input
                     v-model="terminal.name"
                     type="text"
-                    class="form-control"
-                  />
+                    class="form-control" />
                 </div>
                 <div class="form-group">
-                  <label for="company" class="col-form-label"
-                    >Localisation du terminal</label
-                  >
+                  <label for="company" class="col-form-label">Localisation du terminal</label>
                   <div class="input-group input-group-sm mb-3">
                     <div class="input-group-prepend">
-                      <span class="input-group-text"
-                        ><font-awesome-icon icon="map-pin"
-                      /></span>
+                      <span class="input-group-text"><font-awesome-icon icon="map-pin" /></span>
                     </div>
                     <input
                       v-model="terminal.location"
                       type="text"
-                      class="form-control"
-                    />
+                      class="form-control" />
                   </div>
                 </div>
                 <div class="form-group">
-                  <label for="play_timer" class="col-form-label"
-                    >Temps de jeu maximum</label
-                  >
+                  <label for="play_timer" class="col-form-label">Temps de jeu maximum</label>
                   <div class="input-group input-group-sm mb-3">
                     <div class="input-group-prepend">
-                      <span class="input-group-text"
-                        ><font-awesome-icon icon="clock"
-                      /></span>
+                      <span class="input-group-text"><font-awesome-icon icon="clock" /></span>
                     </div>
                     <input
                       v-model="terminal.play_timer"
                       type="number"
                       min="0"
-                      class="form-control"
-                    />
+                      class="form-control" />
                   </div>
                 </div>
-                  <div class="row">
+                <div class="row">
                   <div class="form-group col-md-6 col-12">
                     <label for="core">Formule de dons</label>
-                           <select class="custom-select mb-2"  v-model="terminal.donation_formula" >
-                    <option value ="Classique"> Classique </option>
-                    <option value ="Gratuit"> Gratuit </option>
-                    <option  value ="Mécénat" >  Mécénat </option>
-                     <option  value ="Partage" >Partage  </option>
-
-                      </select>
-                  </div></div>
-				<div class="mb-3 form-check">
-					<small id="nameHelp" class="form-text text-muted"
-                      >Texte personnalisé </small
-                    >
-					 <textarea
-            class="form-control"
-            v-model="terminal.free_mode_text"
-            placeholder="Vous pouvez jouer gratuitement..."
-          ></textarea>
-				</div>
+                    <select class="custom-select mb-2"  v-model="terminal.donation_formula" >
+                      <option value ="Classique"> Classique </option>
+                      <option value ="Gratuit"> Gratuit </option>
+                      <option  value ="Mécénat" >  Mécénat </option>
+                      <option  value ="Partage" >Partage  </option>
+                    </select>
+                  </div>
+                  <div class="form-group col-md-6 col-12">
+                    <label for="core">Pourcentage du don à reverser au propriétaire de la borne</label>
+                    <input type="number" class="form-control" min="0" max="100" v-model="terminal.donation_share" :disabled="terminal.donation_formula != 'Partage'">
+                  </div>
+                </div>
+				        <div class="mb-3">
+                  <small id="nameHelp" class="form-text text-muted">Texte personnalisé</small>
+                  <textarea
+                    class="form-control"
+                    v-model="terminal.free_mode_text"
+                    placeholder="Vous pouvez jouer gratuitement...">
+                  </textarea>
+                </div>
               </form>
             </div>
              <div class="card-body border-top">
@@ -467,7 +456,7 @@ export default {
     },
     getGames: function() {
       this.$http
-        .get("game/")
+        .get("games/")
         .then((resp) => {
           this.games = resp.data;
         })

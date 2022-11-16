@@ -101,6 +101,12 @@ export default new Vuex.Store({
         commit("UPDATE_USER_INFO", resp.data);
       });
     },
+    refreshCurrentUser({ commit }) {
+      // Update user details
+      jwt.getUserInfo().then((resp) => {
+        commit("UPDATE_USER_INFO", resp.data);
+      });
+    },
     logout({ commit }) {
       return new Promise((resolve, reject) => {
         localStorage.removeItem("accessToken");
@@ -115,19 +121,30 @@ export default new Vuex.Store({
     isLoggedIn: (state) => {
       return state.refreshToken != "";
     },
-    isStaff: (state) => {
-      if (
-        state.refreshToken != "" &&
-        state.currentUser.is_staff &&
-        !state.currentUser.is_superuser
-      ) {
-        return true;
-      } else {
-        return false;
-      }
-    },
     isAdmin: (state) => {
-      return state.refreshToken != "" && state.currentUser.is_superuser;
+      return state.currentUser.is_staff;
+    },
+    isSuperuser: (state) => {
+      return state.currentUser.is_superuser;
+    },
+    isCustomer: (state) => {
+      return !state.currentUser.is_staff; // TODO should have a better way to identify customer user, because the terminal user will also pass this check
+    },
+    username: (state) => {
+      return state.currentUser.username;
+    },
+    currentUser: (state) => {
+      return state.currentUser;
+    },
+    canCurrentUserEditScreensavers: (state) => {
+      if (state.currentUser.is_staff) {
+        return true
+      }
+      const customer = state.currentUser.customer;
+      if (customer) {
+        return customer.can_edit_screensaver_broadcasts;
+      }
+      return false;
     },
   },
   modules: {},

@@ -136,7 +136,7 @@
                   >Actions associatives</a
                 >
               </li>
-              <li class="nav-item">
+              <li v-if="isAdmin" class="nav-item">
                 <router-link
                   :to="'/campaign/' + campaign.id + '/edit'"
                   class="nav-link text-warning"
@@ -144,7 +144,7 @@
                   >Editer</router-link
                 >
               </li>
-              <li class="nav-item">
+              <li v-if="isAdmin" class="nav-item">
                 <a
                   href=""
                   class="nav-link text-danger"
@@ -473,7 +473,7 @@
 </template>
 <script>
 export default {
-  name: "ShowTerminal",
+  name: "ShowCampaign",
   data: function() {
     return {
       campaign: {},
@@ -498,6 +498,12 @@ export default {
     },
     displayedPayments() {
       return this.paginate(this.allPayments);
+    },
+    isAdmin: function() {
+      return this.$store.getters.isAdmin;
+    },
+    isCustomer: function() {
+      return this.$store.getters.isCustomer;
     },
   },
   mounted: function() {

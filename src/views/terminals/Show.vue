@@ -66,7 +66,7 @@
               <div class="text-center">
                 <h2 class="font-24 mb-0">{{ terminal.name }}</h2>
                 <p>
-                  {{ terminal.owner.customer.company }}
+                  {{ terminal.customer.company }}
                   <span class="mx-2">|</span>
                   <span v-if="terminal.is_active" class="text-success"
                     >Activé</span
@@ -94,7 +94,7 @@
                 <ul class="list-unstyled mb-0">
                   <li class="mb-2">
                     <font-awesome-icon icon="envelope" class="mr-2" />{{
-                      terminal.owner.customer.representative
+                      terminal.customer.representative
                     }}
                   </li>
                   <li class="mb-0">
@@ -199,6 +199,14 @@
                 >
               </li>
               <li class="nav-item">
+                <router-link
+                  :to="'/terminal/' + terminal.id + '/edit'"
+                  class="nav-link text-warning"
+                  id="pills-review-tab"
+                  >Editer</router-link
+                >
+              </li>
+              <li v-if="isAdmin" class="nav-item">
                 <a class="nav-link text-danger" id="pills-review-tab"
                   >Supprimer</a
                 >
@@ -443,7 +451,13 @@ export default {
     },
     displayedPayments() {
       return this.paginate(this.allPayments);
-    }
+    },
+    isAdmin() {
+      return this.$store.getters.isAdmin;
+    },
+    isCustomer() {
+      return this.$store.getters.isCustomer;
+    },
   },
   methods: {
     getTerminal: function() {
@@ -500,7 +514,7 @@ export default {
             this.errors = {
               visible: true,
               type: "danger",
-              message: "Impossible de d'activer le terminal."
+              message: "Impossible d'activer le terminal."
             };
           });
       } else {
