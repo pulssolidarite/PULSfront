@@ -407,8 +407,8 @@ export default {
         tpe: null,
         time: null,
         date: null,
-        start_date: " DD-MM-YYYY ",
-        end_date: " DD-MM-YYYY ",
+        start_date: null,
+        end_date: null,
       },
 
       // Message
@@ -455,8 +455,8 @@ export default {
         tpe: null,
         time: null,
         date: null,
-        start_date: " DD-MM-YYYY ",
-        end_date: " DD-MM-YYYY ",
+        start_date:null,
+        end_date: null,
       };
       this.fetchPayments()
     },
