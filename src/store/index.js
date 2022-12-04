@@ -25,6 +25,13 @@ export default new Vuex.Store({
       state.refreshToken = payload.refresh;
     },
     UPDATE_USER_INFO(state, payload) {
+      state.currentUser = payload;
+
+      // Store data in localStorage
+      localStorage.setItem("userInfo", JSON.stringify(payload));
+
+      /*
+
       // Get Data localStorage
       let userInfo =
         JSON.parse(localStorage.getItem("userInfo")) || state.currentUser;
@@ -39,10 +46,12 @@ export default new Vuex.Store({
       }
       // Store data in localStorage
       localStorage.setItem("userInfo", JSON.stringify(userInfo));
+      */
+      
     },
     DELETE_USER_INFO(state) {
       // Get Data localStorage
-      state.currentUser = {};
+      state.currentUser = null;
       state.refreshToken = "";
       state.accessToken = "";
       localStorage.removeItem("userInfo");
@@ -119,7 +128,7 @@ export default new Vuex.Store({
   },
   getters: {
     isLoggedIn: (state) => {
-      return state.refreshToken != "";
+      return state.refreshToken != "" && state.currentUser != null;
     },
     isAdmin: (state) => {
       return state.currentUser.is_staff;
