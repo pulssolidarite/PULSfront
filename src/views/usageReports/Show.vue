@@ -432,15 +432,15 @@ export default {
       return this.page * this.limit < this.totalNumberOfPayments;
     },
     filtersToUrlArgs() {
-      const args = [`page=${this.page}`];
+      const args = [];
 
       for (const [filter, value] of Object.entries(this.filters)) {
-        if (value != null && value != " DD-MM-YYYY ") {
+        if (value != null) {
           args.push(`${filter}=${value}`);
         }
       }
 
-      return "?" + args.join("&");
+      return args.join("&");
     }
   },
   methods: {
@@ -484,7 +484,7 @@ export default {
       }
 
       this.$http
-        .get("/payment/filtered/" + this.filtersToUrlArgs)
+        .get("/payment/filtered/?" + this.filtersToUrlArgs + `&page=${this.page}`)
         .then((response) => {
           this.payments = response.data.payments;
           this.sum = response.data.amount_sum;
@@ -512,13 +512,13 @@ export default {
      const args = [];
 
       for (const [filter, value] of Object.entries(this.filters)) {
-        if (value != null && value != " DD-MM-YYYY ") {
+        if (value != null) {
           args.push(`${filter}=${value}`);
         }
       }
 
       this.$http
-        .get("payment/filtered/to_csv/" + this.filtersToUrlArgs)
+        .get("payment/filtered/to_csv/?" + this.filtersToUrlArgs)
         .then((response) => {
           const url = window.URL.createObjectURL(new Blob([response.data]));
           const link = document.createElement('a');
