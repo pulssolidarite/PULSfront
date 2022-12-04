@@ -428,12 +428,11 @@ export default {
     campaignIsSelected: function (id) {
       return this.terminal.campaigns.includes(id);
     },
-    selectCampaign: function (id) {
-      if (!this.campaignIsSelected(id)) {
-        this.terminal.campaigns.push(id);
-        // }
+    selectCampaign: function (campaign) {
+      if (!this.campaignIsSelected(campaign.id)) {
+        this.terminal.campaigns.push(campaign.id);
       } else {
-        var index = this.terminal.campaigns.indexOf(id);
+        var index = this.terminal.campaigns.indexOf(campaign.id);
         if (index !== -1) {
           this.terminal.campaigns.splice(index, 1);
         }
@@ -443,11 +442,11 @@ export default {
       return this.terminal.games.includes(id);
     },
     selectGame: function (game) {
-      if (!this.gameIsSelected(id)) {
-        this.terminal.games.push(id);
+      if (!this.gameIsSelected(game.id)) {
+        this.terminal.games.push(game.id);
         // }
       } else {
-        var index = this.terminal.games.indexOf(id);
+        var index = this.terminal.games.indexOf(game.id);
         if (index !== -1) {
           this.terminal.games.splice(index, 1);
         }
