@@ -108,7 +108,7 @@
                     <select
                       class="custom-select mb-2"
                       @change="onFilterChange"
-                      v-model="filters.transaction"
+                      v-model="filters.payment_status"
                     >
                       <option :value="null">Tout</option>
                       <option class="text-success" value="Accepted">
@@ -402,13 +402,13 @@ export default {
         terminal: null,
         customer: null,
         formula: null,
-        transaction: null,
+        payment_status: null,
         game: null,
         tpe: null,
         time: null,
         date: null,
-        start_date: null,
-        end_date: null,
+        start_date: "",
+        end_date: "",
       },
 
       // Message
@@ -435,7 +435,7 @@ export default {
       const args = [];
 
       for (const [filter, value] of Object.entries(this.filters)) {
-        if (value != null) {
+        if (value != null && value != "") {
           args.push(`${filter}=${value}`);
         }
       }
@@ -450,13 +450,13 @@ export default {
         terminal: null,
         customer: null,
         formula: null,
-        transaction: null,
+        payment_status: null,
         game: null,
         tpe: null,
         time: null,
         date: null,
-        start_date:null,
-        end_date: null,
+        start_date: "",
+        end_date: "",
       };
       this.fetchPayments()
     },
