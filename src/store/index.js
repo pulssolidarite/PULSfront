@@ -133,9 +133,6 @@ export default new Vuex.Store({
     isAdmin: (state) => {
       return state.currentUser.is_staff;
     },
-    isSuperuser: (state) => {
-      return state.currentUser.is_superuser;
-    },
     isCustomer: (state) => {
       return !state.currentUser.is_staff; // TODO should have a better way to identify customer user, because the terminal user will also pass this check
     },

@@ -176,14 +176,18 @@
                     </div>
                   </div>
                   <div v-if="canCurrentUserEditDonationFormula" class="row">
-                    <div class="form-group col-md-6 col-12">
+                    <div class="form-group col-md-2 col-4">
                       <label for="core">Formule de dons</label>
-                      <select class="custom-select mb-2"  v-model="terminal.donation_formula" >
+                      <select class="custom-select mb-2" v-model="terminal.donation_formula" >
                         <option value="Classique" selected>Classique</option>
                         <option value="Gratuit">Gratuit</option>
                         <option value="Mécénat">Mécénat</option>
                         <option value="Partage">Partage</option>
                       </select>
+                    </div>
+                    <div class="form-group col-md-2 col-4">
+                      <label for="core">Pourcentage du don à reverser au propriétaire de la borne</label>
+                      <input type="number" class="form-control" min="0" max="50" v-model="terminal.donation_share" :disabled="terminal.donation_formula != 'Partage'">
                     </div>
                     <div v-if="canCurrentUserEditDonationAmount" class="form-group col-md-2 col-4">
                       <label for="core">Montant min</label>
@@ -217,10 +221,11 @@
                   </div>
 				          <div class="row">
                     <div class="form-group col-12">
-                      <label for="core">Montant max</label>
+                      <label>Texte personnalisé</label>
                       <textarea
                         class="form-control"
-                        v-model="terminal.free_mode_text" />
+                        v-model="terminal.free_mode_text"
+                        placeholder="Vous pouvez jouer gratuitement..." />
                     </div>
                   </div>
                 </div>

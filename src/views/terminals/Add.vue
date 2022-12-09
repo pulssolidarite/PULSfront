@@ -252,27 +252,58 @@
                   </div>
                 </div>
                 <div class="row">
-                  <div class="form-group col-md-6 col-12">
+                  <div class="form-group col-md-2 col-4">
                     <label for="core">Formule de dons</label>
-                    <select class="custom-select mb-2"  v-model="terminal.donation_formula" >
-                      <option value ="Classique"> Classique </option>
-                      <option value ="Gratuit"> Gratuit </option>
-                      <option  value ="Mécénat" >  Mécénat </option>
-                      <option  value ="Partage" >Partage  </option>
+                    <select class="custom-select mb-2" v-model="terminal.donation_formula" >
+                      <option value="Classique" selected>Classique</option>
+                      <option value="Gratuit">Gratuit</option>
+                      <option value="Mécénat">Mécénat</option>
+                      <option value="Partage">Partage</option>
                     </select>
                   </div>
-                  <div class="form-group col-md-6 col-12">
-                    <label for="core">Pourcentage du don à reverser au propriétaire de la borne</label>
-                    <input type="number" class="form-control" min="0" max="100" v-model="terminal.donation_share" :disabled="terminal.donation_formula != 'Partage'">
-                  </div>
+                  <div class="form-group col-md-2 col-4">
+                      <label for="core">Pourcentage du don à reverser au propriétaire de la borne</label>
+                      <input type="number" class="form-control" min="0" max="100" v-model="terminal.donation_share" :disabled="terminal.donation_formula != 'Partage'">
+                    </div>
+                    <div class="form-group col-md-2 col-4">
+                      <label for="core">Montant min</label>
+                      <input
+                        v-model="terminal.donation_min_amount"
+                        type="number"
+                        min="1"
+                        :max="terminal.donation_max_amount"
+                        class="form-control"
+                      />
+                    </div>
+                    <div class="form-group col-md-2 col-4">
+                      <label for="core">Montant par défaut</label>
+                      <input
+                        v-model="terminal.donation_default_amount"
+                        type="number"
+                        :min="terminal.donation_min_amount"
+                        :max="terminal.donation_max_amount"
+                        class="form-control"
+                      />
+                    </div>
+                    <div class="form-group col-md-2 col-4">
+                      <label for="core">Montant max</label>
+                      <input
+                        v-model="terminal.donation_max_amount"
+                        type="number"
+                        :min="terminal.donation_min_amount"
+                        class="form-control"
+                      />
+                    </div>
                 </div>
-				        <div class="mb-3">
-                  <small id="nameHelp" class="form-text text-muted">Texte personnalisé</small>
-                  <textarea
-                    class="form-control"
-                    v-model="terminal.free_mode_text"
-                    placeholder="Vous pouvez jouer gratuitement...">
-                  </textarea>
+                <div class="row">
+                  <div class="form-group col-12">
+                    <label>Texte personnalisé</label>
+                    <textarea
+                      class="form-control"
+                      v-model="terminal.free_mode_text"
+                      placeholder="Vous pouvez jouer gratuitement...">
+                    </textarea>
+                  </div>
                 </div>
               </form>
             </div>
@@ -295,8 +326,6 @@
                 </div>
                 </div>
             </div>
-
-
 
             <div class="card-body border-top">
               <h4 class="mb-0">Campagnes & jeux</h4>

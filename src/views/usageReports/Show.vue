@@ -237,17 +237,17 @@
               </div>
             </div>
           </div>
-          <div v-if="amountDonated" class="col-xl-3 col-lg-6 col-md-6 col-sm-12 col-12">
+          <div v-if="amountDonated != null" class="col-xl-3 col-lg-6 col-md-6 col-sm-12 col-12">
             <div class="card">
               <div class="card-body">
                 <div class="metric-value d-inline-block">
                   <h1 class="mb-1">{{ amountDonated }} €</h1>
                 </div>
-                <h5 class="text-muted">Total des dons</h5>
+                <h5 class="text-muted">Montant reversé</h5>
               </div>
             </div>
           </div>
-          <div v-if="amountForOwner" class="col-xl-3 col-lg-6 col-md-6 col-sm-12 col-12">
+          <div v-if="amountForOwner != null" class="col-xl-3 col-lg-6 col-md-6 col-sm-12 col-12">
             <div class="card">
               <div class="card-body">
                 <div class="metric-value d-inline-block">
@@ -391,8 +391,8 @@ export default {
       totalNumberOfPayments: 0,
       sum: 0,
       avg:  0,
-      amountDonated: 0,
-      amountForOwner: 0,
+      amountDonated: null,
+      amountForOwner: null,
       
       // Filters
       filters: {
@@ -486,8 +486,8 @@ export default {
         .get("/payment/filtered/?" + this.filtersToUrlArgs + `&page=${this.page}`)
         .then((response) => {
           this.payments = response.data.payments;
-          this.sum = response.data.amount_sum;
-          this.avg = response.data.amount_avg;
+          this.sum = response.data.payments_total_amount_excluding_skiped;
+          this.avg = response.data.payments_average_amount_excluding_skiped;
           this.totalNumberOfPayments = response.data.total_number_of_payments;
           this.amountDonated = response.data.amount_donated;
           this.amountForOwner = response.data.amount_for_owner;           
