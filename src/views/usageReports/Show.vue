@@ -20,8 +20,7 @@
                   aria-controls="submenu-export">
                   <center>
                     <button class="btn btn-primary mb-1" @click="exportCSV">
-                      <font-awesome-icon icon="file" class="mr-2" />Exporter les
-                      résultats
+                      <font-awesome-icon icon="file" class="mr-2" />Exporter les résultats
                     </button>
                   </center>
                 </router-link>
@@ -37,6 +36,7 @@
           </div>
         </div>
       </div>
+
       <div class="ecommerce-widget">
         <div class="card">
           <div class="card-body">
@@ -385,7 +385,6 @@ export default {
       campaigns: null,
 
       // Payments list
-
       payments : null,
       page: 1,
       limit: 10,
@@ -396,7 +395,6 @@ export default {
       amountForOwner: 0,
       
       // Filters
-
       filters: {
         campaign: null,
         terminal: null,
@@ -412,7 +410,8 @@ export default {
       },
 
       // Message
-      message : "Aucun résultat correspond à votre recherche",      
+      message : "Aucun résultat correspond à votre recherche",
+      
     };
   },
 
@@ -495,11 +494,9 @@ export default {
           this.message = "Aucun résultat correspond à votre recherche"
         })
         .catch((error) => {
-          this.errors = {
-            visible: true,
-            type: "danger",
-            message: "Probléme avec la liste des payments.",
-          };
+          this.$toasted.global.error({
+            message: "Problème avec la liste des payments.",
+          });
           throw error;
         })
         .finally(() => {
@@ -528,11 +525,9 @@ export default {
           link.click();
         })
         .catch((error) => {
-          this.errors = {
-            visible: true,
-            type: "danger",
-            message: "Probléme avec l'export CSV.",
-          };
+          this.$toasted.global.error({
+            message: "Problème avec l'export CSV.",
+          });
           throw error;
         })
         .finally(() => {
@@ -549,13 +544,11 @@ export default {
           this.games = resp.data.games;
           this.customers = resp.data.customers; // Might be null or undefined if logged user is customer user
         })
-        .catch(() => {
-          this.errors = {
-            visible: true,
-            type: "danger",
-            message:
-              "Impossible de récupérer les données, contactez le webmaster."
-          };
+        .catch((error) => {
+          this.$toasted.global.error({
+            message: "Impossible de récupérer les données, contactez le webmaster.",
+          });
+          throw error;
         });
     },
     previousPage() {
