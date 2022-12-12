@@ -300,7 +300,7 @@
                 <td>{{ payment.campaign.name }}</td>
                 <td>{{ payment.terminal.name }}</td>
                 <td>{{ payment.terminal.customer.company }}</td>
-                <td>{{ payment.terminal.payment_terminal }}</td>
+                <td>{{ payment.payment_terminal ? payment.payment_terminal : payment.terminal.payment_terminal }}</td>
                 <td>{{ payment.amount }} €</td>
                 <td>
                   <router-link v-if="payment.game" to="/">
@@ -310,7 +310,7 @@
 
                 <td>
                   <router-link to="/">
-                    {{ payment.terminal.donation_formula }}</router-link
+                    {{ payment.donation_formula ? payment.donation_formula : payment.terminal.donation_formula }}</router-link
                   >
                 </td>
               </tr>

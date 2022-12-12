@@ -65,6 +65,7 @@
                         <th v-if="isAdmin" class="border-0">Editeur</th>
                         <th v-if="isAdmin" class="border-0">Portée</th>
                         <th class="border-0">Terminaux associés</th>
+                        <th class="border-0" />
                         <th v-if="canCurrentUserEditScreensavers" class="border-0"></th>
                         <th v-if="canCurrentUserEditScreensavers" class="border-0"></th>
                         <th v-if="canCurrentUserEditScreensavers" class="border-0"></th>
@@ -88,6 +89,14 @@
                             v-if="media.nb_terminals > 1"
                             >ux</span
                           ><span v-else>l</span>
+                        </td>
+                        <td>
+                          <a
+                            :href="'https://www.youtube.com/watch?v=' + media.youtube_video_id"
+                            target="_blank"
+                            class="text-dark">
+                            <font-awesome-icon icon="eye" />
+                          </a>
                         </td>
                         <td v-if="canCurrentUserEditScreensavers">
                           <router-link
