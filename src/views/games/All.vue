@@ -258,7 +258,7 @@ export default {
       });
     },
     toggleFeaturedGame(game) {
-      this.$http.post("games/" + game.id + "/toggle-featured/")
+      this.$http.post("games/" + game.id + "/toggle_featured/")
       .then((resp) => {
         this.getGames();
         if (this.isCustomer) {
