@@ -387,7 +387,7 @@ export default {
       // Payments list
       payments : null,
       page: 1,
-      limit: 10,
+      limit: 50,
       totalNumberOfPayments: 0,
       sum: 0,
       avg:  0,
@@ -483,7 +483,7 @@ export default {
       }
 
       this.$http
-        .get("/payment/filtered/?" + this.filtersToUrlArgs + `&page=${this.page}`)
+        .get("/payment/filtered/?" + this.filtersToUrlArgs + `&page=${this.page}&limit=${this.limit}`)
         .then((response) => {
           this.payments = response.data.payments;
           this.sum = response.data.payments_total_amount_excluding_skiped;
@@ -495,7 +495,7 @@ export default {
         })
         .catch((error) => {
           this.$toasted.global.error({
-            message: "Problème avec la liste des payments.",
+            message: "Impossible de récupérer la liste des paiements.",
           });
           throw error;
         })
@@ -526,7 +526,7 @@ export default {
         })
         .catch((error) => {
           this.$toasted.global.error({
-            message: "Problème avec l'export CSV.",
+            message: "Impossible d'exporter les paiements",
           });
           throw error;
         })
@@ -546,7 +546,7 @@ export default {
         })
         .catch((error) => {
           this.$toasted.global.error({
-            message: "Impossible de récupérer les données, contactez le webmaster.",
+            message: "Impossible de récupérer les données de filtrage.",
           });
           throw error;
         });

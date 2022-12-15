@@ -261,11 +261,27 @@
                       <option value="Partage">Partage</option>
                     </select>
                   </div>
-                  <div class="form-group col-md-2 col-4">
-                      <label for="core">Pourcentage du don à reverser au propriétaire de la borne</label>
-                      <input type="number" class="form-control" min="0" max="100" v-model="terminal.donation_share" :disabled="terminal.donation_formula != 'Partage'">
-                    </div>
-                    <div class="form-group col-md-2 col-4">
+                  <div
+                    v-if="terminal.donation_formula == 'Partage'"
+                    class="form-group col-md-2 col-4">
+                    <label for="donation-share">Pourcentage du don à reverser au propriétaire de la borne</label>
+                    <input
+                      id="donation-share"
+                      type="number"
+                      class="form-control"
+                      :class="{ 'is-invalid': terminal.donation_share < 1 || terminal.donation_share > 50 }"
+                      min="1"
+                      max="50"
+                      v-model="terminal.donation_share">
+                    <span v-if="terminal.donation_share > 50" class="invalid-tooltip">
+                      Le maximum est de 50%
+                    </span>
+                    <span v-if="terminal.donation_share < 1" class="invalid-tooltip">
+                      Le minimum est de 1%
+                    </span>
+                  </div>
+                    <div
+                      class="form-group col-md-2 col-4">
                       <label for="core">Montant min</label>
                       <input
                         v-model="terminal.donation_min_amount"
@@ -427,7 +443,10 @@
               </form>
             </div>
             <div class="card-body text-center">
-              <button class="btn btn-success" @click.prevent="addTerminal">
+              <button
+                class="btn btn-success"
+                :disabled="!isValid"
+                @click.prevent="addTerminal">
                 Enregistrer le terminal
               </button>
             </div>
@@ -462,6 +481,11 @@ export default {
         message: "",
       },
     };
+  },
+  computed: {
+    isValid() {
+      return this.terminal.donation_share > 0 && this.terminal.donation_share <= 50;
+    },
   },
   mounted: function() {
     this.getCustomers();

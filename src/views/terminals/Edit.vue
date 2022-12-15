@@ -178,16 +178,31 @@
                   <div v-if="canCurrentUserEditDonationFormula" class="row">
                     <div class="form-group col-md-2 col-4">
                       <label for="core">Formule de dons</label>
-                      <select class="custom-select mb-2" v-model="terminal.donation_formula" >
+                      <select class="custom-select mb-2" v-model="terminal.donation_formula" @change="onDonationFormulaChange">
                         <option value="Classique" selected>Classique</option>
                         <option value="Gratuit">Gratuit</option>
                         <option value="Mécénat">Mécénat</option>
                         <option value="Partage">Partage</option>
                       </select>
                     </div>
-                    <div class="form-group col-md-2 col-4">
-                      <label for="core">Pourcentage du don à reverser au propriétaire de la borne</label>
-                      <input type="number" class="form-control" min="0" max="50" v-model="terminal.donation_share" :disabled="terminal.donation_formula != 'Partage'">
+                    <div
+                      v-if="terminal.donation_formula == 'Partage'"
+                      class="form-group col-md-2 col-4">
+                      <label for="donation-share">Pourcentage du don à reverser au propriétaire de la borne</label>
+                      <input
+                        id="donation-share"
+                        type="number"
+                        class="form-control"
+                        :class="{ 'is-invalid': terminal.donation_share < 1 || terminal.donation_share > 50 }"
+                        min="1"
+                        max="50"
+                        v-model="terminal.donation_share">
+                      <span v-if="terminal.donation_share > 50" class="invalid-tooltip">
+                        Le maximum est de 50%
+                      </span>
+                      <span v-if="terminal.donation_share < 1" class="invalid-tooltip">
+                        Le minimum est de 1%
+                      </span>
                     </div>
                     <div v-if="canCurrentUserEditDonationAmount" class="form-group col-md-2 col-4">
                       <label for="core">Montant min</label>
@@ -333,7 +348,10 @@
             </div>
 
             <div class="card-body text-center">
-              <button class="btn btn-success" @click.prevent="submit">
+              <button
+                class="btn btn-success"
+                :disabled="!isValid"
+                @click.prevent="submit">
                 Modifier le terminal
               </button>
             </div>
@@ -393,6 +411,9 @@ export default {
       }
       return false;
     },
+    isValid() {
+      return this.terminal.donation_share > 0 && this.terminal.donation_share <= 50;
+    },
   },
   mounted: function () {
     this.getTerminal();
@@ -429,6 +450,11 @@ export default {
         .catch((err) => {
           console.log(err.response);
         });
+    },
+    onDonationFormulaChange() {
+      if (this.terminal.donation_formula != "Partage") {
+        this.terminal.donation_share = 50;
+      }
     },
     campaignIsSelected: function (id) {
       return this.terminal.campaigns.includes(id);

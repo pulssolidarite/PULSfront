@@ -205,11 +205,12 @@ export default {
         .then((resp) => {
           this.terminals = resp.data;
         })
-        .catch(() => {
+        .catch((error) => {
           this.$toasted.global.error({
             message:
-              "Impossible de récupérer la liste des terminaux. Vérifier que le serveur est opérationnelle.",
+              "Impossible de récupérer la liste des terminaux.",
           });
+          throw error;
         })
         .finally(() => {
           loader.hide();
