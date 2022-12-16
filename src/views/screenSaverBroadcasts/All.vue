@@ -66,6 +66,7 @@
                         <th class="border-0"></th>
                         <th v-if="canCurrentUserEditScreensavers" class="border-0"></th>
                         <th v-if="canCurrentUserEditScreensavers" class="border-0"></th>
+                        <th v-if="canCurrentUserEditScreensavers" class="border-0"></th>
                       </tr>
                     </thead>
                     <tbody>
@@ -82,16 +83,23 @@
                             href=""
                             v-if="broadcast.visible"
                             @click.prevent="deactivateBroadcast(index)"
-                            class="text-success"
-                            ><font-awesome-icon icon="power-off"
-                          /></a>
+                            class="text-success">
+                            <font-awesome-icon icon="power-off" />
+                          </a>
                           <a
                             href=""
                             v-else
                             @click.prevent="activateBroadcast(index)"
-                            class="text-danger"
-                            ><font-awesome-icon icon="power-off"
-                          /></a>
+                            class="text-danger">
+                            <font-awesome-icon icon="power-off" />
+                          </a>
+                        </td>
+                        <td v-if="canCurrentUserEditScreensavers">
+                          <router-link
+                            :to="{ name: 'editScreensaverBroadcast', params: { id: broadcast.id } }"
+                            class="text-primary">
+                            <font-awesome-icon icon="pen" />
+                          </router-link>
                         </td>
                         <td v-if="canCurrentUserEditScreensavers">
                           <a
