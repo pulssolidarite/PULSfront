@@ -107,13 +107,19 @@
                 <div class="row">
                   <div class="form-group col">
                     <label for="name">ID de la vidéo Youtube</label>
-                    <div class="input-group mb-3">
+                    <div class="input-group">
                       <div class="input-group-prepend">
-                        <span class="input-group-text" id="basic-addon1"
-                          ><font-awesome-icon icon="video"
-                        /></span>
+                        <div class="input-group-text">
+                          <input
+                            type="checkbox"
+                            aria-label="Checkbox for following text input"
+                            v-model="campaign.is_video" />
+                        </div>
                       </div>
-                      <input type="text" class="form-control" v-model="campaign.video" />
+                      <input
+                        type="text"
+                        class="form-control"
+                        v-model="campaign.video" />
                     </div>
                     <small class="form-text text-muted">
                       Sélectionner la checkbox si vous voulez activer la vidéo
@@ -521,12 +527,12 @@ export default {
     edit: function() {
       if (this.campaign) {
         let form = new FormData();
-        form.append("author", this.$store.state.user_id);
         form.append("name", this.campaign.name);
         form.append("goal_amount", this.campaign.goal_amount);
         form.append("link", this.campaign.link);
         form.append("description", this.campaign.description);
         form.append("video", this.campaign.video);
+        form.append("is_video", this.campaign.is_video);
         this.$http
           .patch("campaign/" + this.campaign.id + "/", form)
           .then(resp => {

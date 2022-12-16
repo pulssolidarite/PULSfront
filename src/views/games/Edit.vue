@@ -145,21 +145,19 @@
                           <input
                             type="checkbox"
                             aria-label="Checkbox for following text input"
-                            v-model="game.is_video"
-                          />
+                            v-model="game.is_video" />
                         </div>
                       </div>
                       <input
                         type="text"
                         class="form-control"
-                        v-model="game.video"
-                      />
+                        v-model="game.video" />
                     </div>
-                    <small class="form-text text-muted"
-                      >Sélectionner la checkbox si vous voulez activer la vidéo
+                    <small class="form-text text-muted">
+                      Sélectionner la checkbox si vous voulez activer la vidéo
                       youtube. Insérer uniquement l'ID de la vidéo, non pas le
-                      lien en entier.</small
-                    >
+                      lien en entier.
+                    </small>
                   </div>
                 </div>
               </form>
