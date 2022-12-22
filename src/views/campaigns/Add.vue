@@ -100,13 +100,19 @@
                 <div class="row">
                   <div class="form-group col">
                     <label for="name">ID de la vidéo Youtube</label>
-                    <div class="input-group mb-3">
+                    <div class="input-group">
                       <div class="input-group-prepend">
-                        <span class="input-group-text" id="basic-addon1"
-                          ><font-awesome-icon icon="video"
-                        /></span>
+                        <div class="input-group-text">
+                          <input
+                            type="checkbox"
+                            aria-label="Activer la vidéo Youtube"
+                            v-model="campaign.is_video" />
+                        </div>
                       </div>
-                      <input type="text" class="form-control" v-model="campaign.video" />
+                      <input
+                        type="text"
+                        class="form-control"
+                        v-model="campaign.video" />
                     </div>
                     <small class="form-text text-muted">
                       Sélectionner la checkbox si vous voulez activer la vidéo

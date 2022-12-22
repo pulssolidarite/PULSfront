@@ -112,7 +112,7 @@
                         <div class="input-group-text">
                           <input
                             type="checkbox"
-                            aria-label="Checkbox for following text input"
+                            aria-label="Activer la vidéo Youtube"
                             v-model="campaign.is_video" />
                         </div>
                       </div>
