@@ -105,6 +105,53 @@
                 </div>
               </form>
             </div>
+            <div class="card-body">
+              <h4 class="mb-0">
+                Compte de connexion
+              </h4>
+              <p>Les infos pour se connecter à l'espace client.</p>
+              <form>
+                <div class="row">
+                  <div class="form-group col">
+                    <label
+                      for="username"
+                      class="col-form-label">Nom d'utilisateur</label>
+                    <input
+                      id="username"
+                      v-model="customer.user.username"
+                      type="text"
+                      class="form-control">
+                  </div>
+                  <div class="form-group col">
+                    <label
+                      for="password"
+                      class="col-form-label">Mot de passe</label>
+                    <input
+                      id="password"
+                      v-model="customer.user.password"
+                      type="password"
+                      class="form-control"
+                      placeholder="**********">
+                  </div>
+                </div>
+                <div class="row">
+                  <div class="form-group col-12">
+                    <label for="sales_type">Type de vente</label>
+                    <select v-model="customer.sales_type" class="custom-select">
+                      <option value="A">
+                        Achat
+                      </option>
+                      <option value="S">
+                        Abonnement
+                      </option>
+                      <option value="L">
+                        Location
+                      </option>
+                    </select>
+                  </div>
+                </div>
+              </form>
+            </div>
             <div class="card-body border-top">
               <h4 class="mb-0">
                 Médias
@@ -144,11 +191,14 @@
 </template>
 
 <script>
+
 export default {
   name: "AddClient",
   data: function () {
     return {
-      customer: {},
+      customer: {
+        user: {},
+      },
       errors: {
         visible: false,
         type: "danger",
@@ -156,33 +206,29 @@ export default {
       },
     };
   },
-  mounted: function () {},
   methods: {
-    addClient: function () {
-      const form = new FormData();
-      form.append("company", this.customer.company);
-      form.append("representative", this.customer.representative);
-      form.append("sales_type", this.customer.sales_type);
+    addClient() {
+
+      const data = {
+        ...this.customer,
+      };
 
       if (this.$refs.logo.files[0]) {
-        form.append("logo", this.$refs.logo.files[0]);
+        data.logo = this.$refs.logo.files[0];
       }
 
       this.$http
-        .post("customer/", form, {
-          headers: {
-            "Content-Type": "multipart/form-data",
-          },
-        })
+        .post("customer/", data)
         .then(() => {
           this.$router.push("/clients");
         })
-        .catch(() => {
+        .catch((err) => {
           this.errors = {
             visible: true,
             type: "danger",
             message: "Erreur dans l'enregistrement du client.",
           };
+          throw err;
         });
     },
   },

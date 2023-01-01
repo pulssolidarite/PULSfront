@@ -47,9 +47,9 @@
     "@vue/cli-service": "^5.0.8",
     "@vue/eslint-config-prettier": "^5.0.0",
     "babel-eslint": "^10.0.3",
-    "eslint": "^5.16.0",
+    "eslint": "^7.5.0",
     "eslint-plugin-prettier": "^3.1.1",
-    "eslint-plugin-vue": "^5.2.3",
+    "eslint-plugin-vue": "^7.0.0",
     "prettier": "^1.19.1",
     "script-loader": "^0.7.2",
     "vue-template-compiler": "^2.6.10"
