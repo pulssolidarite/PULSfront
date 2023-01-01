@@ -6,41 +6,46 @@
         <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">
           <div class="page-header">
             <div class="d-flex justify-content-between">
-              <h2 class="pageheader-title">Cores</h2>
+              <h2 class="pageheader-title">
+                Cores
+              </h2>
             </div>
             <div class="page-breadcrumb">
               <nav aria-label="breadcrumb">
                 <ol class="breadcrumb d-flex align-items-center">
                   <li class="breadcrumb-item">
-                    <router-link :to="{ name: 'home' }" class="breadcrumb-link"
-                      >Dashboard</router-link
-                    >
+                    <router-link
+                      :to="{ name: 'home' }"
+                      class="breadcrumb-link">
+                      Dashboard
+                    </router-link>
                   </li>
                   <font-awesome-icon
                     icon="angle-right"
                     size="xs"
-                    class="mx-1"
-                  />
+                    class="mx-1" />
                   <li class="breadcrumb-item">
-                    <router-link to="/cores" class="breadcrumb-link"
-                      >Cores</router-link
-                    >
+                    <router-link
+                      to="/cores"
+                      class="breadcrumb-link">
+                      Cores
+                    </router-link>
                   </li>
                   <font-awesome-icon
                     icon="angle-right"
                     size="xs"
-                    class="mx-1"
-                  />
+                    class="mx-1" />
                   <li class="breadcrumb-item" aria-current="page">
-                    <router-link :to="'/cores'" class="breadcrumb-link">{{
-                      core.name
-                    }}</router-link>
+                    <router-link :to="'/cores'" class="breadcrumb-link">
+                      {{
+                        core.name
+                      }}
+                    </router-link>
                   </li>
                   <font-awesome-icon
                     icon="angle-right"
                     size="xs"
-                    class="mx-1"
-                  />
+                    class="mx-1" />
                   <li class="breadcrumb-item active" aria-current="page">
                     Modifier
                   </li>
@@ -52,33 +57,34 @@
       </div>
 
       <Alert
+        v-if="errors.visible"
         :type="errors.type"
         :message="errors.message"
-        v-if="errors.visible"
-        @dismiss="errors.visible = false"
-      />
+        @dismiss="errors.visible = false" />
 
       <div class="row">
         <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">
           <div class="card">
             <div
-              class="card-header d-flex align-items-center justify-content-between"
-            >
-              <h5 class="mb-0">Modifier un core</h5>
+              class="card-header d-flex align-items-center justify-content-between">
+              <h5 class="mb-0">
+                Modifier un core
+              </h5>
             </div>
             <div class="card-body">
-              <h4 class="mb-0">Informations générales</h4>
+              <h4 class="mb-0">
+                Informations générales
+              </h4>
               <p>Les informations générales sur le core.</p>
               <form>
                 <div class="row">
                   <div class="form-group col">
                     <label for="name">Nom du core</label>
                     <input
+                      v-model="core.name"
                       type="text"
                       class="form-control"
-                      aria-describedby="nameHelp"
-                      v-model="core.name"
-                    />
+                      aria-describedby="nameHelp">
                   </div>
                 </div>
                 <div class="row">
@@ -86,30 +92,30 @@
                     <label for="name">Nom du fichier</label>
                     <div class="input-group mb-3">
                       <div class="input-group-prepend">
-                        <span class="input-group-text" id="basic-addon1"
-                          ><font-awesome-icon icon="file"
-                        /></span>
+                        <span
+                          id="basic-addon1"
+                          class="input-group-text"><font-awesome-icon
+                            icon="file" /></span>
                       </div>
                       <input
-                        type="text"
-                        class="form-control"
                         v-model="core.path"
-                      />
+                        type="text"
+                        class="form-control">
                     </div>
                   </div>
                   <div class="form-group col">
                     <label for="name">Nom du fichier Bios</label>
                     <div class="input-group mb-3">
                       <div class="input-group-prepend">
-                        <span class="input-group-text" id="basic-addon1"
-                          ><font-awesome-icon icon="file"
-                        /></span>
+                        <span
+                          id="basic-addon1"
+                          class="input-group-text"><font-awesome-icon
+                            icon="file" /></span>
                       </div>
                       <input
-                        type="text"
-                        class="form-control"
                         v-model="core.bios_path"
-                      />
+                        type="text"
+                        class="form-control">
                     </div>
                   </div>
                 </div>
@@ -117,13 +123,12 @@
                   <div class="form-group col">
                     <label for="description">Description</label>
                     <textarea
-                      class="form-control"
                       v-model="core.description"
-                      aria-describedby="descHelp"
-                    ></textarea>
-                    <small id="descHelp" class="form-text text-muted"
-                      >Une courte description du core.</small
-                    >
+                      class="form-control"
+                      aria-describedby="descHelp" />
+                    <small
+                      id="descHelp"
+                      class="form-text text-muted">Une courte description du core.</small>
                   </div>
                 </div>
               </form>
@@ -134,7 +139,9 @@
               </button>
             </div>
             <div class="card-body border-top">
-              <h4 class="mb-0">Médias</h4>
+              <h4 class="mb-0">
+                Médias
+              </h4>
               <form>
                 <div class="row">
                   <div class="form-group col">
@@ -143,25 +150,21 @@
                       <a
                         v-if="core.file"
                         class="border d-flex p-2 text-center mb-3"
-                        :href="core.file.file"
-                        >Lien vers le fichier</a
-                      >
+                        :href="core.file.file">Lien vers le fichier</a>
                       <div class="upload-btn-wrapper w-100 text-center ">
                         <button
-                          type="button"
-                          class="btn btn-outline-danger btn-sm"
                           ref="text-coreFile"
-                        >
+                          type="button"
+                          class="btn btn-outline-danger btn-sm">
                           Ajouter un fichier core
                         </button>
                         <input
-                          type="file"
                           id="file"
-                          name="file"
                           ref="coreFile"
+                          type="file"
+                          name="file"
                           required="required"
-                          @change="editCore"
-                        />
+                          @change="editCore">
                       </div>
                     </div>
                   </div>
@@ -173,25 +176,21 @@
                       <a
                         v-if="core.bios"
                         class="border d-flex p-2 text-center mb-3"
-                        :href="core.bios.file"
-                        >Lien vers le fichier</a
-                      >
+                        :href="core.bios.file">Lien vers le fichier</a>
                       <div class="upload-btn-wrapper w-100 text-center ">
                         <button
-                          type="button"
-                          class="btn btn-outline-danger btn-sm"
                           ref="text-biosFile"
-                        >
+                          type="button"
+                          class="btn btn-outline-danger btn-sm">
                           Ajouter un fichier bios
                         </button>
                         <input
-                          type="file"
                           id="file"
-                          name="file"
                           ref="biosFile"
+                          type="file"
+                          name="file"
                           required="required"
-                          @change="editBios"
-                        />
+                          @change="editBios">
                       </div>
                     </div>
                   </div>
@@ -208,7 +207,7 @@
 <script>
 export default {
   name: "EditCore",
-  data: function() {
+  data: function () {
     return {
       core: {},
       errors: {
@@ -218,7 +217,7 @@ export default {
       },
     };
   },
-  mounted: function() {
+  mounted: function () {
     this.getCore();
   },
   methods: {
@@ -239,7 +238,7 @@ export default {
           loader.hide();
         });
     },
-    editCore: function(e) {
+    editCore: function (e) {
       let loader = this.$loading.show();
       this.$refs["text-coreFile"].innerText = "Enregistrement...";
       this.$refs["text-coreFile"].classList.remove("btn-outline-danger");
@@ -277,7 +276,7 @@ export default {
           loader.hide();
         });
     },
-    editBios: function(e) {
+    editBios: function (e) {
       let loader = this.$loading.show();
       this.$refs["text-biosFile"].innerText = "Enregistrement...";
       this.$refs["text-biosFile"].classList.remove("btn-outline-danger");
@@ -318,7 +317,7 @@ export default {
           loader.hide();
         });
     },
-    edit: function() {
+    edit: function () {
       if (this.core) {
         let form = new FormData();
         form.append("name", this.core.name);

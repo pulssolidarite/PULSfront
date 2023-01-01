@@ -84,9 +84,9 @@ library.add(
   faMapPin,
   faUndo,
   faLock,
-  faClock
+  faClock,
 );
-Vue.component("font-awesome-icon", FontAwesomeIcon);
+Vue.component("FontAwesomeIcon", FontAwesomeIcon);
 
 // Adding error handling component
 Vue.component("Alert", Alert);
@@ -146,7 +146,7 @@ Vue.toasted.register(
   },
   {
     type: "error",
-  }
+  },
 );
 
 Vue.toasted.register(
@@ -161,7 +161,7 @@ Vue.toasted.register(
   },
   {
     type: "success",
-  }
+  },
 );
 
 // Progress bar for router
@@ -182,7 +182,7 @@ Vue.use(
   },
   {
     // slots
-  }
+  },
 );
 
 // Vue Select

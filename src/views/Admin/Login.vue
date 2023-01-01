@@ -1,11 +1,15 @@
 <template>
   <div>
     <div class="pricing-header px-3 py-3 pt-md-5 pb-md-4 mx-auto text-center">
-      <h1 class="display-4">Connexion</h1>
-      <p class="lead">Connectez vous à l'espace d'administration.</p>
+      <h1 class="display-4">
+        Connexion
+      </h1>
+      <p class="lead">
+        Connectez vous à l'espace d'administration.
+      </p>
     </div>
 
-    <div class="alert alert-danger" v-if="error">
+    <div v-if="error" class="alert alert-danger">
       {{ error }}
     </div>
 
@@ -14,11 +18,10 @@
         <div class="col">
           <label for="firstName">Username</label>
           <input
+            v-model="credentials.username"
             type="text"
             class="form-control"
-            v-model="credentials.username"
-            required
-          />
+            required>
           <div class="invalid-feedback">
             Valid first name is required.
           </div>
@@ -28,11 +31,10 @@
         <div class="col">
           <label for="firstName">Password</label>
           <input
+            v-model="credentials.password"
             type="password"
             class="form-control"
-            v-model="credentials.password"
-            required
-          />
+            required>
           <div class="invalid-feedback">
             Password is invalid.
           </div>
@@ -40,7 +42,7 @@
       </div>
       <div class="row my-3">
         <div class="col text-center">
-          <button @click="login" class="btn btn-primary btn-lg">
+          <button class="btn btn-primary btn-lg" @click="login">
             Se connecter
           </button>
         </div>
@@ -52,7 +54,7 @@
 <script>
 export default {
   name: "Auth",
-  data: function() {
+  data: function () {
     return {
       credentials: {
         username: "",

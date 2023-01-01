@@ -70,7 +70,7 @@ export default {
           .catch((err) => {
             console.warn(err.response);
           });
-      }
+      },
     );
   },
 };

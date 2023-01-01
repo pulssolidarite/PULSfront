@@ -144,7 +144,7 @@ export default new Vuex.Store({
     },
     canCurrentUserEditScreensavers: (state) => {
       if (state.currentUser.is_staff) {
-        return true
+        return true;
       }
       const customer = state.currentUser.customer;
       if (customer) {

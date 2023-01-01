@@ -64,7 +64,6 @@
               <h4 class="mb-0">
                 Nouveau client
               </h4>
-              <p>Le compte lié au nouveau terminal.</p>
               <form>
                 <div class="row">
                   <div class="form-group col">
@@ -105,7 +104,7 @@
                 </div>
               </form>
             </div>
-            <div class="card-body">
+            <div class="card-body border-top">
               <h4 class="mb-0">
                 Compte de connexion
               </h4>
@@ -132,22 +131,6 @@
                       type="password"
                       class="form-control"
                       placeholder="**********">
-                  </div>
-                </div>
-                <div class="row">
-                  <div class="form-group col-12">
-                    <label for="sales_type">Type de vente</label>
-                    <select v-model="customer.sales_type" class="custom-select">
-                      <option value="A">
-                        Achat
-                      </option>
-                      <option value="S">
-                        Abonnement
-                      </option>
-                      <option value="L">
-                        Location
-                      </option>
-                    </select>
                   </div>
                 </div>
               </form>

@@ -1,13 +1,14 @@
 <template>
   <div class="dashboard-ecommerce">
     <div class="container-fluid dashboard-content ">
-
       <!-- BREADCRUMB -->
       <div class="row">
         <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">
           <div class="page-header">
             <div class="d-flex justify-content-between">
-              <h2 class="pageheader-title">Diffusion d'écran de veille</h2>
+              <h2 class="pageheader-title">
+                Diffusion d'écran de veille
+              </h2>
             </div>
             <div class="page-breadcrumb">
               <nav aria-label="breadcrumb">
@@ -20,16 +21,16 @@
                   <font-awesome-icon
                     icon="angle-right"
                     size="xs"
-                    class="mx-1"
-                  />
+                    class="mx-1" />
                   <li class="breadcrumb-item">
-                    <router-link :to="{ name: 'screensaverMedias' }" class="breadcrumb-link">Ecran de veille</router-link>
+                    <router-link :to="{ name: 'screensaverMedias' }" class="breadcrumb-link">
+                      Ecran de veille
+                    </router-link>
                   </li>
                   <font-awesome-icon
                     icon="angle-right"
                     size="xs"
-                    class="mx-1"
-                  />
+                    class="mx-1" />
                   <li class="breadcrumb-item" aria-current="page">
                     <router-link v-if="broadcast" :to="{ name: 'screensaverBroadcasts' }" class="breadcrumb-link">
                       {{ broadcast.media.title }} sur {{ broadcast.terminal.name }}
@@ -38,8 +39,7 @@
                   <font-awesome-icon
                     icon="angle-right"
                     size="xs"
-                    class="mx-1"
-                  />
+                    class="mx-1" />
                   <li class="breadcrumb-item active" aria-current="page">
                     Modifier
                   </li>
@@ -51,35 +51,35 @@
       </div>
 
       <Alert
+        v-if="errors.visible"
         :type="errors.type"
         :message="errors.message"
-        v-if="errors.visible"
-        @dismiss="errors.visible = false"
-      />
+        @dismiss="errors.visible = false" />
 
-      <div class="row" v-if="broadcast">
+      <div v-if="broadcast" class="row">
         <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">
           <div class="card">
-
             <div class="card-header d-flex align-items-center justify-content-between">
-              <h5 class="mb-0">Modifier une diffusion</h5>
+              <h5 class="mb-0">
+                Modifier une diffusion
+              </h5>
             </div>
 
             <div class="card-body">
-
-              <h4 class="mb-0">Choisir un média</h4>
+              <h4 class="mb-0">
+                Choisir un média
+              </h4>
               <p class="">
                 Veuillez choisir le média à diffuser.
               </p>
-              <select class="custom-select mb-2" v-model="selectedMediaId">
+              <select v-model="selectedMediaId" class="custom-select mb-2">
                 <option
                   v-for="(media, index) in medias"
-                  :value="media.id"
-                  :key="index">
+                  :key="index"
+                  :value="media.id">
                   {{ media.title }}
                 </option>
               </select>
-
             </div>
 
             <div class="card-body text-center">
@@ -87,7 +87,6 @@
                 Enregistrer les modifications
               </button>
             </div>
-
           </div>
         </div>
       </div>
@@ -99,7 +98,7 @@
 
 export default {
   name: "EditScreenSaverBroadcast",
-  data: function() {
+  data: function () {
     return {
       broadcast: null,
       selectedMediaId: null,
@@ -111,7 +110,7 @@ export default {
       },
     };
   },
-  mounted: function() {
+  mounted: function () {
     this.fetchBroadcast();
     this.fetchMedias();
   },
@@ -149,7 +148,7 @@ export default {
           };
         });
     },
-    edit: function() {
+    edit: function () {
 
       if (!this.broadcast) {
         this.$toasted.global.error({

@@ -1,17 +1,17 @@
 <template>
   <div id="app" class="dashboard-main-wrapper">
-    <loading :active.sync="isLoading" :is-full-page="true"></loading>
-    <vue-progress-bar></vue-progress-bar>
+    <Loading :active.sync="isLoading" :is-full-page="true" />
+    <vue-progress-bar />
     <span v-if="isLoggedIn">
-      <Navbar></Navbar>
-      <Sidebar></Sidebar>
+      <Navbar />
+      <Sidebar />
       <div class="dashboard-wrapper">
         <router-view />
-        <Footer></Footer>
+        <Footer />
       </div>
     </span>
     <span v-else>
-      <Login></Login>
+      <Login />
     </span>
   </div>
 </template>
@@ -35,14 +35,14 @@ export default {
     Loading,
   },
   computed: {
-    isLoggedIn: function() {
+    isLoggedIn: function () {
       return this.$store.getters.isLoggedIn;
     },
-    isLoading: function() {
+    isLoading: function () {
       return this.$store.getters.loading;
     },
   },
-  created: function() {
+  created: function () {
     //  [App.vue specific] When App.vue is first loaded start the progress bar
     this.$Progress.start();
     //  hook the progress bar to start before we move router-view

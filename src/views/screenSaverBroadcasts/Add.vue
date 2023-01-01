@@ -6,21 +6,26 @@
         <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">
           <div class="page-header">
             <div class="d-flex justify-content-between">
-              <h2 class="pageheader-title">Diffusion d'écran de veille</h2>
+              <h2 class="pageheader-title">
+                Diffusion d'écran de veille
+              </h2>
             </div>
             <div class="page-breadcrumb">
               <nav aria-label="breadcrumb">
                 <ol class="breadcrumb d-flex align-items-center">
                   <li class="breadcrumb-item">
-                    <router-link :to="{ name: 'home' }" class="breadcrumb-link">Dashboard</router-link>
+                    <router-link :to="{ name: 'home' }" class="breadcrumb-link">
+                      Dashboard
+                    </router-link>
                   </li>
                   <font-awesome-icon
                     icon="angle-right"
                     size="xs"
-                    class="mx-1"
-                  />
+                    class="mx-1" />
                   <li class="breadcrumb-item">
-                    <router-link :to="{ name: 'screensaverMedias' }" class="breadcrumb-link">Ecran de veille</router-link>
+                    <router-link :to="{ name: 'screensaverMedias' }" class="breadcrumb-link">
+                      Ecran de veille
+                    </router-link>
                   </li>
                   <font-awesome-icon
                     icon="angle-right"
@@ -37,48 +42,50 @@
       </div>
       
       <Alert
+        v-if="errors.visible"
         :type="errors.type"
         :message="errors.message"
-        v-if="errors.visible"
-        @dismiss="errors.visible = false"
-      />
+        @dismiss="errors.visible = false" />
 
       <div class="row">
         <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">
           <div class="card">
-
             <div class="card-header d-flex align-items-center justify-content-between">
-              <h5 class="mb-0">Créer une diffusion</h5>
+              <h5 class="mb-0">
+                Créer une diffusion
+              </h5>
             </div>
 
             <div class="card-body">
-
-              <h4 class="mb-0">Choisir un terminal</h4>
+              <h4 class="mb-0">
+                Choisir un terminal
+              </h4>
               <p class="">
                 Veuillez choisir le terminal sur lequel vous souhaitez diffuser l'écran de veille.
               </p>
-              <select class="custom-select mb-2" v-model="choosenTerminal">
+              <select v-model="choosenTerminal" class="custom-select mb-2">
                 <option
                   v-for="terminal in terminals"
-                  :value="terminal"
-                  :key="terminal.id">
+                  :key="terminal.id"
+                  :value="terminal">
                   {{ terminal.name }}
                 </option>
               </select>
 
-              <h4 class="mb-0">Choisir un média</h4>
+              <h4 class="mb-0">
+                Choisir un média
+              </h4>
               <p class="">
                 Veuillez choisir le média à diffuser.
               </p>
-              <select class="custom-select mb-2" v-model="choosenMedia">
+              <select v-model="choosenMedia" class="custom-select mb-2">
                 <option
                   v-for="media in medias"
-                  :value="media"
-                  :key="media.id">
+                  :key="media.id"
+                  :value="media">
                   {{ media.title }}
                 </option>
               </select>
-              
             </div>
 
             <div class="card-body text-center">
@@ -86,7 +93,6 @@
                 Enregistrer la diffusion
               </button>
             </div>
-
           </div>
         </div>
       </div>
@@ -98,7 +104,7 @@
 
 export default {
   name: "AddScreenSaverBroadcast",
-  data: function() {
+  data: function () {
     return {
       choosenTerminal: null,
       choosenMedia: null,
@@ -111,7 +117,7 @@ export default {
       },
     };
   },
-  mounted: function() {
+  mounted: function () {
     this.getTerminals();
     this.getMedias();
   },
@@ -144,7 +150,7 @@ export default {
           };
         });
     },
-    save: function() {
+    save: function () {
 
       if(!this.choosenTerminal) {
         this.$toasted.global.error({
@@ -172,7 +178,7 @@ export default {
         })
         .then((resp) => {
           this.broadcast = resp.data;
-          this.$router.push({ name: 'screensaverBroadcasts'});
+          this.$router.push({ name: "screensaverBroadcasts"});
         })
         .catch((err) => {
           this.$toasted.global.error({

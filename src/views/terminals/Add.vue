@@ -6,31 +6,35 @@
         <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">
           <div class="page-header">
             <div class="d-flex justify-content-between">
-              <h2 class="pageheader-title">Terminaux</h2>
+              <h2 class="pageheader-title">
+                Terminaux
+              </h2>
             </div>
             <div class="page-breadcrumb">
               <nav aria-label="breadcrumb">
                 <ol class="breadcrumb d-flex align-items-center">
                   <li class="breadcrumb-item">
-                    <router-link :to="{ name: 'home' }" class="breadcrumb-link"
-                      >Dashboard</router-link
-                    >
+                    <router-link
+                      :to="{ name: 'home' }"
+                      class="breadcrumb-link">
+                      Dashboard
+                    </router-link>
                   </li>
                   <font-awesome-icon
                     icon="angle-right"
                     size="xs"
-                    class="mx-1"
-                  />
+                    class="mx-1" />
                   <li class="breadcrumb-item">
-                    <router-link to="/terminals" class="breadcrumb-link"
-                      >Terminaux</router-link
-                    >
+                    <router-link
+                      to="/terminals"
+                      class="breadcrumb-link">
+                      Terminaux
+                    </router-link>
                   </li>
                   <font-awesome-icon
                     icon="angle-right"
                     size="xs"
-                    class="mx-1"
-                  />
+                    class="mx-1" />
                   <li class="breadcrumb-item active" aria-current="page">
                     Ajouter un terminal
                   </li>
@@ -42,35 +46,37 @@
       </div>
 
       <Alert
+        v-if="errors.visible"
         :type="errors.type"
         :message="errors.message"
-        v-if="errors.visible"
-        @dismiss="errors.visible = false"
-      />
+        @dismiss="errors.visible = false" />
 
-      <div class="row" v-if="!formVisible">
+      <div v-if="!formVisible" class="row">
         <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">
           <div class="card">
-            <h5 class="card-header">Ajouter un terminal</h5>
+            <h5 class="card-header">
+              Ajouter un terminal
+            </h5>
             <div class="card-body">
-              <h4 class="mb-0">Choisir un client</h4>
+              <h4 class="mb-0">
+                Choisir un client
+              </h4>
               <p class="">
                 Veuillez choisir à qui vous voulez attribuer ce nouveau
                 terminal. Vous pouvez également créer un nouveau client.
               </p>
-              <select class="custom-select mb-2" v-model="choosenCustomer">
+              <select v-model="choosenCustomer" class="custom-select mb-2">
                 <option
                   v-for="customer in customers"
-                  :value="customer"
                   :key="customer.id"
-                  >{{ customer.company }} -
-                  {{ customer.representative }}</option
-                >
+                  :value="customer">
+                  {{ customer.company }} -
+                  {{ customer.representative }}
+                </option>
               </select>
               <button
                 class="btn btn-primary w-100"
-                @click.prevent="continueWithCustomer"
-              >
+                @click.prevent="continueWithCustomer">
                 Choisir un client existant
               </button>
               <div class="hr-text my-4 text-center">
@@ -78,8 +84,7 @@
               </div>
               <button
                 class="btn btn-success w-100"
-                @click.prevent="continueWithoutCustomer"
-              >
+                @click.prevent="continueWithoutCustomer">
                 <font-awesome-icon icon="plus" class="mr-2" /> Créer un nouveau
                 client
               </button>
@@ -87,88 +92,96 @@
           </div>
         </div>
       </div>
-      <div class="row" v-else>
+      <div v-else class="row">
         <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">
           <div class="card">
             <div
-              class="card-header d-flex align-items-center justify-content-between"
-            >
-              <h5 class="mb-0">Ajouter un terminal</h5>
-              <a href="" class="btn btn-dark" @click.prevent="goBack"
-                ><font-awesome-icon icon="undo" class="mr-2" />Choisir un autre
-                client</a
-              >
+              class="card-header d-flex align-items-center justify-content-between">
+              <h5 class="mb-0">
+                Ajouter un terminal
+              </h5>
+              <a
+                href=""
+                class="btn btn-dark"
+                @click.prevent="goBack"><font-awesome-icon icon="undo" class="mr-2" />Choisir un autre
+                client</a>
             </div>
             <div class="card-body">
-              <h4 class="mb-0" v-if="choosenCustomer.company">Client choisi</h4>
-              <h4 class="mb-0" v-else>Nouveau client</h4>
+              <h4 v-if="choosenCustomer.company" class="mb-0">
+                Client choisi
+              </h4>
+              <h4 v-else class="mb-0">
+                Nouveau client
+              </h4>
               <p>Le compte lié au nouveau terminal.</p>
               <form>
                 <div class="row">
                   <div class="form-group col">
-                    <label for="company" class="col-form-label"
-                      >Nom de l'entreprise</label
-                    >
+                    <label
+                      for="company"
+                      class="col-form-label">Nom de l'entreprise</label>
                     <input
-                      :disabled="choosenCustomer.company"
                       v-model="customer.company"
+                      :disabled="choosenCustomer.company"
                       type="text"
-                      class="form-control"
-                    />
+                      class="form-control">
                   </div>
                   <div class="form-group col">
-                    <label for="inputEmail" class="col-form-label"
-                      >Contact au sein de l'entreprise</label
-                    >
+                    <label
+                      for="inputEmail"
+                      class="col-form-label">Contact au sein de l'entreprise</label>
                     <input
+                      v-model="customer.representative"
                       type="email"
                       class="form-control"
                       placeholder="name@example.com"
-                      :disabled="choosenCustomer.representative"
-                      v-model="customer.representative"
-                    />
+                      :disabled="choosenCustomer.representative">
                   </div>
                 </div>
                 <div class="row">
                   <div class="form-group col-md-6 col-12">
                     <label for="sales_type">Type de vente</label>
                     <select
-                      class="custom-select"
-                      :disabled="choosenCustomer.sales_type"
                       v-model="customer.sales_type"
-                    >
-                      <option value="A" :checked="customer.sales_type == 'A'"
-                        >Achat</option
-                      >
-                      <option value="L" :checked="customer.sales_type == 'L'"
-                        >Location</option
-                      >
+                      class="custom-select"
+                      :disabled="choosenCustomer.sales_type">
+                      <option
+                        value="A"
+                        :checked="customer.sales_type == 'A'">
+                        Achat
+                      </option>
+                      <option
+                        value="L"
+                        :checked="customer.sales_type == 'L'">
+                        Location
+                      </option>
                     </select>
                   </div>
                   <div class="form-group col-md-6 col-12">
                     <label for="sales_type">Contrat de maintenance</label>
                     <select
-                      class="custom-select"
-                      :disabled="choosenCustomer.maintenance_type"
                       v-model="customer.maintenance_type"
-                    >
+                      class="custom-select"
+                      :disabled="choosenCustomer.maintenance_type">
                       <option
                         value="option1"
-                        :checked="customer.sales_type == 'option1'"
-                        >Option 1</option
-                      >
+                        :checked="customer.sales_type == 'option1'">
+                        Option 1
+                      </option>
                       <option
                         value="option2"
-                        :checked="customer.sales_type == 'option2'"
-                        >Option 2</option
-                      >
+                        :checked="customer.sales_type == 'option2'">
+                        Option 2
+                      </option>
                     </select>
                   </div>
                 </div>
               </form>
             </div>
             <div class="card-body border-top">
-              <h4 class="mb-0">Paramètres de connexion</h4>
+              <h4 class="mb-0">
+                Paramètres de connexion
+              </h4>
               <p>
                 Ces identifiants doivent être sauvegardés quelque part. Vous ne
                 pourrez pas les retrouver.
@@ -176,44 +189,44 @@
               <form>
                 <div class="row">
                   <div class="form-group col">
-                    <label for="company" class="col-form-label"
-                      >Utilisateur</label
-                    >
+                    <label
+                      for="company"
+                      class="col-form-label">Utilisateur</label>
                     <div class="input-group input-group-sm mb-3">
                       <div class="input-group-prepend">
-                        <span class="input-group-text"
-                          ><font-awesome-icon icon="user"
-                        /></span>
+                        <span
+                          class="input-group-text"><font-awesome-icon
+                          icon="user" /></span>
                       </div>
                       <input
                         v-model="user.username"
                         type="text"
-                        class="form-control"
-                      />
+                        class="form-control">
                     </div>
                   </div>
                   <div class="form-group col">
-                    <label for="company" class="col-form-label"
-                      >Mot de passe</label
-                    >
+                    <label
+                      for="company"
+                      class="col-form-label">Mot de passe</label>
                     <div class="input-group input-group-sm mb-3">
                       <div class="input-group-prepend">
-                        <span class="input-group-text"
-                          ><font-awesome-icon icon="lock"
-                        /></span>
+                        <span
+                          class="input-group-text"><font-awesome-icon
+                          icon="lock" /></span>
                       </div>
                       <input
                         v-model="user.password"
                         type="password"
-                        class="form-control"
-                      />
+                        class="form-control">
                     </div>
                   </div>
                 </div>
               </form>
             </div>
             <div class="card-body border-top">
-              <h4 class="mb-0">Paramètres du terminal</h4>
+              <h4 class="mb-0">
+                Paramètres du terminal
+              </h4>
               <p>
                 Différents paramètres permettant d'identifier clairement le
                 terminal.
@@ -224,7 +237,7 @@
                   <input
                     v-model="terminal.name"
                     type="text"
-                    class="form-control" />
+                    class="form-control">
                 </div>
                 <div class="form-group">
                   <label for="company" class="col-form-label">Localisation du terminal</label>
@@ -235,7 +248,7 @@
                     <input
                       v-model="terminal.location"
                       type="text"
-                      class="form-control" />
+                      class="form-control">
                   </div>
                 </div>
                 <div class="form-group">
@@ -248,17 +261,25 @@
                       v-model="terminal.play_timer"
                       type="number"
                       min="0"
-                      class="form-control" />
+                      class="form-control">
                   </div>
                 </div>
                 <div class="row">
                   <div class="form-group col-md-2 col-4">
                     <label for="core">Formule de dons</label>
-                    <select class="custom-select mb-2" v-model="terminal.donation_formula" >
-                      <option value="Classique" selected>Classique</option>
-                      <option value="Gratuit">Gratuit</option>
-                      <option value="Mécénat">Mécénat</option>
-                      <option value="Partage">Partage</option>
+                    <select v-model="terminal.donation_formula" class="custom-select mb-2">
+                      <option value="Classique" selected>
+                        Classique
+                      </option>
+                      <option value="Gratuit">
+                        Gratuit
+                      </option>
+                      <option value="Mécénat">
+                        Mécénat
+                      </option>
+                      <option value="Partage">
+                        Partage
+                      </option>
                     </select>
                   </div>
                   <div
@@ -267,12 +288,12 @@
                     <label for="donation-share">Pourcentage du don à reverser au propriétaire de la borne</label>
                     <input
                       id="donation-share"
+                      v-model="terminal.donation_share"
                       type="number"
                       class="form-control"
                       :class="{ 'is-invalid': terminal.donation_share < 1 || terminal.donation_share > 50 }"
                       min="1"
-                      max="50"
-                      v-model="terminal.donation_share">
+                      max="50">
                     <span v-if="terminal.donation_share > 50" class="invalid-tooltip">
                       Le maximum est de 50%
                     </span>
@@ -280,85 +301,80 @@
                       Le minimum est de 1%
                     </span>
                   </div>
-                    <div
-                      class="form-group col-md-2 col-4">
-                      <label for="core">Montant min</label>
-                      <input
-                        v-model="terminal.donation_min_amount"
-                        type="number"
-                        min="1"
-                        :max="terminal.donation_max_amount"
-                        class="form-control"
-                      />
-                    </div>
-                    <div class="form-group col-md-2 col-4">
-                      <label for="core">Montant par défaut</label>
-                      <input
-                        v-model="terminal.donation_default_amount"
-                        type="number"
-                        :min="terminal.donation_min_amount"
-                        :max="terminal.donation_max_amount"
-                        class="form-control"
-                      />
-                    </div>
-                    <div class="form-group col-md-2 col-4">
-                      <label for="core">Montant max</label>
-                      <input
-                        v-model="terminal.donation_max_amount"
-                        type="number"
-                        :min="terminal.donation_min_amount"
-                        class="form-control"
-                      />
-                    </div>
+                  <div
+                    class="form-group col-md-2 col-4">
+                    <label for="core">Montant min</label>
+                    <input
+                      v-model="terminal.donation_min_amount"
+                      type="number"
+                      min="1"
+                      :max="terminal.donation_max_amount"
+                      class="form-control">
+                  </div>
+                  <div class="form-group col-md-2 col-4">
+                    <label for="core">Montant par défaut</label>
+                    <input
+                      v-model="terminal.donation_default_amount"
+                      type="number"
+                      :min="terminal.donation_min_amount"
+                      :max="terminal.donation_max_amount"
+                      class="form-control">
+                  </div>
+                  <div class="form-group col-md-2 col-4">
+                    <label for="core">Montant max</label>
+                    <input
+                      v-model="terminal.donation_max_amount"
+                      type="number"
+                      :min="terminal.donation_min_amount"
+                      class="form-control">
+                  </div>
                 </div>
                 <div class="row">
                   <div class="form-group col-12">
                     <label>Texte personnalisé</label>
                     <textarea
-                      class="form-control"
                       v-model="terminal.free_mode_text"
-                      placeholder="Vous pouvez jouer gratuitement...">
-                    </textarea>
+                      class="form-control"
+                      placeholder="Vous pouvez jouer gratuitement..." />
                   </div>
                 </div>
               </form>
             </div>
-             <div class="card-body border-top">
-            <div class="row">
-              <div class="col-6">
+            <div class="card-body border-top">
+              <div class="row">
+                <div class="col-6">
                   <div class="form-group w-100">
                     <h4>Numéro du Terminal de paiement</h4>
-                    <small id="nameHelp" class="form-text text-muted"
-                      >Indiquer le réfèrence fournisseur du terminal de paiement </small
-                    >
+                    <small
+                      id="nameHelp"
+                      class="form-text text-muted">Indiquer le réfèrence fournisseur du terminal de paiement </small>
                     <input
+                      v-model="terminal.payment_terminal"
                       type="text"
                       placeholder="P6XXXXXXXXXX"
                       class="form-control"
-                      aria-describedby="nameHelp"
-                      v-model="terminal.payment_terminal"
-                    />
+                      aria-describedby="nameHelp">
                   </div>
                 </div>
-                </div>
+              </div>
             </div>
 
             <div class="card-body border-top">
-              <h4 class="mb-0">Campagnes & jeux</h4>
+              <h4 class="mb-0">
+                Campagnes & jeux
+              </h4>
               <p>
                 Sélectionnez les campagnes et les jeux actifs sur ce terminal.
               </p>
               <form>
                 <div class="row">
-                  <div class="col" v-if="campaigns">
-                    <label for="campaign"
-                      >Campagnes actives :
-                      <span :class="['font-weight-bold']"
-                        >({{ terminal.campaigns.length }}/{{
-                          campaigns.length
-                        }})</span
-                      ></label
-                    >
+                  <div v-if="campaigns" class="col">
+                    <label
+                      for="campaign">Campagnes actives :
+                      <span
+                        :class="['font-weight-bold']">({{ terminal.campaigns.length }}/{{
+                        campaigns.length
+                      }})</span></label>
                     <div class="row form-group">
                       <label
                         v-for="campaign in campaigns"
@@ -371,25 +387,22 @@
                           'py-2',
                           'mx-2',
                         ]"
-                        @click.prevent="selectCampaign(campaign)"
-                      >
-                        <input type="radio" :value="campaign.id" />
+                        @click.prevent="selectCampaign(campaign)">
+                        <input type="radio" :value="campaign.id">
                         <span
                           :class="[
                             'selected',
                             'd-flex',
                             'align-items-center',
                             'justify-content-center',
-                          ]"
-                        >
+                          ]">
                           <font-awesome-icon icon="check" />
                         </span>
                         <span class="checkbox-icon">
                           <img
                             :src="campaign.logo"
                             class="img-fluid"
-                            :alt="campaign.name"
-                          />
+                            :alt="campaign.name">
                         </span>
                         <h5 class="mt-2">{{ campaign.name }}</h5>
                         <p class="lead px-1">
@@ -400,16 +413,15 @@
                   </div>
                 </div>
                 <div class="row">
-                  <div class="col" v-if="games">
-                    <label for="game"
-                      >Jeux actifs :
-                      <span :class="['font-weight-bold']"
-                        >({{ terminal.games.length }}/{{ games.length }})</span
-                      ></label
-                    >
+                  <div v-if="games" class="col">
+                    <label
+                      for="game">Jeux actifs :
+                      <span
+                        :class="['font-weight-bold']">({{ terminal.games.length }}/{{ games.length }})</span></label>
                     <div class="row form-group">
                       <label
                         v-for="game in games"
+                        :key="game.id"
                         :for="game.id"
                         :class="[
                           gameExists(game.id) ? 'checked' : '',
@@ -418,22 +430,19 @@
                           'py-3',
                           'mx-2',
                         ]"
-                        :key="game.id"
-                        @click.prevent="selectGame(game)"
-                      >
-                        <input type="radio" :value="game.id" />
+                        @click.prevent="selectGame(game)">
+                        <input type="radio" :value="game.id">
                         <span
                           :class="[
                             'selected',
                             'd-flex',
                             'align-items-center',
                             'justify-content-center',
-                          ]"
-                        >
+                          ]">
                           <font-awesome-icon icon="check" />
                         </span>
                         <span class="checkbox-icon">
-                          <img :src="game.logo" height="70" :alt="game.name" />
+                          <img :src="game.logo" height="70" :alt="game.name">
                         </span>
                         <h4 class="mt-2">{{ game.name }}</h4>
                       </label>
@@ -460,7 +469,7 @@
 <script>
 export default {
   name: "AddTerminal",
-  data: function() {
+  data: function () {
     return {
       choosenCustomer: {},
       customer: {},
@@ -469,7 +478,7 @@ export default {
         campaigns: [],
         games: [],
         payment_terminal: null,
-        donation_formula: 'Classique',
+        donation_formula: "Classique",
       },
       formVisible: false,
       customers: {},
@@ -487,13 +496,13 @@ export default {
       return this.terminal.donation_share > 0 && this.terminal.donation_share <= 50;
     },
   },
-  mounted: function() {
+  mounted: function () {
     this.getCustomers();
     this.getCampaigns();
     this.getGames();
   },
   methods: {
-    getCustomers: function() {
+    getCustomers: function () {
       this.$http
         .get("customer/")
         .then((resp) => {
@@ -507,7 +516,7 @@ export default {
           };
         });
     },
-    getGames: function() {
+    getGames: function () {
       this.$http
         .get("games/")
         .then((resp) => {
@@ -521,7 +530,7 @@ export default {
           };
         });
     },
-    getCampaigns: function() {
+    getCampaigns: function () {
       this.$http
         .get("campaign/")
         .then((resp) => {
@@ -535,7 +544,7 @@ export default {
           };
         });
     },
-    campaignExists: function(id) {
+    campaignExists: function (id) {
       for (let i = 0; i < this.terminal.campaigns.length; i++) {
         if (this.terminal.campaigns[i] == id) {
           return true;
@@ -543,7 +552,7 @@ export default {
       }
       return false;
     },
-    selectCampaign: function(campaign) {
+    selectCampaign: function (campaign) {
       if (!this.campaignExists(campaign.id)) {
         // Only if not max campaigns
         this.terminal.campaigns.push(campaign.id);
@@ -556,7 +565,7 @@ export default {
         }
       }
     },
-    gameExists: function(id) {
+    gameExists: function (id) {
       for (let i = 0; i < this.terminal.games.length; i++) {
         if (this.terminal.games[i] == id) {
           return true;
@@ -564,7 +573,7 @@ export default {
       }
       return false;
     },
-    selectGame: function(game) {
+    selectGame: function (game) {
       if (!this.gameExists(game.id)) {
         this.terminal.games.push(game.id);
       } else {
@@ -576,24 +585,24 @@ export default {
         }
       }
     },
-    continueWithCustomer: function() {
+    continueWithCustomer: function () {
       if (this.choosenCustomer) {
         // Get data about customer first
         this.formVisible = true;
         this.customer = this.choosenCustomer;
       }
     },
-    continueWithoutCustomer: function() {
+    continueWithoutCustomer: function () {
       this.choosenCustomer = "";
       this.customer = {};
       this.formVisible = true;
     },
-    goBack: function() {
+    goBack: function () {
       this.choosenCustomer = "";
       this.customer = {};
       this.formVisible = false;
     },
-    addTerminal: function() {
+    addTerminal: function () {
       if (this.choosenCustomer.id && this.customer.id) {
         this.user.customer = this.customer.id;
         this.$http
