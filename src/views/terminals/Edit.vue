@@ -373,8 +373,6 @@ export default {
       games: {},
       user: {},
       customer: {},
-      // maxGames: this.$store.state.maxGames,
-      // maxCampaigns: this.$store.state.maxCampaigns,
       errors: {
         visible: false,
         type: "danger",

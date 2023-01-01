@@ -6,7 +6,6 @@
       </h1>
 
       <Breadcrumb :links="[{ text: 'Clients', to: { name: 'clients' } }, { text: 'Ajouter un client', active: true }]" />
-
     </div>
 
     <Alert
