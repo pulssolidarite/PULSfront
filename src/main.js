@@ -54,6 +54,7 @@ require("./assets/admin/vendor/charts/chartist-bundle/chartist.css");
 require("./assets/admin/vendor/charts/morris-bundle/morris.css");
 require("./assets/admin/vendor/charts/c3charts/c3.css");
 require("./assets/admin/vendor/fonts/flag-icon-css/flag-icon.min.css");
+require("./assets/styles.css");
 
 // Font Awesome Stuff
 library.add(

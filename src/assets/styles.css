@@ -1,0 +1,16 @@
+
+
+.page {
+    padding: 30px 30px 60px 30px;
+    width: 100%;
+    margin: 0 auto;
+}
+
+.page-header {
+    margin-bottom: 30px;
+}
+
+.page-header-title {
+    font-size: 24px;
+    margin-bottom: 8px;
+}
