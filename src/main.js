@@ -15,6 +15,8 @@ import ToggleButton from "vue-js-toggle-button";
 import Loading from "vue-loading-overlay";
 import "vue-loading-overlay/dist/vue-loading.css";
 import { library } from "@fortawesome/fontawesome-svg-core";
+import setServices from "@/services";
+
 import {
   faUserSecret,
   faPen,
@@ -187,14 +189,24 @@ Vue.use(
 );
 
 // Vue Select
-Vue.component("v-select", vSelect);
+Vue.component("VSelect", vSelect);
 
 // Vue Toggle Button
 Vue.use(ToggleButton);
 
-new Vue({
+// Create app
+
+const app = new Vue({
   mode: "history",
   router,
   store,
   render: (h) => h(App),
-}).$mount("#app");
+});
+
+// Set services
+
+setServices();
+
+// Mount app
+
+app.$mount("#app");

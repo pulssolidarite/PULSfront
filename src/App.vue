@@ -13,6 +13,7 @@
     <span v-else>
       <Login />
     </span>
+    <NotificationList v-if="hasNotifications" />
   </div>
 </template>
 
@@ -21,6 +22,7 @@ import Navbar from "@/components/Navbar.vue";
 import Footer from "@/components/Footer.vue";
 import Sidebar from "@/components/Sidebar.vue";
 import Login from "@/components/Login.vue";
+import NotificationList from "@/components/notifications/NotificationList";
 
 import Loading from "vue-loading-overlay";
 import "vue-loading-overlay/dist/vue-loading.css";
@@ -33,6 +35,7 @@ export default {
     Sidebar,
     Login,
     Loading,
+    NotificationList,
   },
   computed: {
     isLoggedIn: function () {
@@ -40,6 +43,9 @@ export default {
     },
     isLoading: function () {
       return this.$store.getters.loading;
+    },
+    hasNotifications() {
+      return this.$store.getters.getNotifications.length > 0;
     },
   },
   created: function () {

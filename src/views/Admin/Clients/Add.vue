@@ -8,12 +8,6 @@
       <Breadcrumb :links="[{ text: 'Clients', to: { name: 'clients' } }, { text: 'Ajouter un client', active: true }]" />
     </div>
 
-    <Alert
-      v-if="errors.visible"
-      :type="errors.type"
-      :message="errors.message"
-      @dismiss="errors.visible = false" />
-
     <div class="row">
       <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">
         <div class="card">
@@ -143,11 +137,6 @@ export default {
       customer: {
         user: {},
       },
-      errors: {
-        visible: false,
-        type: "danger",
-        message: "",
-      },
     };
   },
   methods: {
@@ -166,13 +155,9 @@ export default {
         .then(() => {
           this.$router.push("/clients");
         })
-        .catch((err) => {
-          this.errors = {
-            visible: true,
-            type: "danger",
-            message: "Erreur dans l'enregistrement du client.",
-          };
-          throw err;
+        .catch((error) => {
+          this.$notifications.error("Erreur dans l'enregistrement du client.");
+          throw error;
         });
     },
   },
