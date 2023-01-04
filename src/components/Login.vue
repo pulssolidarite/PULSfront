@@ -74,6 +74,7 @@ export default {
         })
         .catch((error) => {
           this.$toasted.global.error(error);
+          throw error;
         });
     },
   },

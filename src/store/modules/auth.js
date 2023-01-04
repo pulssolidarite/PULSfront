@@ -1,3 +1,8 @@
+import router from "@/router";
+import jwt from "@/axios/jwt";
+import axios from "axios";
+
+
 
 //// State
 // The state contains the vars to store
@@ -102,11 +107,11 @@ const actions = {
             });
         })
         .catch((err) => {
-          console.error(err.response);
           reject({
             message:
               "Impossible de se connecter avec ces identifiants. Veuillez réessayer."+err,
           });
+          throw err;
         });
     });
   },
