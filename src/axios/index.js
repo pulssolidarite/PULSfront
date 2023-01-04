@@ -1,12 +1,11 @@
 import axios from "axios";
 import jwt from "./jwt";
 import store from "../store/index";
-import router from "../router";
 import Vue from "vue";
 
 export default {
   createAxiosResponseInterceptor() {
-    const interceptor = axios.interceptors.response.use(
+    axios.interceptors.response.use(
       (response) => response,
       (error) => {
 
