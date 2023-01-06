@@ -118,7 +118,7 @@
                           <a
                             href=""
                             class="text-danger"
-                            @click.prevent="deleteGame(customer.id)"><font-awesome-icon
+                            @click.prevent="deleteClient(customer.id)"><font-awesome-icon
                               icon="trash-alt" /></a>
                         </td>
                       </tr>
@@ -162,6 +162,10 @@ export default {
       this.$router.push("/client/" + id + "/edit");
     },
     deleteClient: function (id) {
+      if (!window.confirm("Etes vous sur de vouloir supprimer ce client ?")) {
+        return;
+      }
+
       this.$http.delete("/customer/" + id + "/").then(() => {
         this.getClients();
       });
