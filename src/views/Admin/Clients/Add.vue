@@ -156,7 +156,9 @@ export default {
           this.$router.push("/clients");
         })
         .catch((error) => {
-          this.$notifications.error("Erreur dans l'enregistrement du client.");
+          this.$toasted.global.error({
+            message: "Erreur dans l'enregistrement du client",
+          });
           throw error;
         });
     },

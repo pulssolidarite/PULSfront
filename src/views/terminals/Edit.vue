@@ -427,7 +427,10 @@ export default {
           this.games = resp.data;
         })
         .catch((err) => {
-          console.log(err.response);
+          this.$toasted.global.error({
+            message: "Erreur lors de la récupération des informations des jeux",
+          });
+          throw err;
         });
     },
     getCampaigns: function () {
@@ -437,7 +440,10 @@ export default {
           this.campaigns = resp.data;
         })
         .catch((err) => {
-          console.log(err.response);
+          this.$toasted.global.error({
+            message: "Erreur lors de la récupération des informations des campagnes",
+          });
+          throw err;
         });
     },
     getTerminal: function () {
@@ -447,7 +453,10 @@ export default {
           this.terminal = resp.data;
         })
         .catch((err) => {
-          console.log(err.response);
+          this.$toasted.global.error({
+            message: "Erreur lors de la récupération des informations du terminal",
+          });
+          throw err;
         });
     },
     onDonationFormulaChange() {
@@ -505,9 +514,10 @@ export default {
             });
           })
           .catch((err) => {
-            this.$toasted.global.success({
-              message: "Une erreur s'est produite durant la modification.",
+            this.$toasted.global.error({
+              message: "Erreur lors de l'enregistrement de vos modifications",
             });
+            throw err;
           });
       }
     },
