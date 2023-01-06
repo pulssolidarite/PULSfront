@@ -106,7 +106,7 @@
                         </td>
                         <td>
                           <a
-                            :href="'https://www.youtube.com/watch?v=' + media.youtube_video_id"
+                            :href="'https://vimeo.com/' + media.vimeo_video_id"
                             target="_blank"
                             class="text-dark">
                             <font-awesome-icon icon="eye" />

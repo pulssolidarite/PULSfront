@@ -92,14 +92,14 @@
 
                 <div class="row">
                   <div class="form-group col">
-                    <label for="name">Id de la vidéo Youtube</label>
+                    <label for="name">Id de la vidéo Viméo</label>
                     <input
-                      v-model="media.youtube_video_id"
+                      v-model="media.vimeo_video_id"
                       type="text"
                       class="form-control"
                       aria-describedby="idHelp">
                     <small id="idHelp" class="form-text text-muted">
-                      N'insérez que l'id, pas le lien entier. L'id de la vidéo Youtube peut être trouvé dans l'url de la vidéo après 'v='.
+                      N'insérez que l'id, pas le lien entier. L'id de la vidéo Vimeo peut être trouvé dans l'url de la vidéo après '/'.
                     </small>
                   </div>
                 </div>
@@ -170,9 +170,9 @@ export default {
         return;
       }
 
-      if(!this.media.youtube_video_id || this.media.youtube_video_id.length <=0) {
+      if(!this.media.vimeo_video_id || this.media.vimeo_video_id.length <=0) {
         this.$toasted.global.error({
-          message: "Veuillez spécifier une vidéo Youtube.",
+          message: "Veuillez spécifier une vidéo Vimeo.",
         });
         return;
       }
@@ -187,7 +187,7 @@ export default {
       let form = new FormData();
       form.append("title", this.media.title);
       form.append("scope", this.media.scope);
-      form.append("youtube_video_id", this.media.youtube_video_id);
+      form.append("vimeo_video_id", this.media.vimeo_video_id);
 
       this.$http
         .patch("screensaver-medias/" + this.$route.params.id + "/", form)
