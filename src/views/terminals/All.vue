@@ -101,18 +101,19 @@
                       <tr v-for="(terminal, index) in terminals" :key="index">
                         <td>{{ terminal.id }}</td>
                         <td>
-                          <span
-                            v-if="terminal.is_active"
-                            class="text-success">Activé</span>
+                          <span v-if="terminal.is_active" class="text-success">Activé</span>
                           <span v-else class="text-danger">Désactivé</span>
                         </td>
                         <td>
-                          <span
-                            v-if="terminal.is_on & terminal.is_playing"><span class="badge-dot badge-success mr-1" />En jeu</span>
-                          <span
-                            v-if="terminal.is_on & !terminal.is_playing"><span class="badge-dot badge-warning mr-1" />Allumé</span>
-                          <span
-                            v-else><span class="badge-dot badge-danger mr-1" />Eteint</span>
+                          <span v-if="terminal.is_playing">
+                            <span class="badge-dot badge-success mr-1" />En jeu
+                          </span>
+                          <span v-else-if="terminal.is_on">
+                            <span class="badge-dot badge-warning mr-1" />Allumé
+                          </span>
+                          <span v-else>
+                            <span class="badge-dot badge-danger mr-1" />Eteint
+                          </span>
                         </td>
                         <td>{{ terminal.name }}</td>
                         <td>
