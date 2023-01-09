@@ -6,7 +6,9 @@
         <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">
           <div class="page-header">
             <div class="d-flex justify-content-between">
-              <h2 class="pageheader-title">Ecran de veille</h2>
+              <h2 class="pageheader-title">
+                Ecran de veille
+              </h2>
               <router-link
                 v-if="canCurrentUserEditScreensavers"
                 class="btn btn-primary mb-1"
@@ -19,15 +21,18 @@
               <nav aria-label="breadcrumb">
                 <ol class="breadcrumb d-flex align-items-center">
                   <li class="breadcrumb-item">
-                    <router-link :to="{ name: 'home' }" class="breadcrumb-link">Dashboard</router-link>
+                    <router-link :to="{ name: 'home' }" class="breadcrumb-link">
+                      Dashboard
+                    </router-link>
                   </li>
                   <font-awesome-icon
                     icon="angle-right"
                     size="xs"
-                    class="mx-1"
-                  />
+                    class="mx-1" />
                   <li class="breadcrumb-item">
-                    <router-link :to="{ name: 'screensaverMedias' }" class="breadcrumb-link">Ecran de veille</router-link>
+                    <router-link :to="{ name: 'screensaverMedias' }" class="breadcrumb-link">
+                      Ecran de veille
+                    </router-link>
                   </li>
                   <font-awesome-icon
                     icon="angle-right"
@@ -44,30 +49,42 @@
       </div>
 
       <Alert
+        v-if="errors.visible"
         :type="errors.type"
         :message="errors.message"
-        v-if="errors.visible"
-        @dismiss="errors.visible = false"
-      />
+        @dismiss="errors.visible = false" />
 
       <div class="ecommerce-widget">
         <div class="row">
           <div class="col-12">
             <div class="card">
-              <h5 class="card-header">Médias</h5>
+              <h5 class="card-header">
+                Médias
+              </h5>
               <div class="card-body p-0">
                 <div class="table-responsive">
                   <table class="table">
                     <thead class="bg-light">
                       <tr class="border-0">
-                        <th class="border-0">#</th>
-                        <th class="border-0">Nom</th>
-                        <th v-if="isAdmin" class="border-0">Editeur</th>
-                        <th v-if="isAdmin" class="border-0">Portée</th>
-                        <th class="border-0">Terminaux associés</th>
-                        <th v-if="canCurrentUserEditScreensavers" class="border-0"></th>
-                        <th v-if="canCurrentUserEditScreensavers" class="border-0"></th>
-                        <th v-if="canCurrentUserEditScreensavers" class="border-0"></th>
+                        <th class="border-0">
+                          #
+                        </th>
+                        <th class="border-0">
+                          Nom
+                        </th>
+                        <th v-if="isAdmin" class="border-0">
+                          Editeur
+                        </th>
+                        <th v-if="isAdmin" class="border-0">
+                          Portée
+                        </th>
+                        <th class="border-0">
+                          Terminaux associés
+                        </th>
+                        <th class="border-0" />
+                        <th v-if="canCurrentUserEditScreensavers" class="border-0" />
+                        <th v-if="canCurrentUserEditScreensavers" class="border-0" />
+                        <th v-if="canCurrentUserEditScreensavers" class="border-0" />
                       </tr>
                     </thead>
                     <tbody>
@@ -85,9 +102,15 @@
                         </td>
                         <td>
                           {{ media.nb_terminals }} termina<span
-                            v-if="media.nb_terminals > 1"
-                            >ux</span
-                          ><span v-else>l</span>
+                            v-if="media.nb_terminals > 1">ux</span><span v-else>l</span>
+                        </td>
+                        <td>
+                          <a
+                            :href="'https://vimeo.com/' + media.vimeo_video_id"
+                            target="_blank"
+                            class="text-dark">
+                            <font-awesome-icon icon="eye" />
+                          </a>
                         </td>
                         <td v-if="canCurrentUserEditScreensavers">
                           <router-link
@@ -99,9 +122,9 @@
                         <td v-if="canCurrentUserEditScreensavers">
                           <a
                             href=""
-                            @click.prevent="deleteMedia(media.id)"
-                            class="text-danger">
-                            <font-awesome-icon icon="trash-alt"/>
+                            class="text-danger"
+                            @click.prevent="deleteMedia(media.id)">
+                            <font-awesome-icon icon="trash-alt" />
                           </a>
                         </td>
                         <td v-if="canCurrentUserEditScreensavers">
@@ -127,7 +150,7 @@
 <script>
 export default {
   name: "AllScreenSaverMedia",
-  data: function() {
+  data: function () {
     return {
       medias: {},
       errors: {
@@ -138,26 +161,26 @@ export default {
     };
   },
   computed: {
-    isAdmin: function() {
+    isAdmin: function () {
       return this.$store.getters.isAdmin;
     },
-    isCustomer: function() {
+    isCustomer: function () {
       return this.$store.getters.isCustomer;
     },
     canCurrentUserEditScreensavers() {
       return this.$store.getters.canCurrentUserEditScreensavers;
     },
   },
-  mounted: function() {
+  mounted: function () {
     this.fetchMedias();
   },
   methods: {
-    deleteMedia: function(id) {
+    deleteMedia: function (id) {
       this.$http.delete("/screensaver-medias/" + id + "/").then(() => {
         this.fetchMedias();
       });
     },
-    fetchMedias: function() {
+    fetchMedias: function () {
       let loader = this.$loading.show();
 
       this.$http

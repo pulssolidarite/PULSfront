@@ -6,7 +6,9 @@
         <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">
           <div class="page-header">
             <div class="d-flex justify-content-between">
-              <h2 class="pageheader-title">Diffusion d'écran de veille</h2>
+              <h2 class="pageheader-title">
+                Diffusion d'écran de veille
+              </h2>
               <router-link
                 v-if="canCurrentUserEditScreensavers"
                 class="btn btn-primary mb-1"
@@ -19,15 +21,18 @@
               <nav aria-label="breadcrumb">
                 <ol class="breadcrumb d-flex align-items-center">
                   <li class="breadcrumb-item">
-                    <router-link :to="{ name: 'home' }" class="breadcrumb-link">Dashboard</router-link>
+                    <router-link :to="{ name: 'home' }" class="breadcrumb-link">
+                      Dashboard
+                    </router-link>
                   </li>
                   <font-awesome-icon
                     icon="angle-right"
                     size="xs"
-                    class="mx-1"
-                  />
+                    class="mx-1" />
                   <li class="breadcrumb-item">
-                    <router-link :to="{ name: 'screensaverBroadcasts' }" class="breadcrumb-link">Ecran de veille</router-link>
+                    <router-link :to="{ name: 'screensaverBroadcasts' }" class="breadcrumb-link">
+                      Ecran de veille
+                    </router-link>
                   </li>
                   <font-awesome-icon
                     icon="angle-right"
@@ -44,28 +49,36 @@
       </div>
 
       <Alert
+        v-if="errors.visible"
         :type="errors.type"
         :message="errors.message"
-        v-if="errors.visible"
-        @dismiss="errors.visible = false"
-      />
+        @dismiss="errors.visible = false" />
 
       <div class="ecommerce-widget">
         <div class="row">
           <div class="col-12">
             <div class="card">
-              <h5 class="card-header">Diffusions</h5>
+              <h5 class="card-header">
+                Diffusions
+              </h5>
               <div class="card-body p-0">
                 <div class="table-responsive">
                   <table class="table">
                     <thead class="bg-light">
                       <tr class="border-0">
-                        <th class="border-0">#</th>
-                        <th class="border-0">Terminal</th>
-                        <th class="border-0">Média</th>
-                        <th class="border-0"></th>
-                        <th v-if="canCurrentUserEditScreensavers" class="border-0"></th>
-                        <th v-if="canCurrentUserEditScreensavers" class="border-0"></th>
+                        <th class="border-0">
+                          #
+                        </th>
+                        <th class="border-0">
+                          Terminal
+                        </th>
+                        <th class="border-0">
+                          Média
+                        </th>
+                        <th class="border-0" />
+                        <th v-if="canCurrentUserEditScreensavers" class="border-0" />
+                        <th v-if="canCurrentUserEditScreensavers" class="border-0" />
+                        <th v-if="canCurrentUserEditScreensavers" class="border-0" />
                       </tr>
                     </thead>
                     <tbody>
@@ -79,26 +92,33 @@
                         </td>
                         <td v-if="canCurrentUserEditScreensavers">
                           <a
-                            href=""
                             v-if="broadcast.visible"
-                            @click.prevent="deactivateBroadcast(index)"
-                            class="text-success"
-                            ><font-awesome-icon icon="power-off"
-                          /></a>
-                          <a
                             href=""
+                            class="text-success"
+                            @click.prevent="deactivateBroadcast(index)">
+                            <font-awesome-icon icon="power-off" />
+                          </a>
+                          <a
                             v-else
-                            @click.prevent="activateBroadcast(index)"
+                            href=""
                             class="text-danger"
-                            ><font-awesome-icon icon="power-off"
-                          /></a>
+                            @click.prevent="activateBroadcast(index)">
+                            <font-awesome-icon icon="power-off" />
+                          </a>
+                        </td>
+                        <td v-if="canCurrentUserEditScreensavers">
+                          <router-link
+                            :to="{ name: 'editScreensaverBroadcast', params: { id: broadcast.id } }"
+                            class="text-primary">
+                            <font-awesome-icon icon="pen" />
+                          </router-link>
                         </td>
                         <td v-if="canCurrentUserEditScreensavers">
                           <a
                             href=""
-                            @click.prevent="deleteBroadcast(broadcast.id)"
-                            class="text-danger">
-                            <font-awesome-icon icon="trash-alt"/>
+                            class="text-danger"
+                            @click.prevent="deleteBroadcast(broadcast.id)">
+                            <font-awesome-icon icon="trash-alt" />
                           </a>
                         </td>
                       </tr>
@@ -117,7 +137,7 @@
 <script>
 export default {
   name: "AllScreenSaverBroadcasts",
-  data: function() {
+  data: function () {
     return {
       broadcasts: {},
       errors: {
@@ -128,21 +148,21 @@ export default {
     };
   },
   computed: {
-    isAdmin: function() {
+    isAdmin: function () {
       return this.$store.getters.isAdmin;
     },
-    isCustomer: function() {
+    isCustomer: function () {
       return this.$store.getters.isCustomer;
     },
     canCurrentUserEditScreensavers() {
       return this.$store.getters.canCurrentUserEditScreensavers;
     },
   },
-  mounted: function() {
+  mounted: function () {
     this.fetchBroadcasts();
   },
   methods: {
-    fetchBroadcasts: function() {
+    fetchBroadcasts: function () {
       let loader = this.$loading.show();
 
       this.$http
@@ -160,7 +180,7 @@ export default {
           loader.hide();
         });
     },
-    activateBroadcast: function(index) {
+    activateBroadcast: function (index) {
       this.$http
         .post("screensaver-broadcasts/" + this.broadcasts[index].id + "/activate/")
         .then((resp) => {
@@ -175,7 +195,7 @@ export default {
           });
         });
     },
-    deactivateBroadcast: function(index) {
+    deactivateBroadcast: function (index) {
       this.$http
         .post("screensaver-broadcasts/" + this.broadcasts[index].id + "/deactivate/")
         .then((resp) => {
@@ -192,7 +212,7 @@ export default {
           };
         });
     },
-    deleteBroadcast: function(id) {
+    deleteBroadcast: function (id) {
       this.$http.delete("/screensaver-broadcasts/" + id + "/").then(() => {
         this.fetchBroadcasts();
       });

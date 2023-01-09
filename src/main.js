@@ -15,6 +15,8 @@ import ToggleButton from "vue-js-toggle-button";
 import Loading from "vue-loading-overlay";
 import "vue-loading-overlay/dist/vue-loading.css";
 import { library } from "@fortawesome/fontawesome-svg-core";
+import setServices from "@/services";
+
 import {
   faUserSecret,
   faPen,
@@ -54,6 +56,7 @@ require("./assets/admin/vendor/charts/chartist-bundle/chartist.css");
 require("./assets/admin/vendor/charts/morris-bundle/morris.css");
 require("./assets/admin/vendor/charts/c3charts/c3.css");
 require("./assets/admin/vendor/fonts/flag-icon-css/flag-icon.min.css");
+require("./assets/styles.css");
 
 // Font Awesome Stuff
 library.add(
@@ -84,9 +87,9 @@ library.add(
   faMapPin,
   faUndo,
   faLock,
-  faClock
+  faClock,
 );
-Vue.component("font-awesome-icon", FontAwesomeIcon);
+Vue.component("FontAwesomeIcon", FontAwesomeIcon);
 
 // Adding error handling component
 Vue.component("Alert", Alert);
@@ -146,7 +149,7 @@ Vue.toasted.register(
   },
   {
     type: "error",
-  }
+  },
 );
 
 Vue.toasted.register(
@@ -161,7 +164,7 @@ Vue.toasted.register(
   },
   {
     type: "success",
-  }
+  },
 );
 
 // Progress bar for router
@@ -182,18 +185,28 @@ Vue.use(
   },
   {
     // slots
-  }
+  },
 );
 
 // Vue Select
-Vue.component("v-select", vSelect);
+Vue.component("VSelect", vSelect);
 
 // Vue Toggle Button
 Vue.use(ToggleButton);
 
-new Vue({
+// Create app
+
+const app = new Vue({
   mode: "history",
   router,
   store,
   render: (h) => h(App),
-}).$mount("#app");
+});
+
+// Set services
+
+setServices();
+
+// Mount app
+
+app.$mount("#app");

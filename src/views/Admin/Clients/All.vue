@@ -6,37 +6,41 @@
         <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">
           <div class="page-header">
             <div class="d-flex justify-content-between">
-              <h2 class="pageheader-title">Clients</h2>
+              <h2 class="pageheader-title">
+                Clients
+              </h2>
               <router-link
                 class="btn btn-primary mb-1"
-                :to="{ name: 'addClient' }"
-                ><font-awesome-icon icon="plus" class="mr-2" />Ajouter un
-                client</router-link
-              >
+                :to="{ name: 'addClient' }">
+                <font-awesome-icon icon="plus" class="mr-2" />Ajouter un
+                client
+              </router-link>
             </div>
             <div class="page-breadcrumb">
               <nav aria-label="breadcrumb">
                 <ol class="breadcrumb d-flex align-items-center">
                   <li class="breadcrumb-item">
-                    <router-link :to="{ name: 'home' }" class="breadcrumb-link"
-                      >Dashboard</router-link
-                    >
+                    <router-link
+                      :to="{ name: 'home' }"
+                      class="breadcrumb-link">
+                      Dashboard
+                    </router-link>
                   </li>
                   <font-awesome-icon
                     icon="angle-right"
                     size="xs"
-                    class="mx-1"
-                  />
+                    class="mx-1" />
                   <li class="breadcrumb-item">
-                    <router-link to="/clients" class="breadcrumb-link"
-                      >Clients</router-link
-                    >
+                    <router-link
+                      to="/clients"
+                      class="breadcrumb-link">
+                      Clients
+                    </router-link>
                   </li>
                   <font-awesome-icon
                     icon="angle-right"
                     size="xs"
-                    class="mx-1"
-                  />
+                    class="mx-1" />
                   <li class="breadcrumb-item active" aria-current="page">
                     Tous les clients
                   </li>
@@ -48,29 +52,40 @@
       </div>
 
       <Alert
+        v-if="errors.visible"
         :type="errors.type"
         :message="errors.message"
-        v-if="errors.visible"
-        @dismiss="errors.visible = false"
-      />
+        @dismiss="errors.visible = false" />
 
       <div class="ecommerce-widget">
         <div class="row">
           <div class="col-12">
             <div class="card">
-              <h5 class="card-header">Clients</h5>
+              <h5 class="card-header">
+                Clients
+              </h5>
               <div class="card-body p-0">
                 <div class="table-responsive">
                   <table class="table">
                     <thead class="bg-light">
                       <tr class="border-0">
-                        <th class="border-0">#</th>
-                        <th class="border-0">Status</th>
-                        <th class="border-0">Entreprise</th>
-                        <th class="border-0">Contact</th>
-                        <th class="border-0">Type de contrat</th>
-                        <th class="border-0"></th>
-                        <th class="border-0"></th>
+                        <th class="border-0">
+                          #
+                        </th>
+                        <th class="border-0">
+                          Status
+                        </th>
+                        <th class="border-0">
+                          Entreprise
+                        </th>
+                        <th class="border-0">
+                          Contact
+                        </th>
+                        <th class="border-0">
+                          Type de contrat
+                        </th>
+                        <th class="border-0" />
+                        <th class="border-0" />
                       </tr>
                     </thead>
                     <tbody>
@@ -89,22 +104,22 @@
                         <td v-if="customer.sales_type == 'A'">
                           Achat
                         </td>
-                        <td v-else>Location</td>
-                        <td>
-                          <a
-                            href=""
-                            @click.prevent="editClient(customer.id)"
-                            class="text-primary"
-                            ><font-awesome-icon icon="pen"
-                          /></a>
+                        <td v-else>
+                          Location
                         </td>
                         <td>
                           <a
                             href=""
-                            @click.prevent="deleteGame(customer.id)"
+                            class="text-primary"
+                            @click.prevent="editClient(customer.id)"><font-awesome-icon
+                              icon="pen" /></a>
+                        </td>
+                        <td>
+                          <a
+                            href=""
                             class="text-danger"
-                            ><font-awesome-icon icon="trash-alt"
-                          /></a>
+                            @click.prevent="deleteClient(customer.id)"><font-awesome-icon
+                              icon="trash-alt" /></a>
                         </td>
                       </tr>
                     </tbody>
@@ -122,7 +137,7 @@
 <script>
 export default {
   name: "AllClients",
-  data: function() {
+  data: function () {
     return {
       customers: {},
       errors: {
@@ -132,26 +147,30 @@ export default {
       },
     };
   },
-  mounted: function() {
+  mounted: function () {
     this.getClients();
   },
   methods: {
-    stripCharacters: function(text) {
+    stripCharacters: function (text) {
       if (text.length > 70) {
         return text.substring(0, 70) + "..";
       } else {
         return text;
       }
     },
-    editClient: function(id) {
+    editClient: function (id) {
       this.$router.push("/client/" + id + "/edit");
     },
-    deleteClient: function(id) {
+    deleteClient: function (id) {
+      if (!window.confirm("Etes vous sur de vouloir supprimer ce client ?")) {
+        return;
+      }
+
       this.$http.delete("/customer/" + id + "/").then(() => {
         this.getClients();
       });
     },
-    getClients: function() {
+    getClients: function () {
       let loader = this.$loading.show();
 
       this.$http

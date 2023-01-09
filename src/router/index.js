@@ -43,6 +43,7 @@ import AddScreenSaverMedia from "@/views/screenSaverMedias/Add";
 // ScreenSaver broadcasts
 import AllScreenSaverBroadcast from "@/views/screenSaverBroadcasts/All";
 import AddScreenSaverBroadcast from "@/views/screenSaverBroadcasts/Add";
+import EditScreenSaverBroadcast from "@/views/screenSaverBroadcasts/Edit";
 
 
 
@@ -297,8 +298,15 @@ const routes = [
     meta: {
       requiresAuth: true,
     },
-  },  
-  
+  },
+  {
+    path: "/screensaver/broadcasts/:id/edit",
+    name: "editScreensaverBroadcast",
+    component: EditScreenSaverBroadcast,
+    meta: {
+      requiresAuth: true,
+    },
+  },
 ];
 
 const router = new VueRouter({

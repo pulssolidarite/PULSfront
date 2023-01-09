@@ -6,31 +6,35 @@
         <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">
           <div class="page-header">
             <div class="d-flex justify-content-between">
-              <h2 class="pageheader-title">Cores</h2>
+              <h2 class="pageheader-title">
+                Cores
+              </h2>
             </div>
             <div class="page-breadcrumb">
               <nav aria-label="breadcrumb">
                 <ol class="breadcrumb d-flex align-items-center">
                   <li class="breadcrumb-item">
-                    <router-link :to="{ name: 'home' }" class="breadcrumb-link"
-                      >Dashboard</router-link
-                    >
+                    <router-link
+                      :to="{ name: 'home' }"
+                      class="breadcrumb-link">
+                      Dashboard
+                    </router-link>
                   </li>
                   <font-awesome-icon
                     icon="angle-right"
                     size="xs"
-                    class="mx-1"
-                  />
+                    class="mx-1" />
                   <li class="breadcrumb-item">
-                    <router-link to="/cores" class="breadcrumb-link"
-                      >Cores</router-link
-                    >
+                    <router-link
+                      to="/cores"
+                      class="breadcrumb-link">
+                      Cores
+                    </router-link>
                   </li>
                   <font-awesome-icon
                     icon="angle-right"
                     size="xs"
-                    class="mx-1"
-                  />
+                    class="mx-1" />
                   <li class="breadcrumb-item active" aria-current="page">
                     Ajouter un core
                   </li>
@@ -42,33 +46,34 @@
       </div>
 
       <Alert
+        v-if="errors.visible"
         :type="errors.type"
         :message="errors.message"
-        v-if="errors.visible"
-        @dismiss="errors.visible = false"
-      />
+        @dismiss="errors.visible = false" />
 
       <div class="row">
         <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">
           <div class="card">
             <div
-              class="card-header d-flex align-items-center justify-content-between"
-            >
-              <h5 class="mb-0">Ajouter un core</h5>
+              class="card-header d-flex align-items-center justify-content-between">
+              <h5 class="mb-0">
+                Ajouter un core
+              </h5>
             </div>
             <div class="card-body">
-              <h4 class="mb-0">Informations générales</h4>
+              <h4 class="mb-0">
+                Informations générales
+              </h4>
               <p>Les informations générales sur le nouveau core.</p>
               <form>
                 <div class="row">
                   <div class="form-group col">
                     <label for="name">Nom du core</label>
                     <input
+                      v-model="core.name"
                       type="text"
                       class="form-control"
-                      aria-describedby="nameHelp"
-                      v-model="core.name"
-                    />
+                      aria-describedby="nameHelp">
                   </div>
                 </div>
                 <div class="row">
@@ -76,67 +81,64 @@
                     <label for="name">Nom du fichier</label>
 
                     <input
-                      type="text"
-                      class="form-control"
                       v-model="core.path"
-                    />
+                      type="text"
+                      class="form-control">
                   </div>
                   <div class="form-group col">
                     <label for="name">Nom du fichier Bios</label>
 
                     <input
-                      type="text"
-                      class="form-control"
                       v-model="core.bios_path"
-                    />
+                      type="text"
+                      class="form-control">
                   </div>
                 </div>
                 <div class="row">
                   <div class="form-group col">
                     <label for="description">Description</label>
                     <textarea
-                      class="form-control"
                       v-model="core.description"
-                      aria-describedby="descHelp"
-                    ></textarea>
-                    <small id="descHelp" class="form-text text-muted"
-                      >Une courte description du core.</small
-                    >
+                      class="form-control"
+                      aria-describedby="descHelp" />
+                    <small
+                      id="descHelp"
+                      class="form-text text-muted">Une courte description du core.</small>
                   </div>
                 </div>
               </form>
             </div>
             <div class="card-body border-top">
-              <h4 class="mb-0">Médias</h4>
+              <h4 class="mb-0">
+                Médias
+              </h4>
               <form>
                 <div class="row">
                   <div class="form-group col">
                     <label for="description">Fichier Core</label>
                     <input
+                      ref="coreFile"
                       type="file"
                       class="form-control-file"
                       aria-describedby="fileHelp"
-                      ref="coreFile"
-                      @change="uploadCore"
-                    />
-                    <small id="fileHelp" class="form-text text-muted"
-                      >Le fichier associé au core.</small
-                    >
+                      @change="uploadCore">
+                    <small
+                      id="fileHelp"
+                      class="form-text text-muted">Le fichier associé au core.</small>
                   </div>
                 </div>
                 <div class="row">
                   <div class="form-group col">
                     <label for="description">Fichier Bios</label>
                     <input
+                      ref="biosFile"
                       type="file"
                       class="form-control-file"
                       aria-describedby="fileHelp"
-                      ref="biosFile"
-                      @change="uploadBios"
-                    />
-                    <small id="fileHelp" class="form-text text-muted"
-                      >Le fichier Bios associé au core.</small
-                    >
+                      @change="uploadBios">
+                    <small
+                      id="fileHelp"
+                      class="form-text text-muted">Le fichier Bios associé au core.</small>
                   </div>
                 </div>
               </form>
@@ -156,7 +158,7 @@
 <script>
 export default {
   name: "AddCore",
-  data: function() {
+  data: function () {
     return {
       core: {},
       file: {},
@@ -173,7 +175,7 @@ export default {
       this.$refs["text-" + e.target.id].classList.remove("btn-outline-danger");
       this.$refs["text-" + e.target.id].classList.add("btn-success");
     },
-    uploadCore: function(event) {
+    uploadCore: function (event) {
       let loader = this.$loading.show();
 
       let form_file = new FormData();
@@ -196,7 +198,7 @@ export default {
           loader.hide();
         });
     },
-    uploadBios: function(event) {
+    uploadBios: function (event) {
       let loader = this.$loading.show();
 
       let form_file = new FormData();
@@ -219,7 +221,7 @@ export default {
           loader.hide();
         });
     },
-    addCore: function() {
+    addCore: function () {
       if (this.core) {
         if (!this.core.file) {
           this.$toasted.global.error({

@@ -10,11 +10,10 @@
           data-target="#navbarNav"
           aria-controls="navbarNav"
           aria-expanded="false"
-          aria-label="Toggle navigation"
-        >
-          <span class="navbar-toggler-icon"></span>
+          aria-label="Toggle navigation">
+          <span class="navbar-toggler-icon" />
         </button>
-        <div class="collapse navbar-collapse" id="navbarNav">
+        <div id="navbarNav" class="collapse navbar-collapse">
           <ul class="navbar-nav flex-column">
             <li class="nav-divider">
               Menu
@@ -23,9 +22,8 @@
               <router-link exact class="nav-link first" to="/">
                 <font-awesome-icon
                   icon="rocket"
-                  class="mr-2"
-                />Dashboard</router-link
-              >
+                  class="mr-2" />Dashboard
+              </router-link>
             </li>
 
             <li class="nav-item">
@@ -51,7 +49,7 @@
                       <span v-else>Toutes vos arcades</span>
                     </router-link>
                   </li>
-                  <li class="nav-item" v-if="isAdmin">
+                  <li v-if="isAdmin" class="nav-item">
                     <router-link class="nav-link" :to="{ name: 'addTerminal' }">
                       <span v-if="isAdmin">Ajouter un terminal</span>
                       <span v-else>Ajouter une arcade</span>
@@ -122,10 +120,14 @@
                     </router-link>
                   </li>
                   <li v-if="isAdmin" class="nav-item">
-                    <router-link class="nav-link" to="/cores">Tous les cores</router-link>
+                    <router-link class="nav-link" to="/cores">
+                      Tous les cores
+                    </router-link>
                   </li>
                   <li v-if="isAdmin" class="nav-item">
-                    <router-link class="nav-link" :to="{ name: 'addCore' }">Ajouter un core</router-link>
+                    <router-link class="nav-link" :to="{ name: 'addCore' }">
+                      Ajouter un core
+                    </router-link>
                   </li>
                 </ul>
               </div>
@@ -145,21 +147,25 @@
                 data-toggle="collapse"
                 aria-expanded="false"
                 data-target="#submenu-clients"
-                aria-controls="submenu-clients"
-                ><font-awesome-icon icon="columns" class="mr-2" />
-                Clients</router-link
-              >
+                aria-controls="submenu-clients">
+                <font-awesome-icon icon="columns" class="mr-2" />
+                Clients
+              </router-link>
               <div id="submenu-clients" class="collapse submenu" style="">
                 <ul class="nav flex-column">
                   <li class="nav-item">
-                    <router-link class="nav-link" to="/clients"
-                      >Tous les clients</router-link
-                    >
+                    <router-link
+                      class="nav-link"
+                      to="/clients">
+                      Tous les clients
+                    </router-link>
                   </li>
                   <li class="nav-item">
-                    <router-link class="nav-link" :to="{ name: 'addClient' }"
-                      >Ajouter un client</router-link
-                    >
+                    <router-link
+                      class="nav-link"
+                      :to="{ name: 'addClient' }">
+                      Ajouter un client
+                    </router-link>
                   </li>
                 </ul>
               </div>
@@ -217,7 +223,6 @@
                 </ul>
               </div>
             </li>
-
           </ul>
         </div>
       </nav>
@@ -229,10 +234,10 @@
 export default {
   name: "Sidebar",
   computed: {
-    isAdmin: function() {
+    isAdmin: function () {
       return this.$store.getters.isAdmin;
     },
-    isCustomer: function() {
+    isCustomer: function () {
       return this.$store.getters.isCustomer;
     },
     canCurrentUserEditScreensavers() {

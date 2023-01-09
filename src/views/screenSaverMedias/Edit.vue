@@ -1,47 +1,49 @@
 <template>
   <div class="dashboard-ecommerce">
     <div class="container-fluid dashboard-content ">
-
       <!-- BREADCRUMB -->
       <div class="row">
         <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">
           <div class="page-header">
             <div class="d-flex justify-content-between">
-              <h2 class="pageheader-title">Ecran de veille</h2>
+              <h2 class="pageheader-title">
+                Ecran de veille
+              </h2>
             </div>
             <div class="page-breadcrumb">
               <nav aria-label="breadcrumb">
                 <ol class="breadcrumb d-flex align-items-center">
                   <li class="breadcrumb-item">
-                    <router-link :to="{ name: 'home' }" class="breadcrumb-link"
-                      >Dashboard</router-link
-                    >
+                    <router-link :to="{ name: 'home' }" class="breadcrumb-link">
+                      Dashboard
+                    </router-link>
                   </li>
                   <font-awesome-icon
                     icon="angle-right"
                     size="xs"
-                    class="mx-1"
-                  />
+                    class="mx-1" />
                   <li class="breadcrumb-item">
-                    <router-link :to="{ name: 'screensaverMedias' }" class="breadcrumb-link"
-                      >Ecran de veille</router-link
-                    >
+                    <router-link
+                      :to="{ name: 'screensaverMedias' }"
+                      class="breadcrumb-link">
+                      Ecran de veille
+                    </router-link>
                   </li>
                   <font-awesome-icon
                     icon="angle-right"
                     size="xs"
-                    class="mx-1"
-                  />
+                    class="mx-1" />
                   <li class="breadcrumb-item" aria-current="page">
-                    <router-link :to="{ name: 'screensaverMedias' }" class="breadcrumb-link">{{
-                      media.title
-                    }}</router-link>
+                    <router-link :to="{ name: 'screensaverMedias' }" class="breadcrumb-link">
+                      {{
+                        media.title
+                      }}
+                    </router-link>
                   </li>
                   <font-awesome-icon
                     icon="angle-right"
                     size="xs"
-                    class="mx-1"
-                  />
+                    class="mx-1" />
                   <li class="breadcrumb-item active" aria-current="page">
                     Modifier
                   </li>
@@ -53,36 +55,35 @@
       </div>
 
       <Alert
+        v-if="errors.visible"
         :type="errors.type"
         :message="errors.message"
-        v-if="errors.visible"
-        @dismiss="errors.visible = false"
-      />
+        @dismiss="errors.visible = false" />
 
       <div class="row">
         <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">
           <div class="card">
-
             <div class="card-header d-flex align-items-center justify-content-between">
-              <h5 class="mb-0">Modifier un média</h5>
+              <h5 class="mb-0">
+                Modifier un média
+              </h5>
             </div>
 
             <div class="card-body">
-
-              <h4 class="mb-0">Informations générales</h4>
+              <h4 class="mb-0">
+                Informations générales
+              </h4>
               <p>Les informations générales sur le nouveau média.</p>
 
               <form>
-
                 <div class="row">
                   <div class="form-group col">
                     <label for="name">Titre du média</label>
                     <input
+                      v-model="media.title"
                       type="text"
                       class="form-control"
-                      aria-describedby="titleHelp"
-                      v-model="media.title"
-                    />
+                      aria-describedby="titleHelp">
                     <small id="titleHelp" class="form-text text-muted">
                       Donnez un nom cohérent au média.
                     </small>
@@ -91,20 +92,18 @@
 
                 <div class="row">
                   <div class="form-group col">
-                    <label for="name">Id de la vidéo Youtube</label>
+                    <label for="name">Id de la vidéo Viméo</label>
                     <input
+                      v-model="media.vimeo_video_id"
                       type="text"
                       class="form-control"
-                      aria-describedby="idHelp"
-                      v-model="media.youtube_video_id" />
+                      aria-describedby="idHelp">
                     <small id="idHelp" class="form-text text-muted">
-                      N'insérez que l'id, pas le lien entier. L'id de la vidéo Youtube peut être trouvé dans l'url de la vidéo après 'v='.
+                      N'insérez que l'id, pas le lien entier. L'id de la vidéo Vimeo peut être trouvé dans l'url de la vidéo après '/'.
                     </small>
                   </div>
                 </div>
-
               </form>
-
             </div>
 
             <div class="card-body text-center">
@@ -112,7 +111,6 @@
                 Enregistrer les modifications
               </button>
             </div>
-
           </div>
         </div>
       </div>
@@ -124,7 +122,7 @@
 
 export default {
   name: "EditScreenSaverMedia",
-  data: function() {
+  data: function () {
     return {
       media: {},
       errors: {
@@ -134,7 +132,7 @@ export default {
       },
     };
   },
-  mounted: function() {
+  mounted: function () {
     this.fetchMedia();
   },
   methods: {
@@ -156,7 +154,7 @@ export default {
           loader.hide();
         });
     },
-    edit: function() {
+    edit: function () {
 
       if (!this.media) {
         this.$toasted.global.error({
@@ -172,9 +170,9 @@ export default {
         return;
       }
 
-      if(!this.media.youtube_video_id || this.media.youtube_video_id.length <=0) {
+      if(!this.media.vimeo_video_id || this.media.vimeo_video_id.length <=0) {
         this.$toasted.global.error({
-          message: "Veuillez spécifier une vidéo Youtube.",
+          message: "Veuillez spécifier une vidéo Vimeo.",
         });
         return;
       }
@@ -189,7 +187,7 @@ export default {
       let form = new FormData();
       form.append("title", this.media.title);
       form.append("scope", this.media.scope);
-      form.append("youtube_video_id", this.media.youtube_video_id);
+      form.append("vimeo_video_id", this.media.vimeo_video_id);
 
       this.$http
         .patch("screensaver-medias/" + this.$route.params.id + "/", form)

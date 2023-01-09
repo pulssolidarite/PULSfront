@@ -6,7 +6,9 @@
         <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">
           <div class="page-header">
             <div class="d-flex justify-content-between">
-              <h2 class="pageheader-title">Terminaux</h2>
+              <h2 class="pageheader-title">
+                Terminaux
+              </h2>
               <router-link
                 v-if="isAdmin"
                 class="btn btn-primary mb-1"
@@ -19,25 +21,27 @@
               <nav aria-label="breadcrumb">
                 <ol class="breadcrumb d-flex align-items-center">
                   <li class="breadcrumb-item">
-                    <router-link :to="{ name: 'home' }" class="breadcrumb-link"
-                      >Dashboard</router-link
-                    >
+                    <router-link
+                      :to="{ name: 'home' }"
+                      class="breadcrumb-link">
+                      Dashboard
+                    </router-link>
                   </li>
                   <font-awesome-icon
                     icon="angle-right"
                     size="xs"
-                    class="mx-1"
-                  />
+                    class="mx-1" />
                   <li class="breadcrumb-item">
-                    <router-link to="/terminals" class="breadcrumb-link"
-                      >Terminaux</router-link
-                    >
+                    <router-link
+                      to="/terminals"
+                      class="breadcrumb-link">
+                      Terminaux
+                    </router-link>
                   </li>
                   <font-awesome-icon
                     icon="angle-right"
                     size="xs"
-                    class="mx-1"
-                  />
+                    class="mx-1" />
                   <li class="breadcrumb-item active" aria-current="page">
                     Tous les terminaux
                   </li>
@@ -49,115 +53,126 @@
       </div>
 
       <Alert
+        v-if="errors.visible"
         :type="errors.type"
         :message="errors.message"
-        v-if="errors.visible"
-        @dismiss="errors.visible = false"
-      />
+        @dismiss="errors.visible = false" />
 
       <div class="ecommerce-widget">
         <div class="row">
           <div class="col-12">
             <div class="card">
-              <h5 class="card-header">Terminaux</h5>
+              <h5 class="card-header">
+                Terminaux
+              </h5>
               <div class="card-body p-0">
                 <div class="table-responsive">
                   <table class="table">
                     <thead class="bg-light">
                       <tr class="border-0">
-                        <th class="border-0">#</th>
-                        <th class="border-0">Actif</th>
-                        <th class="border-0">Status</th>
-                        <th class="border-0">Nom</th>
-                        <th class="border-0">Client</th>
-                        <th class="border-0">Campagnes</th>
-                        <th class="border-0">Total dons</th>
-                        <th class="border-0"></th>
-                        <th class="border-0"></th>
-                        <th class="border-0"></th>
-                        <th v-if="isAdmin" class="border-0"></th>
+                        <th class="border-0">
+                          #
+                        </th>
+                        <th class="border-0">
+                          Actif
+                        </th>
+                        <th class="border-0">
+                          Status
+                        </th>
+                        <th class="border-0">
+                          Nom
+                        </th>
+                        <th class="border-0">
+                          Client
+                        </th>
+                        <th class="border-0">
+                          Campagnes
+                        </th>
+                        <th class="border-0">
+                          Total dons
+                        </th>
+                        <th class="border-0" />
+                        <th class="border-0" />
+                        <th class="border-0" />
+                        <th v-if="isAdmin" class="border-0" />
                       </tr>
                     </thead>
                     <tbody>
                       <tr v-for="(terminal, index) in terminals" :key="index">
                         <td>{{ terminal.id }}</td>
                         <td>
-                          <span v-if="terminal.is_active" class="text-success"
-                            >Activé</span
-                          >
+                          <span v-if="terminal.is_active" class="text-success">Activé</span>
                           <span v-else class="text-danger">Désactivé</span>
                         </td>
                         <td>
-                          <span v-if="terminal.is_on & terminal.is_playing"
-                            ><span class="badge-dot badge-success mr-1"></span
-                            >En jeu</span
-                          >
-                          <span v-if="terminal.is_on & !terminal.is_playing"
-                            ><span class="badge-dot badge-warning mr-1"></span
-                            >Allumé</span
-                          >
-                          <span v-else
-                            ><span class="badge-dot badge-danger mr-1"></span
-                            >Eteint</span
-                          >
+                          <span v-if="terminal.is_playing">
+                            <span class="badge-dot badge-success mr-1" />En jeu
+                          </span>
+                          <span v-else-if="terminal.is_on">
+                            <span class="badge-dot badge-warning mr-1" />Allumé
+                          </span>
+                          <span v-else>
+                            <span class="badge-dot badge-danger mr-1" />Eteint
+                          </span>
                         </td>
                         <td>{{ terminal.name }}</td>
                         <td>
-                          <router-link to="/clients">{{
-                            terminal.customer.company
-                          }}</router-link>
+                          <router-link to="/clients">
+                            {{
+                              terminal.customer.company
+                            }}
+                          </router-link>
                         </td>
                         <td>
                           <span
                             v-for="(campaign, index) in terminal.campaigns"
                             :key="index"
-                            class="border border-primary p-1 small rounded mr-1"
-                            ><router-link :to="'/campaigns/' + campaign.id">{{
+                            class="border border-primary p-1 small rounded mr-1"><router-link :to="'/campaigns/' + campaign.id">{{
                               campaign.name
-                            }}</router-link></span
-                          >
+                            }}</router-link></span>
                         </td>
                         <td v-if="terminal.total_donations">
                           {{ terminal.total_donations }} €
                         </td>
-                        <td v-else>0 €</td>
+                        <td v-else>
+                          0 €
+                        </td>
                         <td>
                           <router-link
                             :to="'/terminals/' + terminal.id"
-                            class="text-dark"
-                            ><font-awesome-icon icon="eye"
-                          /></router-link>
+                            class="text-dark">
+                            <font-awesome-icon
+                              icon="eye" />
+                          </router-link>
                         </td>
                         <td>
                           <a
-                            href=""
                             v-if="terminal.is_active"
-                            @click.prevent="deactivateTerminal(index)"
-                            class="text-success"
-                            ><font-awesome-icon icon="power-off"
-                          /></a>
-                          <a
                             href=""
+                            class="text-success"
+                            @click.prevent="deactivateTerminal(index)"><font-awesome-icon
+                              icon="power-off" /></a>
+                          <a
                             v-else
-                            @click.prevent="activateTerminal(index)"
+                            href=""
                             class="text-danger"
-                            ><font-awesome-icon icon="power-off"
-                          /></a>
+                            @click.prevent="activateTerminal(index)"><font-awesome-icon
+                              icon="power-off" /></a>
                         </td>
                         <td>
                           <router-link
                             :to="'/terminal/' + terminal.id + '/edit'"
-                            class="text-primary"
-                            ><font-awesome-icon icon="pen"
-                          /></router-link>
+                            class="text-primary">
+                            <font-awesome-icon
+                              icon="pen" />
+                          </router-link>
                         </td>
                         <td v-if="isAdmin">
                           <a
                             href=""
-                            @click.prevent="deleteTerminal(index)"
                             class="text-danger"
-                            ><font-awesome-icon icon="trash-alt"
-                          /></a>
+                            @click.prevent="deleteTerminal(index)"><font-awesome-icon
+                              icon="trash-alt" /></a>
                         </td>
                       </tr>
                     </tbody>
@@ -175,7 +190,7 @@
 <script>
 export default {
   name: "AllTerminals",
-  data: function() {
+  data: function () {
     return {
       terminals: {},
       errors: {
@@ -186,18 +201,18 @@ export default {
     };
   },
   computed: {
-    isAdmin: function() {
+    isAdmin: function () {
       return this.$store.getters.isAdmin;
     },
-    isCustomer: function() {
+    isCustomer: function () {
       return this.$store.getters.isCustomer;
     },
   },
-  mounted: function() {
+  mounted: function () {
     this.getTerminals();
   },
   methods: {
-    getTerminals: function() {
+    getTerminals: function () {
       let loader = this.$loading.show();
 
       this.$http
@@ -205,17 +220,18 @@ export default {
         .then((resp) => {
           this.terminals = resp.data;
         })
-        .catch(() => {
+        .catch((error) => {
           this.$toasted.global.error({
             message:
-              "Impossible de récupérer la liste des terminaux. Vérifier que le serveur est opérationnelle.",
+              "Impossible de récupérer la liste des terminaux.",
           });
+          throw error;
         })
         .finally(() => {
           loader.hide();
         });
     },
-    activateTerminal: function(index) {
+    activateTerminal: function (index) {
       if (
         this.terminals[index].campaigns.length > 0 &&
         this.terminals[index].games.length > 0
@@ -239,7 +255,7 @@ export default {
         });
       }
     },
-    deactivateTerminal: function(index) {
+    deactivateTerminal: function (index) {
       this.$http
         .get("terminal/" + this.terminals[index].id + "/deactivate/")
         .then((resp) => {
@@ -253,7 +269,7 @@ export default {
           };
         });
     },
-    deleteTerminal: function(index) {
+    deleteTerminal: function (index) {
       this.$http
         .get("terminal/" + this.terminals[index].id + "/archive/")
         .then(() => {

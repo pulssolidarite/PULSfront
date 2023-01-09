@@ -5,7 +5,9 @@
       <div class="row">
         <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">
           <div class="page-header">
-            <h2 class="pageheader-title">Mon espace</h2>
+            <h2 class="pageheader-title">
+              Mon espace
+            </h2>
             <div class="page-breadcrumb">
               <nav aria-label="breadcrumb">
                 <ol class="breadcrumb d-flex align-items-center">
@@ -17,8 +19,7 @@
                   <font-awesome-icon
                     icon="angle-right"
                     size="xs"
-                    class="mx-1"
-                  />
+                    class="mx-1" />
                   <li class="breadcrumb-item active" aria-current="page">
                     Mes informations
                   </li>
@@ -33,7 +34,9 @@
         <div class="row">
           <div class="col-12">
             <div class="card">
-              <h5 class="card-header">Mes informations</h5>
+              <h5 class="card-header">
+                Mes informations
+              </h5>
               <div class="card-body">
                 <table class="table">
                   <tbody>
@@ -45,7 +48,7 @@
                         {{ currentUser.username }}
                       </td>
                     </tr>
-                      <tr>
+                    <tr>
                       <td>
                         <strong>Mon email</strong>
                       </td>
@@ -53,14 +56,13 @@
                         {{ currentUser.email }}
                       </td>
                     </tr>
-                      <tr>
+                    <tr>
                       <td>
                         <strong>Mon mot de passe</strong>
                       </td>
-                      <td>
-                      </td>
+                      <td />
                     </tr>
-                      <tr>
+                    <tr>
                       <td>
                         <strong>Mon entreprise</strong>
                       </td>
@@ -68,7 +70,7 @@
                         {{ currentUser.customer.company }}
                       </td>
                     </tr>
-                      <tr>
+                    <tr>
                       <td>
                         <strong>Mon représentant</strong>
                       </td>
@@ -81,7 +83,9 @@
               </div>
             </div>
             <div class="card">
-              <h5 class="card-header">Mon logo</h5>
+              <h5 class="card-header">
+                Mon logo
+              </h5>
               <div class="card-body">
                 <form>
                   <div class="row">
@@ -92,21 +96,21 @@
                           width="200"
                           height="200"
                           style="object-fit: contain;"
-                          class="rounded border mx-auto my-3 d-block" />
+                          class="rounded border mx-auto my-3 d-block">
                         <div class="upload-btn-wrapper w-100 text-center ">
                           <button
+                            ref="text-logo"
                             type="button"
-                            class="btn btn-outline-danger btn-sm"
-                            ref="text-logo">
+                            class="btn btn-outline-danger btn-sm">
                             Ajouter une photo
                           </button>
                           <input
-                            type="file"
                             id="logo"
-                            name="logo"
                             ref="logo"
+                            type="file"
+                            name="logo"
                             required="required"
-                            @change="editLogo" />
+                            @change="editLogo">
                         </div>
                       </div>
                     </div>
@@ -115,7 +119,9 @@
               </div>
             </div>
             <div class="card">
-              <h5 class="card-header">Mes permissions</h5>
+              <h5 class="card-header">
+                Mes permissions
+              </h5>
               <div class="card-body">
                 <table class="table">
                   <tbody>
@@ -210,19 +216,19 @@ export default {
     },
   },
   methods: {
-    editLogo: function(e) {
+    editLogo: function (e) {
       if (this.currentUser.customer) {
         let loader = this.$loading.show();
 
         this.$refs["text-" + e.target.id].innerText = "Enregistrement...";
         this.$refs["text-" + e.target.id].classList.remove(
-          "btn-outline-danger"
+          "btn-outline-danger",
         );
         this.$refs["text-" + e.target.id].classList.add("btn-success");
         let form = new FormData();
         form.append("logo", this.$refs.logo.files[0]);
         this.$http
-          .patch("customer/" + this.currentUser.customer.id + '/', form, {
+          .patch("customer/" + this.currentUser.customer.id + "/", form, {
             headers: {
               "Content-Type": "multipart/form-data",
             },

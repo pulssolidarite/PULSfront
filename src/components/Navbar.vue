@@ -14,15 +14,15 @@
         aria-controls="navbarSupportedContent"
         aria-expanded="false"
         aria-label="Toggle navigation">
-        <span class="navbar-toggler-icon"></span>
+        <span class="navbar-toggler-icon" />
       </button>
-      <div class="collapse navbar-collapse " id="navbarSupportedContent">
+      <div id="navbarSupportedContent" class="collapse navbar-collapse ">
         <ul class="navbar-nav ml-auto navbar-right-top">
           <li class="nav-item dropdown nav-user">
             <a
+              id="navbarDropdownMenuLink2"
               class="nav-link nav-user-img"
               href="#"
-              id="navbarDropdownMenuLink2"
               data-toggle="dropdown"
               aria-haspopup="true"
               aria-expanded="false">
@@ -36,10 +36,12 @@
               class="dropdown-menu dropdown-menu-right nav-user-dropdown"
               aria-labelledby="navbarDropdownMenuLink2">
               <div class="nav-user-info">
-                <h5 class="mb-0 text-white nav-user-name">{{ username }}</h5>
+                <h5 class="mb-0 text-white nav-user-name">
+                  {{ username }}
+                </h5>
               </div>
               <a class="dropdown-item" href="#"><font-awesome-icon icon="cog" class="mr-2" />Réglages</a>
-              <a class="dropdown-item" href="#" @click.prevent="logout"><font-awesome-icon icon="power-off" class="mr-2"/>Déconnexion</a>
+              <a class="dropdown-item" href="#" @click.prevent="logout"><font-awesome-icon icon="power-off" class="mr-2" />Déconnexion</a>
             </div>
           </li>
         </ul>
@@ -52,22 +54,22 @@
 export default {
   name: "Navbar",
   computed: {
-    isLoggedIn: function() {
+    isLoggedIn: function () {
       return this.$store.getters.isLoggedIn;
     },
-    isAdmin: function() {
+    isAdmin: function () {
       return this.$store.getters.isAdmin;
     },
-    isCustomer: function() {
+    isCustomer: function () {
       return this.$store.getters.isCustomer;
     },
-    isTerminalOn: function() {
+    isTerminalOn: function () {
       return this.$store.state.currentTerminal.is_on;
     },
-    username: function() {
+    username: function () {
       return this.$store.getters.username;
     },
-    usernameInitial: function() {
+    usernameInitial: function () {
       if (this.username && this.username.length > 0) {
         return this.username[0].toUpperCase();
       }
@@ -76,7 +78,7 @@ export default {
     },
   },
   methods: {
-    logout: function() {
+    logout: function () {
       this.$store
         .dispatch("logout")
         .then((resp) => {

@@ -6,41 +6,46 @@
         <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">
           <div class="page-header">
             <div class="d-flex justify-content-between">
-              <h2 class="pageheader-title">Jeux</h2>
+              <h2 class="pageheader-title">
+                Jeux
+              </h2>
             </div>
             <div class="page-breadcrumb">
               <nav aria-label="breadcrumb">
                 <ol class="breadcrumb d-flex align-items-center">
                   <li class="breadcrumb-item">
-                    <router-link :to="{ name: 'home' }" class="breadcrumb-link"
-                      >Dashboard</router-link
-                    >
+                    <router-link
+                      :to="{ name: 'home' }"
+                      class="breadcrumb-link">
+                      Dashboard
+                    </router-link>
                   </li>
                   <font-awesome-icon
                     icon="angle-right"
                     size="xs"
-                    class="mx-1"
-                  />
+                    class="mx-1" />
                   <li class="breadcrumb-item">
-                    <router-link to="/games" class="breadcrumb-link"
-                      >Jeux</router-link
-                    >
+                    <router-link
+                      to="/games"
+                      class="breadcrumb-link">
+                      Jeux
+                    </router-link>
                   </li>
                   <font-awesome-icon
                     icon="angle-right"
                     size="xs"
-                    class="mx-1"
-                  />
+                    class="mx-1" />
                   <li class="breadcrumb-item" aria-current="page">
-                    <router-link :to="'/games'" class="breadcrumb-link">{{
-                      game.name
-                    }}</router-link>
+                    <router-link :to="'/games'" class="breadcrumb-link">
+                      {{
+                        game.name
+                      }}
+                    </router-link>
                   </li>
                   <font-awesome-icon
                     icon="angle-right"
                     size="xs"
-                    class="mx-1"
-                  />
+                    class="mx-1" />
                   <li class="breadcrumb-item active" aria-current="page">
                     Modifier
                   </li>
@@ -52,33 +57,34 @@
       </div>
 
       <Alert
+        v-if="errors.visible"
         :type="errors.type"
         :message="errors.message"
-        v-if="errors.visible"
-        @dismiss="errors.visible = false"
-      />
+        @dismiss="errors.visible = false" />
 
       <div class="row">
         <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">
           <div class="card">
             <div
-              class="card-header d-flex align-items-center justify-content-between"
-            >
-              <h5 class="mb-0">Modifier un jeu</h5>
+              class="card-header d-flex align-items-center justify-content-between">
+              <h5 class="mb-0">
+                Modifier un jeu
+              </h5>
             </div>
             <div class="card-body">
-              <h4 class="mb-0">Informations générales</h4>
+              <h4 class="mb-0">
+                Informations générales
+              </h4>
               <p>Les informations générales sur le jeu.</p>
               <form>
                 <div class="row">
                   <div class="form-group col">
                     <label for="name">Nom du jeu</label>
                     <input
+                      v-model="game.name"
                       type="text"
                       class="form-control"
-                      aria-describedby="nameHelp"
-                      v-model="game.name"
-                    />
+                      aria-describedby="nameHelp">
                   </div>
                 </div>
                 <div class="row">
@@ -86,15 +92,15 @@
                     <label for="name">Nom du fichier (rom)</label>
                     <div class="input-group mb-3">
                       <div class="input-group-prepend">
-                        <span class="input-group-text" id="basic-addon1"
-                          ><font-awesome-icon icon="file"
-                        /></span>
+                        <span
+                          id="basic-addon1"
+                          class="input-group-text"><font-awesome-icon
+                            icon="file" /></span>
                       </div>
                       <input
-                        type="text"
-                        class="form-control"
                         v-model="game.path"
-                      />
+                        type="text"
+                        class="form-control">
                     </div>
                   </div>
 
@@ -103,37 +109,34 @@
                     <v-select
                       v-model="game.core"
                       :options="cores"
-                      label="name"
-                    ></v-select>
+                      label="name" />
                   </div>
                 </div>
                 <div class="row">
                   <div class="form-group col">
                     <label for="description">Description</label>
                     <textarea
-                      class="form-control"
                       v-model="game.description"
-                      aria-describedby="descHelp"
-                    ></textarea>
-                    <small id="descHelp" class="form-text text-muted"
-                      >Une courte description du jeu.</small
-                    >
+                      class="form-control"
+                      aria-describedby="descHelp" />
+                    <small
+                      id="descHelp"
+                      class="form-text text-muted">Une courte description du jeu.</small>
                   </div>
                 </div>
                 <div class="row mb-2">
                   <div class="col-12 col-md-6">
                     <label for="name">Type de jeu</label>
-                    <v-select :options="types" v-model="game.type"></v-select>
+                    <v-select v-model="game.type" :options="types" />
                   </div>
                   <div class="col-12 col-md-6">
                     <label for="name">Nombre de joueurs</label>
                     <input
+                      v-model="game.nb_players"
                       type="number"
                       min="0"
                       class="form-control"
-                      aria-describedby="nameHelp"
-                      v-model="game.nb_players"
-                    />
+                      aria-describedby="nameHelp">
                   </div>
                 </div>
                 <div class="row">
@@ -143,29 +146,29 @@
                       <div class="input-group-prepend">
                         <div class="input-group-text">
                           <input
-                            type="checkbox"
-                            aria-label="Checkbox for following text input"
                             v-model="game.is_video"
-                          />
+                            type="checkbox"
+                            aria-label="Checkbox for following text input">
                         </div>
                       </div>
                       <input
-                        type="text"
-                        class="form-control"
                         v-model="game.video"
-                      />
+                        type="text"
+                        class="form-control">
                     </div>
-                    <small class="form-text text-muted"
-                      >Sélectionner la checkbox si vous voulez activer la vidéo
+                    <small class="form-text text-muted">
+                      Sélectionner la checkbox si vous voulez activer la vidéo
                       youtube. Insérer uniquement l'ID de la vidéo, non pas le
-                      lien en entier.</small
-                    >
+                      lien en entier.
+                    </small>
                   </div>
                 </div>
               </form>
             </div>
             <div class="card-body border-top">
-              <h4 class="mb-0">Contrôles</h4>
+              <h4 class="mb-0">
+                Contrôles
+              </h4>
               <p>
                 Indiquer les touches et autres contrôles utiles lors d'une
                 partie.
@@ -174,120 +177,108 @@
                 <div class="col-12 col-md-6">
                   <label for="name">Joystick haut</label>
                   <input
+                    v-model="game.j_up"
                     type="text"
                     class="form-control"
-                    aria-describedby="nameHelp"
-                    v-model="game.j_up"
-                  />
+                    aria-describedby="nameHelp">
                 </div>
                 <div class="col-12 col-md-6">
                   <label for="name">Joystick bas</label>
                   <input
+                    v-model="game.j_down"
                     type="text"
                     class="form-control"
-                    aria-describedby="nameHelp"
-                    v-model="game.j_down"
-                  />
+                    aria-describedby="nameHelp">
                 </div>
               </div>
               <div class="row mb-5">
                 <div class="col-12 col-md-6">
                   <label for="name">Joystick gauche</label>
                   <input
+                    v-model="game.j_right"
                     type="text"
                     class="form-control"
-                    aria-describedby="nameHelp"
-                    v-model="game.j_right"
-                  />
+                    aria-describedby="nameHelp">
                 </div>
                 <div class="col-12 col-md-6">
                   <label for="name">Joystick droite</label>
                   <input
+                    v-model="game.j_left"
                     type="text"
                     class="form-control"
-                    aria-describedby="nameHelp"
-                    v-model="game.j_left"
-                  />
+                    aria-describedby="nameHelp">
                 </div>
               </div>
               <div class="row mb-3">
                 <div class="col-12 col-md-6">
                   <label for="name">Bouton X</label>
                   <input
+                    v-model="game.btn_x"
                     type="text"
                     class="form-control"
-                    aria-describedby="nameHelp"
-                    v-model="game.btn_x"
-                  />
+                    aria-describedby="nameHelp">
                 </div>
                 <div class="col-12 col-md-6">
                   <label for="name">Bouton Y</label>
                   <input
+                    v-model="game.btn_y"
                     type="text"
                     class="form-control"
-                    aria-describedby="nameHelp"
-                    v-model="game.btn_y"
-                  />
+                    aria-describedby="nameHelp">
                 </div>
               </div>
               <div class="row mb-3">
                 <div class="col-12 col-md-6">
                   <label for="name">Bouton A</label>
                   <input
+                    v-model="game.btn_a"
                     type="text"
                     class="form-control"
-                    aria-describedby="nameHelp"
-                    v-model="game.btn_a"
-                  />
+                    aria-describedby="nameHelp">
                 </div>
                 <div class="col-12 col-md-6">
                   <label for="name">Bouton B</label>
                   <input
+                    v-model="game.btn_b"
                     type="text"
                     class="form-control"
-                    aria-describedby="nameHelp"
-                    v-model="game.btn_b"
-                  />
+                    aria-describedby="nameHelp">
                 </div>
               </div>
               <div class="row mb-5">
                 <div class="col-12 col-md-6">
                   <label for="name">Bouton L</label>
                   <input
+                    v-model="game.btn_l"
                     type="text"
                     class="form-control"
-                    aria-describedby="nameHelp"
-                    v-model="game.btn_l"
-                  />
+                    aria-describedby="nameHelp">
                 </div>
                 <div class="col-12 col-md-6">
                   <label for="name">Bouton R</label>
                   <input
+                    v-model="game.btn_r"
                     type="text"
                     class="form-control"
-                    aria-describedby="nameHelp"
-                    v-model="game.btn_r"
-                  />
+                    aria-describedby="nameHelp">
                 </div>
               </div>
               <div class="row">
                 <div class="col-12 col-md-6">
                   <label for="name">Bouton Start</label>
                   <input
+                    v-model="game.btn_start"
                     type="text"
                     class="form-control"
-                    aria-describedby="nameHelp"
-                    v-model="game.btn_start"
-                  />
+                    aria-describedby="nameHelp">
                 </div>
                 <div class="col-12 col-md-6">
                   <label for="name">Bouton Select</label>
                   <input
+                    v-model="game.btn_select"
                     type="text"
                     class="form-control"
-                    aria-describedby="nameHelp"
-                    v-model="game.btn_select"
-                  />
+                    aria-describedby="nameHelp">
                 </div>
               </div>
             </div>
@@ -297,7 +288,9 @@
               </button>
             </div>
             <div class="card-body border-top">
-              <h4 class="mb-0">Médias</h4>
+              <h4 class="mb-0">
+                Médias
+              </h4>
               <p>
                 Il est important de compresser les images au maximum avant de
                 les uploader.
@@ -310,25 +303,21 @@
                       <a
                         v-if="game.file"
                         class="border d-flex p-2 text-center mb-3"
-                        :href="game.file.file"
-                        >Lien vers le fichier</a
-                      >
+                        :href="game.file.file">Lien vers le fichier</a>
                       <div class="upload-btn-wrapper w-100 text-center ">
                         <button
-                          type="button"
-                          class="btn btn-outline-danger btn-sm"
                           ref="text-romFile"
-                        >
+                          type="button"
+                          class="btn btn-outline-danger btn-sm">
                           Ajouter un fichier ROM
                         </button>
                         <input
-                          type="file"
                           id="file"
-                          name="file"
                           ref="romFile"
+                          type="file"
+                          name="file"
                           required="required"
-                          @change="editRom"
-                        />
+                          @change="editRom">
                       </div>
                     </div>
                   </div>
@@ -343,24 +332,21 @@
                         width="200"
                         height="200"
                         style="object-fit: contain;"
-                        class="rounded border mx-auto my-3 d-block"
-                      />
+                        class="rounded border mx-auto my-3 d-block">
                       <div class="upload-btn-wrapper w-100 text-center ">
                         <button
-                          type="button"
-                          class="btn btn-outline-danger btn-sm"
                           ref="text-logo"
-                        >
+                          type="button"
+                          class="btn btn-outline-danger btn-sm">
                           Ajouter une photo
                         </button>
                         <input
-                          type="file"
                           id="logo"
-                          name="logo"
                           ref="logo"
+                          type="file"
+                          name="logo"
                           required="required"
-                          @change="editLogo"
-                        />
+                          @change="editLogo">
                       </div>
                     </div>
                   </div>
@@ -375,24 +361,21 @@
                         width="740"
                         height="350"
                         style="object-fit: contain;"
-                        class="rounded border mx-auto my-3 d-block"
-                      />
+                        class="rounded border mx-auto my-3 d-block">
                       <div class="upload-btn-wrapper w-100 text-center ">
                         <button
-                          type="button"
-                          class="btn btn-outline-danger btn-sm"
                           ref="text-cover"
-                        >
+                          type="button"
+                          class="btn btn-outline-danger btn-sm">
                           Ajouter une photo
                         </button>
                         <input
-                          type="file"
                           id="cover"
-                          name="cover"
                           ref="cover"
+                          type="file"
+                          name="cover"
                           required="required"
-                          @change="editCover"
-                        />
+                          @change="editCover">
                       </div>
                     </div>
                   </div>
@@ -409,7 +392,7 @@
 <script>
 export default {
   name: "EditGame",
-  data: function() {
+  data: function () {
     return {
       game: {},
       cores: [],
@@ -421,12 +404,12 @@ export default {
       },
     };
   },
-  mounted: function() {
+  mounted: function () {
     this.getGame();
     this.getCores();
   },
   methods: {
-    getCores: function() {
+    getCores: function () {
       let loader = this.$loading.show();
 
       this.$http
@@ -460,7 +443,7 @@ export default {
           loader.hide();
         });
     },
-    editRom: function(e) {
+    editRom: function (e) {
       let loader = this.$loading.show();
       this.$refs["text-romFile"].innerText = "Enregistrement...";
       this.$refs["text-romFile"].classList.remove("btn-outline-danger");
@@ -498,13 +481,13 @@ export default {
           loader.hide();
         });
     },
-    editLogo: function(e) {
+    editLogo: function (e) {
       if (this.game) {
         let loader = this.$loading.show();
 
         this.$refs["text-" + e.target.id].innerText = "Enregistrement...";
         this.$refs["text-" + e.target.id].classList.remove(
-          "btn-outline-danger"
+          "btn-outline-danger",
         );
         this.$refs["text-" + e.target.id].classList.add("btn-success");
         let form = new FormData();
@@ -524,13 +507,13 @@ export default {
           });
       }
     },
-    editCover: function(e) {
+    editCover: function (e) {
       if (this.game) {
         let loader = this.$loading.show();
 
         this.$refs["text-" + e.target.id].innerText = "Enregistrement...";
         this.$refs["text-" + e.target.id].classList.remove(
-          "btn-outline-danger"
+          "btn-outline-danger",
         );
         this.$refs["text-" + e.target.id].classList.add("btn-success");
         let form = new FormData();
@@ -550,7 +533,7 @@ export default {
           });
       }
     },
-    edit: function() {
+    edit: function () {
       if (this.game) {
         let form = new FormData();
         form.append("name", this.game.name);
