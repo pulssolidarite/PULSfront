@@ -74,6 +74,9 @@
                           #
                         </th>
                         <th class="border-0">
+                          Version
+                        </th>
+                        <th class="border-0">
                           Actif
                         </th>
                         <th class="border-0">
@@ -100,6 +103,7 @@
                     <tbody>
                       <tr v-for="(terminal, index) in terminals" :key="index">
                         <td>{{ terminal.id }}</td>
+                        <td>{{ terminal.version }}</td>
                         <td>
                           <span v-if="terminal.is_active" class="text-success">Activé</span>
                           <span v-else class="text-danger">Désactivé</span>
@@ -174,6 +178,16 @@
                             @click.prevent="deleteTerminal(index)"><font-awesome-icon
                               icon="trash-alt" /></a>
                         </td>
+                        <td v-if="isAdmin">
+                          <a
+                            href=""
+                            class="text-primary"
+                            :disabled="terminal.check_for_updates"
+                            @click.prevent="checkForUpdates(index)">
+                            <i v-if="terminal.check_for_updates" class="bi bi-hourglass" />
+                            <i v-else class="bi bi-arrow-counterclockwise" />
+                          </a>
+                        </td>
                       </tr>
                     </tbody>
                   </table>
@@ -216,7 +230,7 @@ export default {
       let loader = this.$loading.show();
 
       this.$http
-        .get("terminal/")
+        .get("terminals/")
         .then((resp) => {
           this.terminals = resp.data;
         })
@@ -237,7 +251,7 @@ export default {
         this.terminals[index].games.length > 0
       ) {
         this.$http
-          .get("terminal/" + this.terminals[index].id + "/activate/")
+          .post("terminals/" + this.terminals[index].id + "/activate/")
           .then((resp) => {
             this.$set(this.terminals[index], "is_active", resp.data.is_active);
             this.$toasted.global.success({
@@ -257,7 +271,7 @@ export default {
     },
     deactivateTerminal: function (index) {
       this.$http
-        .get("terminal/" + this.terminals[index].id + "/deactivate/")
+        .post("terminals/" + this.terminals[index].id + "/deactivate/")
         .then((resp) => {
           this.$set(this.terminals[index], "is_active", resp.data.is_active);
         })
@@ -271,7 +285,7 @@ export default {
     },
     deleteTerminal: function (index) {
       this.$http
-        .get("terminal/" + this.terminals[index].id + "/archive/")
+        .post("terminals/" + this.terminals[index].id + "/archive/")
         .then(() => {
           this.$delete(this.terminals, index);
           this.$toasted.global.success({
@@ -282,6 +296,22 @@ export default {
           this.$toasted.global.error({
             message: "Impossible d'archiver ce terminal.",
           });
+        });
+    },
+    checkForUpdates: function (index) {
+      this.$http
+        .post("terminals/" + this.terminals[index].id + "/check_for_updates/")
+        .then(() => {
+          this.$set(this.terminals[index], "check_for_updates", resp.data.check_for_updates);
+          this.$toasted.global.success({
+            message: "Vérification des mises à jour programmée",
+          });
+        })
+        .catch((error) => {
+          this.$toasted.global.error({
+            message: "Impossible de programmer la vérification des mises à jour",
+          });
+          throw error;
         });
     },
   },

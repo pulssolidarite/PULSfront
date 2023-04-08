@@ -218,11 +218,12 @@
 </template>
 
 <script>
+
 export default {
   name: "EditClient",
   data: function () {
     return {
-      customer: null,
+      customer: {},
       errors: {
         visible: false,
         type: "danger",
