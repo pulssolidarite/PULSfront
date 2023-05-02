@@ -67,11 +67,11 @@
               </p>
               <select v-model="choosenCustomer" class="custom-select mb-2">
                 <option
-                  v-for="customer in customers"
-                  :key="customer.id"
-                  :value="customer">
-                  {{ customer.company }} -
-                  {{ customer.representative }}
+                  v-for="_customer in customers"
+                  :key="_customer.id"
+                  :value="_customer">
+                  {{ _customer.company }} -
+                  {{ _customer.representative }}
                 </option>
               </select>
               <button
@@ -493,7 +493,19 @@ export default {
   },
   computed: {
     isValid() {
-      return this.terminal.donation_share > 0 && this.terminal.donation_share <= 50;
+      if (this.user == null || this.user.username == null || this.user.password == null) {
+        return false;
+      }
+
+      if (this.terminal == null || this.terminal.name == null) {
+        return false;
+      }
+
+      if (this.terminal.donation_formula == "Partage") {
+        return this.terminal.donation_share > 0 && this.terminal.donation_share <= 50;
+      }
+
+      return true;
     },
   },
   mounted: function () {
@@ -604,13 +616,13 @@ export default {
     },
     addTerminal: function () {
       if (this.choosenCustomer.id && this.customer.id) {
-        this.user.customer = this.customer.id;
+        this.terminal.customer_id = this.customer.id;
         this.$http
           .post("user/", this.user)
           .then((resp) => {
             if (resp) {
               this.user = resp.data;
-              this.terminal.owner = this.user.id;
+              this.terminal.owner_id = this.user.id;
 
               this.$http
                 .post("terminal/", this.terminal)
@@ -659,7 +671,7 @@ export default {
               .post("user/", this.user)
               .then((resp) => {
                 this.user = resp.data;
-                this.terminal.owner = this.user.id;
+                this.terminal.owner_id = this.user.id;
                 this.$http
                   .post("terminal/", this.terminal)
                   .then((resp) => {
