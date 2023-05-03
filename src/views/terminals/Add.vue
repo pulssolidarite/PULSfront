@@ -199,7 +199,7 @@
                           icon="user" /></span>
                       </div>
                       <input
-                        v-model="user.username"
+                        v-model="terminal.owner.username"
                         type="text"
                         class="form-control">
                     </div>
@@ -215,7 +215,7 @@
                           icon="lock" /></span>
                       </div>
                       <input
-                        v-model="user.password"
+                        v-model="terminal.owner.password"
                         type="password"
                         class="form-control">
                     </div>
@@ -473,12 +473,15 @@ export default {
     return {
       choosenCustomer: {},
       customer: {},
-      user: {},
       terminal: {
         campaigns: [],
         games: [],
         payment_terminal: null,
         donation_formula: "Classique",
+        owner: {
+          username: null,
+          password: null,
+        },
       },
       formVisible: false,
       customers: {},
@@ -493,11 +496,7 @@ export default {
   },
   computed: {
     isValid() {
-      if (this.user == null || this.user.username == null || this.user.password == null) {
-        return false;
-      }
-
-      if (this.terminal == null || this.terminal.name == null) {
+      if (this.terminal == null || this.terminal.name == null || this.terminal.owner == null || this.terminal.owner.username == null || this.terminal.owner.password == null) {
         return false;
       }
 
@@ -615,95 +614,37 @@ export default {
       this.formVisible = false;
     },
     addTerminal: function () {
-      if (this.choosenCustomer.id && this.customer.id) {
-        this.terminal.customer_id = this.customer.id;
-        this.$http
-          .post("user/", this.user)
-          .then((resp) => {
-            if (resp) {
-              this.user = resp.data;
-              this.terminal.owner_id = this.user.id;
+      const body = {
+        ...this.terminal,
+      };
 
-              this.$http
-                .post("terminal/", this.terminal)
-                .then((resp) => {
-                  this.terminal = resp.data;
-                  this.$toasted.global.success({
-                    message: "Le terminal a bien été ajouté.",
-                  });
-                  this.$router.push("/terminals");
-                })
-                .catch((err) => {
-                  if (err.response.data) {
-                    Object.values(err.response.data).forEach((element) => {
-                      this.$toasted.global.error({ message: element });
-                    });
-                  } else {
-                    this.$toasted.global.error({
-                      message: "Erreur dans l'enregistrement du terminal.",
-                    });
-                  }
+      if (this.customer.id) {
+        body.customer_id = this.customer.id;
 
-                  // We also delete the newly created user
-                  this.$http.delete("user/" + this.user.id + "/").catch(() => {
-                    this.$toasted.global.error({
-                      message:
-                        "Impossible de supprimer l'utilisateur tout juste créé. Vérifiez si le serveur est opérationnelle.",
-                    });
-                  });
-                });
-            }
-          })
-          .catch((err) => {
-            if (err.response.data) {
-              Object.values(err.response.data).forEach((element) => {
-                this.$toasted.global.error({ message: element });
-              });
-            }
-          });
-      } else if (this.customer && this.user && this.terminal) {
-        this.$http
-          .post("customer/", this.customer)
-          .then((resp) => {
-            this.customer = resp.data;
-            this.user.customer = this.customer.id;
-            this.$http
-              .post("user/", this.user)
-              .then((resp) => {
-                this.user = resp.data;
-                this.terminal.owner_id = this.user.id;
-                this.$http
-                  .post("terminal/", this.terminal)
-                  .then((resp) => {
-                    this.terminal = resp.data;
-                    this.$router.push({
-                      name: "terminals",
-                    });
-                  })
-                  .catch(() => {
-                    this.errors = {
-                      visible: true,
-                      type: "danger",
-                      message: "Erreur dans l'enregistrement du terminal.",
-                    };
-                  });
-              })
-              .catch(() => {
-                this.errors = {
-                  visible: true,
-                  type: "danger",
-                  message: "Erreur dans l'enregistrement de l'utilisateur.",
-                };
-              });
-          })
-          .catch(() => {
-            this.errors = {
-              visible: true,
-              type: "danger",
-              message: "Erreur dans l'enregistrement du client.",
-            };
-          });
+      } else {
+        body.customer = this.customer;
       }
+
+      this.$http
+        .post("terminal/", body)
+
+        .then((resp) => {
+          this.terminal = resp.data;
+          this.$toasted.global.success({
+            message: "Le terminal a bien été ajouté.",
+          });
+          this.$router.push("/terminals");
+        })
+
+        .catch((err) => {
+          this.errors = {
+            visible: true,
+            type: "danger",
+            message: "Erreur dans l'enregistrement du terminal.",
+          };
+
+          throw err;
+        });
     },
   },
 };
