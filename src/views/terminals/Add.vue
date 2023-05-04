@@ -138,44 +138,6 @@
                       :disabled="choosenCustomer.representative">
                   </div>
                 </div>
-                <div class="row">
-                  <div class="form-group col-md-6 col-12">
-                    <label for="sales_type">Type de vente</label>
-                    <select
-                      v-model="customer.sales_type"
-                      class="custom-select"
-                      :disabled="choosenCustomer.sales_type">
-                      <option
-                        value="A"
-                        :checked="customer.sales_type == 'A'">
-                        Achat
-                      </option>
-                      <option
-                        value="L"
-                        :checked="customer.sales_type == 'L'">
-                        Location
-                      </option>
-                    </select>
-                  </div>
-                  <div class="form-group col-md-6 col-12">
-                    <label for="sales_type">Contrat de maintenance</label>
-                    <select
-                      v-model="customer.maintenance_type"
-                      class="custom-select"
-                      :disabled="choosenCustomer.maintenance_type">
-                      <option
-                        value="option1"
-                        :checked="customer.sales_type == 'option1'">
-                        Option 1
-                      </option>
-                      <option
-                        value="option2"
-                        :checked="customer.sales_type == 'option2'">
-                        Option 2
-                      </option>
-                    </select>
-                  </div>
-                </div>
               </form>
             </div>
             <div class="card-body border-top">
@@ -482,6 +444,10 @@ export default {
           username: null,
           password: null,
         },
+        play_timer: 10,
+        donation_min_amount: 1,
+        donation_default_amount: 1,
+        donation_max_amount: 1,
       },
       formVisible: false,
       customers: {},
@@ -496,7 +462,7 @@ export default {
   },
   computed: {
     isValid() {
-      if (this.terminal == null || this.terminal.name == null || this.terminal.owner == null || this.terminal.owner.username == null || this.terminal.owner.password == null) {
+      if (this.terminal == null || this.terminal.name == null || this.terminal.owner == null || this.terminal.owner.username == null || this.terminal.owner.password == null || this.terminal.payment_terminal == null) {
         return false;
       }
 

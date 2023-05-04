@@ -361,7 +361,7 @@
             <tbody v-if="payments.length > 0">
               <tr v-for="(payment, index) in payments" :key="index">
                 <td>{{ payment.id }}</td>
-                <td>{{ payment.date }}</td>
+                <td>{{ isoDatetimeToLocalHumanizedDatetime(payment.date) }}</td>
                 <td>
                   <span
                     v-if="payment.status == 'Accepted'"
@@ -635,6 +635,22 @@ export default {
     nextPage() {
       this.page++;
       this.fetchPayments();
+    },
+    isoDatetimeToLocalHumanizedDatetime(datetime) {
+      const date = new Date(datetime);
+
+      // Format the date and time to display
+      const options = { 
+        year: "numeric", 
+        month: "short", 
+        day: "numeric", 
+        hour: "numeric", 
+        minute: "numeric", 
+        second: "numeric", 
+        timeZoneName: "short", 
+      };
+
+      return date.toLocaleDateString("fr-FR", options);
     },
   },
 };
