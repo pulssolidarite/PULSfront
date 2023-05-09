@@ -493,6 +493,8 @@ export default {
     },
     submit: function () {
       if (this.terminal) {
+        let loader = this.$loading.show();
+
         const submittedTerminal = {
           campaigns: this.terminal.campaigns,
           games: this.terminal.games,
@@ -521,6 +523,9 @@ export default {
               message: "Erreur lors de l'enregistrement de vos modifications",
             });
             throw err;
+          })
+          .finally(() => {
+            loader.hide();
           });
       }
     },
