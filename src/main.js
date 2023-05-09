@@ -119,7 +119,7 @@ Vue.config.productionTip = false;
 // Axios stuff
 const baseURL = process.env.VUE_APP_SERVER_URL;
 
-console.log("VUE_APP_SERVER_URL", baseURL);
+console.log("Env", process.env);
 
 axios.defaults.baseURL = baseURL;
 Vue.prototype.$http = axios;
