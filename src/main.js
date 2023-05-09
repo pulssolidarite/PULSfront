@@ -117,11 +117,9 @@ Vue.use(VueProgressBar, {
 Vue.config.productionTip = false;
 
 // Axios stuff
-const baseURL = process.env.VUE_APP_SERVER_URL;
-//const baseURL = "http://localhost:8000";
+const baseURL = process.env.SERVER_URL; // Defined in Heroku environment with command : heroku config:set SERVER_URL=https://puls-back-preprod.herokuapp.com/ --app puls-front-preprod
 
-
-console.log("debug", process.env);
+console.log("Env", process.env);
 
 axios.defaults.baseURL = baseURL;
 Vue.prototype.$http = axios;
