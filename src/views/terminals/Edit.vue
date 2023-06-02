@@ -493,20 +493,25 @@ export default {
     },
     submit: function () {
       if (this.terminal) {
-        let sentTerminal = { ...this.terminal };
+        let loader = this.$loading.show();
 
-        // Rearranging data for serializer reasons
-        delete sentTerminal.payments;
-        delete sentTerminal.avg_gametimesession;
-        delete sentTerminal.avg_timesession;
-        delete sentTerminal.avg_donation;
-        delete sentTerminal.total_donations;
-
-        sentTerminal.owner = sentTerminal.owner.id;
-        sentTerminal.customer = sentTerminal.customer.id;
+        const submittedTerminal = {
+          campaigns: this.terminal.campaigns,
+          games: this.terminal.games,
+          donation_default_amount: this.terminal.donation_default_amount,
+          donation_formula: this.terminal.donation_formula,
+          donation_max_amount: this.terminal.donation_max_amount,
+          donation_min_amount: this.terminal.donation_min_amount,
+          donation_share: this.terminal.donation_share,
+          free_mode_text: this.terminal.free_mode_text,
+          location: this.terminal.location,
+          name: this.terminal.name,
+          payment_terminal: this.terminal.payment_terminal,
+          play_timer: this.terminal.play_timer,
+        };
 
         this.$http
-          .put("terminal/" + sentTerminal.id + "/", sentTerminal)
+          .patch("terminal/" + this.terminal.id + "/", submittedTerminal)
           .then(() => {
             this.getTerminal();
             this.$toasted.global.success({
@@ -518,6 +523,9 @@ export default {
               message: "Erreur lors de l'enregistrement de vos modifications",
             });
             throw err;
+          })
+          .finally(() => {
+            loader.hide();
           });
       }
     },

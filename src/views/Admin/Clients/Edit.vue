@@ -7,7 +7,7 @@
           <div class="page-header">
             <div class="d-flex justify-content-between">
               <h2 class="pageheader-title">
-                Terminaux
+                Clients
               </h2>
             </div>
             <div class="page-breadcrumb">
@@ -26,9 +26,9 @@
                     class="mx-1" />
                   <li class="breadcrumb-item">
                     <router-link
-                      to="/terminals"
+                      to="/clients"
                       class="breadcrumb-link">
-                      Terminaux
+                      Clients
                     </router-link>
                   </li>
                   <font-awesome-icon
@@ -36,7 +36,7 @@
                     size="xs"
                     class="mx-1" />
                   <li class="breadcrumb-item active" aria-current="page">
-                    Ajouter un terminal
+                    Modifier un client
                   </li>
                 </ol>
               </nav>
@@ -218,11 +218,12 @@
 </template>
 
 <script>
+
 export default {
   name: "EditClient",
   data: function () {
     return {
-      customer: null,
+      customer: {},
       errors: {
         visible: false,
         type: "danger",

@@ -264,6 +264,34 @@
             </div>
             <div class="card-body border-top">
               <h4 class="mb-0">
+                Scriptes
+              </h4>
+              <div class="row mb-3">
+                <div class="form-group col">
+                  <label for="installation_script">Script d'installation</label>
+                  <input
+                    v-model="game.installation_script"
+                    type="text"
+                    class="form-control">
+                </div>
+                <div class="form-group col">
+                  <label for="execution_script">Script d'exécution</label>
+                  <input
+                    v-model="game.execution_script"
+                    type="text"
+                    class="form-control">
+                </div>
+                <div class="form-group col">
+                  <label for="kill_script">Script d'arrêt</label>
+                  <input
+                    v-model="game.kill_script"
+                    type="text"
+                    class="form-control">
+                </div>
+              </div>
+            </div>
+            <div class="card-body border-top">
+              <h4 class="mb-0">
                 Médias
               </h4>
               <p>
@@ -448,6 +476,10 @@ export default {
           form.append("btn_select", this.game.btn_select);
           form.append("type", this.game.type);
           form.append("nb_players", this.game.nb_players);
+          form.append("installation_script", this.game.installation_script);
+          form.append("execution_script", this.game.execution_script);
+          form.append("kill_script", this.game.kill_script);
+
           this.$http
             .post("games/", form, {
               headers: {

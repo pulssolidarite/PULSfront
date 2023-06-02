@@ -17,6 +17,17 @@ import "vue-loading-overlay/dist/vue-loading.css";
 import { library } from "@fortawesome/fontawesome-svg-core";
 import setServices from "@/services";
 
+
+// Import Geobootstrap icons
+
+// We are using this lib : https://icons.getbootstrap.com/
+// Install with npm i bootstrap-icons
+// Then import css :
+import "bootstrap-icons/font/bootstrap-icons.css";
+// Then display icons like explained in this doc : https://icons.getbootstrap.com/#usage
+
+
+
 import {
   faUserSecret,
   faPen,
@@ -46,8 +57,8 @@ import {
   faUndo,
   faLock,
   faClock,
-} from "@fortawesome/free-solid-svg-icons";
-import { FontAwesomeIcon } from "@fortawesome/vue-fontawesome";
+} from "@fortawesome/free-solid-svg-icons"; // Remove
+import { FontAwesomeIcon } from "@fortawesome/vue-fontawesome"; // Remove
 import Alert from "@/components/Alert.vue";
 require("./assets/admin/vendor/bootstrap/css/bootstrap.min.css");
 require("./assets/admin/vendor/fonts/circular-std/style.css");
@@ -88,8 +99,8 @@ library.add(
   faUndo,
   faLock,
   faClock,
-);
-Vue.component("FontAwesomeIcon", FontAwesomeIcon);
+); // Remove
+Vue.component("FontAwesomeIcon", FontAwesomeIcon); // Remove
 
 // Adding error handling component
 Vue.component("Alert", Alert);
@@ -107,10 +118,8 @@ Vue.config.productionTip = false;
 
 // Axios stuff
 const baseURL = process.env.VUE_APP_SERVER_URL;
-//const baseURL = "http://localhost:8000";
 
-
-console.log("debug", process.env);
+console.log("Env", process.env);
 
 axios.defaults.baseURL = baseURL;
 Vue.prototype.$http = axios;
