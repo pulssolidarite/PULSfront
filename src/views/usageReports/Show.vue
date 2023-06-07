@@ -520,7 +520,7 @@ export default {
     this.fetchPayments();
   },
   methods: {
-    resetAllFilters(event) {
+    resetAllFilters() {
       this.filters = {
         campaign: null,
         terminal: null,
