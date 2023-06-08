@@ -368,6 +368,7 @@ export default {
         btn_r: "Rien",
         btn_start: "Start",
         btn_select: "Select",
+        nb_players: 1,
       },
       file: {},
       cores: [],
@@ -438,10 +439,11 @@ export default {
         .then((resp) => {
           this.game.file = resp.data;
         })
-        .catch(() => {
+        .catch((error) => {
           this.$toasted.global.error({
             message: "Impossible d'uploader le fichier.",
           });
+          throw error;
         })
         .finally(() => {
           loader.hide();
@@ -454,8 +456,8 @@ export default {
       if (this.game.core) {form.append("core", this.game.core.id);};
       form.append("file", this.game.file.id);
       form.append("description", this.game.description);
-      form.append("logo", this.$refs.logo.files[0]);
-      form.append("cover", this.$refs.cover.files[0]);
+      if (this.$refs.logo.files) {form.append("logo", this.$refs.logo.files[0]);};
+      if (this.$refs.cover.files) {form.append("cover", this.$refs.cover.files[0]);};
       form.append("is_video", this.game.is_video);
       form.append("j_up", this.game.j_up);
       form.append("j_down", this.game.j_down);
