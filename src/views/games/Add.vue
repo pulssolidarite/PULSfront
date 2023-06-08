@@ -368,7 +368,6 @@ export default {
         btn_r: "Rien",
         btn_start: "Start",
         btn_select: "Select",
-        nb_players: 1,
       },
       file: {},
       cores: [],
@@ -471,10 +470,10 @@ export default {
       form.append("btn_r", this.game.btn_r);
       form.append("btn_start", this.game.btn_start);
       form.append("btn_select", this.game.btn_select);
-      form.append("type", this.game.type);
-      form.append("nb_players", this.game.nb_players);
-      form.append("installation_script", this.game.installation_script);
-      form.append("execution_script", this.game.execution_script);
+      if (this.game.type) {form.append("type", this.game.type);};
+      if (this.game.nb_players != null) {form.append("nb_players", this.game.nb_players);};
+      if (this.game.installation_script) {form.append("installation_script", this.game.installation_script);};
+      if (this.game.execution_script) {form.append("execution_script", this.game.execution_script);};
 
       this.$http
         .post("games/", form, {
