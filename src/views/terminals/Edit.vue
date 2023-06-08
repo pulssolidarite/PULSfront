@@ -448,7 +448,7 @@ export default {
     },
     getTerminal: function () {
       this.$http
-        .get("terminal/" + this.$route.params.id + "/")
+        .get("terminals/" + this.$route.params.id + "/")
         .then((resp) => {
           this.terminal = resp.data;
         })

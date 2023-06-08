@@ -124,7 +124,7 @@ export default {
   methods: {
     getTerminals() {
       this.$http
-        .get("terminal/")
+        .get("terminals/")
         .then((resp) => {
           this.terminals = resp.data;
         })

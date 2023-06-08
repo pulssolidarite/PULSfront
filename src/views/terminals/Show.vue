@@ -462,7 +462,7 @@ export default {
       let loader = this.$loading.show();
 
       this.$http
-        .get("terminal/" + this.$route.params.id + "/")
+        .get("terminals/" + this.$route.params.id + "/")
         .then(resp => {
           this.terminal = resp.data;
           this.terminal.avg_donation = resp.data.avg_donation;
@@ -504,7 +504,7 @@ export default {
         this.terminal.games.length > 0
       ) {
         this.$http
-          .get("terminal/" + id + "/activate/")
+          .get("terminals/" + id + "/activate/")
           .then(resp => {
             this.$set(this.terminal, "is_active", resp.data.is_active);
           })
@@ -525,7 +525,7 @@ export default {
     },
     deactivateTerminal: function (id) {
       this.$http
-        .get("terminal/" + id + "/deactivate/")
+        .get("terminals/" + id + "/deactivate/")
         .then(resp => {
           this.$set(this.terminal, "is_active", resp.data.is_active);
         })

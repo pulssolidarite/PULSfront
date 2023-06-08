@@ -59,140 +59,201 @@
         @dismiss="errors.visible = false" />
 
       <div class="ecommerce-widget">
-        <div class="row">
-          <div class="col-12">
-            <div class="card">
-              <h5 class="card-header">
-                Terminaux
-              </h5>
-              <div class="card-body p-0">
-                <div class="table-responsive">
-                  <table class="table">
-                    <thead class="bg-light">
-                      <tr class="border-0">
-                        <th class="border-0">
-                          #
-                        </th>
-                        <th class="border-0">
-                          Version
-                        </th>
-                        <th class="border-0">
-                          Actif
-                        </th>
-                        <th class="border-0">
-                          Status
-                        </th>
-                        <th class="border-0">
-                          Nom
-                        </th>
-                        <th class="border-0">
-                          Client
-                        </th>
-                        <th class="border-0">
-                          Campagnes
-                        </th>
-                        <th class="border-0">
-                          Total dons
-                        </th>
-                        <th class="border-0" />
-                        <th class="border-0" />
-                        <th class="border-0" />
-                        <th v-if="isAdmin" class="border-0" />
-                      </tr>
-                    </thead>
-                    <tbody>
-                      <tr v-for="(terminal, index) in terminals" :key="index">
-                        <td>{{ terminal.id }}</td>
-                        <td>{{ terminal.version }}</td>
-                        <td>
-                          <span v-if="terminal.is_active" class="text-success">Activé</span>
-                          <span v-else class="text-danger">Désactivé</span>
-                        </td>
-                        <td>
-                          <span v-if="terminal.is_playing">
-                            <span class="badge-dot badge-success mr-1" />En jeu
-                          </span>
-                          <span v-else-if="terminal.is_on">
-                            <span class="badge-dot badge-warning mr-1" />Allumé
-                          </span>
-                          <span v-else>
-                            <span class="badge-dot badge-danger mr-1" />Eteint
-                          </span>
-                        </td>
-                        <td>{{ terminal.name }}</td>
-                        <td>
-                          <router-link to="/clients">
-                            {{
-                              terminal.customer.company
-                            }}
-                          </router-link>
-                        </td>
-                        <td>
-                          <span
-                            v-for="(campaign, index) in terminal.campaigns"
-                            :key="index"
-                            class="border border-primary p-1 small rounded mr-1"><router-link :to="'/campaigns/' + campaign.id">{{
-                              campaign.name
-                            }}</router-link></span>
-                        </td>
-                        <td v-if="terminal.total_donations">
-                          {{ terminal.total_donations }} €
-                        </td>
-                        <td v-else>
-                          0 €
-                        </td>
-                        <td>
-                          <router-link
-                            :to="'/terminals/' + terminal.id"
-                            class="text-dark">
-                            <font-awesome-icon
-                              icon="eye" />
-                          </router-link>
-                        </td>
-                        <td>
-                          <a
-                            v-if="terminal.is_active"
-                            href=""
-                            class="text-success"
-                            @click.prevent="deactivateTerminal(index)"><font-awesome-icon
-                              icon="power-off" /></a>
-                          <a
-                            v-else
-                            href=""
-                            class="text-danger"
-                            @click.prevent="activateTerminal(index)"><font-awesome-icon
-                              icon="power-off" /></a>
-                        </td>
-                        <td>
-                          <router-link
-                            :to="'/terminal/' + terminal.id + '/edit'"
-                            class="text-primary">
-                            <font-awesome-icon
-                              icon="pen" />
-                          </router-link>
-                        </td>
-                        <td v-if="isAdmin">
-                          <a
-                            href=""
-                            class="text-danger"
-                            @click.prevent="deleteTerminal(index)"><font-awesome-icon
-                              icon="trash-alt" /></a>
-                        </td>
-                        <td v-if="isAdmin">
-                          <a
-                            href=""
-                            class="text-primary"
-                            :disabled="terminal.check_for_updates"
-                            @click.prevent="checkForUpdates(index)">
-                            <i v-if="terminal.check_for_updates" class="bi bi-hourglass" />
-                            <i v-else class="bi bi-arrow-counterclockwise" />
-                          </a>
-                        </td>
-                      </tr>
-                    </tbody>
-                  </table>
-                </div>
+        <div class="card">
+          <div class="card-body">
+            <div class="row">
+              <div class="form-group col-3">
+                <center><label>Actif</label></center>
+                <select
+                  v-model="filters.is_active"
+                  class="custom-select mb-2">
+                  <option :value="null">
+                    Tout
+                  </option>
+                  <option :value="true">
+                    Actifs
+                  </option>
+                  <option :value="false">
+                    Inactifs
+                  </option>
+                </select>
               </div>
+              <div class="form-group col-3">
+                <center><label>Status</label></center>
+                <select
+                  class="custom-select mb-2"
+                  @change="onFilterByStatusChange">
+                  <option :value="null">
+                    Tout
+                  </option>
+                  <option value="off">
+                    Eteint
+                  </option>
+                  <option value="on">
+                    Allumé
+                  </option>
+                  <option value="playing">
+                    En jeu
+                  </option>
+                </select>
+              </div>
+              <div v-if="isAdmin" class="form-group col-3">
+                <center><label>Client</label></center>
+                <select
+                  v-model="filters.customer_id"
+                  class="custom-select mb-2">
+                  <option :value="null">
+                    Tout
+                  </option>
+                  <option
+                    v-for="customer in customers"
+                    :key="customer.id"
+                    :value="customer.id">
+                    {{ customer.company }} - {{ customer.representative }}
+                  </option>
+                </select>
+              </div>
+            </div>
+            <button
+              class="btn btn-primary"
+              style=" background-color:black; float : right"
+              @click="resetFilters">
+              Effacer Tout
+            </button>
+          </div>
+        </div>
+
+        <div class="card">
+          <div class="card-body p-0">
+            <div class="table-responsive">
+              <table class="table">
+                <thead class="bg-light">
+                  <tr class="border-0">
+                    <th class="border-0">
+                      #
+                    </th>
+                    <th class="border-0">
+                      Version
+                    </th>
+                    <th class="border-0">
+                      Actif
+                    </th>
+                    <th class="border-0">
+                      Status
+                    </th>
+                    <th class="border-0">
+                      Nom
+                    </th>
+                    <th class="border-0">
+                      Client
+                    </th>
+                    <th class="border-0">
+                      Campagnes
+                    </th>
+                    <th class="border-0">
+                      Total dons
+                    </th>
+                    <th class="border-0" />
+                    <th class="border-0" />
+                    <th class="border-0" />
+                    <th v-if="isAdmin" class="border-0" />
+                    <th v-if="isAdmin" class="border-0" />
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr v-for="(terminal, index) in terminals" :key="index">
+                    <td>{{ terminal.id }}</td>
+                    <td>{{ terminal.version }}</td>
+                    <td>
+                      <span v-if="terminal.is_active" class="text-success">Activé</span>
+                      <span v-else class="text-danger">Désactivé</span>
+                    </td>
+                    <td>
+                      <span v-if="terminal.is_playing">
+                        <span class="badge-dot badge-success mr-1" />En jeu
+                      </span>
+                      <span v-else-if="terminal.is_on">
+                        <span class="badge-dot badge-warning mr-1" />Allumé
+                      </span>
+                      <span v-else>
+                        <span class="badge-dot badge-danger mr-1" />Eteint
+                      </span>
+                    </td>
+                    <td>{{ terminal.name }}</td>
+                    <td>
+                      <router-link to="/clients">
+                        {{
+                          terminal.customer.company
+                        }}
+                      </router-link>
+                    </td>
+                    <td>
+                      <span
+                        v-for="(campaign, index2) in terminal.campaigns"
+                        :key="index2"
+                        class="border border-primary p-1 small rounded mr-1">
+                        <router-link :to="'/campaigns/' + campaign.id">{{
+                          campaign.name
+                        }}
+                        </router-link>
+                      </span>
+                    </td>
+                    <td v-if="terminal.total_donations">
+                      {{ terminal.total_donations }} €
+                    </td>
+                    <td v-else>
+                      0 €
+                    </td>
+                    <td>
+                      <router-link
+                        :to="'/terminals/' + terminal.id"
+                        class="text-dark">
+                        <font-awesome-icon
+                          icon="eye" />
+                      </router-link>
+                    </td>
+                    <td>
+                      <a
+                        v-if="terminal.is_active"
+                        href=""
+                        class="text-success"
+                        @click.prevent="deactivateTerminal(index)"><font-awesome-icon
+                          icon="power-off" /></a>
+                      <a
+                        v-else
+                        href=""
+                        class="text-danger"
+                        @click.prevent="activateTerminal(index)"><font-awesome-icon
+                          icon="power-off" /></a>
+                    </td>
+                    <td>
+                      <router-link
+                        :to="'/terminal/' + terminal.id + '/edit'"
+                        class="text-primary">
+                        <font-awesome-icon
+                          icon="pen" />
+                      </router-link>
+                    </td>
+                    <td v-if="isAdmin">
+                      <a
+                        href=""
+                        class="text-danger"
+                        @click.prevent="deleteTerminal(index)"><font-awesome-icon
+                          icon="trash-alt" /></a>
+                    </td>
+                    <td v-if="isAdmin">
+                      <a
+                        href=""
+                        class="text-primary"
+                        :disabled="terminal.check_for_updates"
+                        @click.prevent="checkForUpdates(index)">
+                        <i v-if="terminal.check_for_updates" class="bi bi-hourglass" />
+                        <i v-else class="bi bi-arrow-counterclockwise" />
+                      </a>
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
             </div>
           </div>
         </div>
@@ -206,7 +267,14 @@ export default {
   name: "AllTerminals",
   data: function () {
     return {
-      terminals: {},
+      terminals: null,
+      customers: null,
+      filters: {
+        is_active: null,
+        is_on: null,
+        is_playing: null,
+        customer: null,
+      },
       errors: {
         visible: false,
         type: "danger",
@@ -222,15 +290,35 @@ export default {
       return this.$store.getters.isCustomer;
     },
   },
-  mounted: function () {
-    this.getTerminals();
+  watch: {
+    filters: {
+      handler() {
+        this.getTerminals();
+      },
+      deep: true,
+    },
+  },
+  mounted() {
+    return Promise.all(
+      [
+        this.getTerminals(),
+        this.getCustomers(),
+      ],
+    );
   },
   methods: {
-    getTerminals: function () {
+    getTerminals() {
       let loader = this.$loading.show();
 
+      const params = new URLSearchParams();
+      for (let key in this.filters) {
+        if (this.filters[key] !== null) {
+          params.append(key, this.filters[key]);
+        }
+      }
+
       this.$http
-        .get("terminals/")
+        .get("terminals/?" + params.toString())
         .then((resp) => {
           this.terminals = resp.data;
         })
@@ -243,6 +331,20 @@ export default {
         })
         .finally(() => {
           loader.hide();
+        });
+    },
+    getCustomers() {
+      this.$http
+        .get("customer/")
+        .then((resp) => {
+          this.customers = resp.data;
+        })
+        .catch((error) => {
+          this.$toasted.global.error({
+            message:
+              "Impossible de récupérer la liste des clients.",
+          });
+          throw error;
         });
     },
     activateTerminal: function (index) {
@@ -313,6 +415,42 @@ export default {
           });
           throw error;
         });
+    },
+    onFilterByStatusChange(event) {
+      const state = event.target.value;
+      if (state == "off") {
+        this.filters = {
+          ...this.filters,
+          is_on: false,
+          is_playing: null,
+        };
+      } else if (state == "on") {
+        this.filters = {
+          ...this.filters,
+          is_on: true,
+          is_playing: null,
+        };
+      } else if (state == "playing") {
+        this.filters = {
+          ...this.filters,
+          is_on: null,
+          is_playing: true,
+        };
+      } else {
+        this.filters = {
+          ...this.filters,
+          is_on: null,
+          is_playing: null,
+        };
+      }
+    },
+    resetFilters() {
+      this.filters = {
+        is_active: null,
+        is_on: null,
+        is_playing: null,
+        customer_id: null,
+      };
     },
   },
 };

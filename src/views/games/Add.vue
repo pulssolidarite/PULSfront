@@ -68,7 +68,7 @@
               <form>
                 <div class="row">
                   <div class="form-group col">
-                    <label for="name">Nom du jeu</label>
+                    <label for="name">Nom du jeu *</label>
                     <input
                       v-model="game.name"
                       type="text"
@@ -78,7 +78,7 @@
                 </div>
                 <div class="row">
                   <div class="form-group col">
-                    <label for="name">Nom du fichier</label>
+                    <label for="name">Nom du fichier *</label>
 
                     <input
                       v-model="game.path"
@@ -95,7 +95,7 @@
                 </div>
                 <div class="row">
                   <div class="form-group col">
-                    <label for="description">Description</label>
+                    <label for="description">Description *</label>
                     <textarea
                       v-model="game.description"
                       class="form-control"
@@ -269,24 +269,15 @@
               <div class="row mb-3">
                 <div class="form-group col">
                   <label for="installation_script">Script d'installation</label>
-                  <input
+                  <textarea
                     v-model="game.installation_script"
-                    type="text"
-                    class="form-control">
+                    class="form-control" />
                 </div>
                 <div class="form-group col">
                   <label for="execution_script">Script d'exécution</label>
-                  <input
+                  <textarea
                     v-model="game.execution_script"
-                    type="text"
-                    class="form-control">
-                </div>
-                <div class="form-group col">
-                  <label for="kill_script">Script d'arrêt</label>
-                  <input
-                    v-model="game.kill_script"
-                    type="text"
-                    class="form-control">
+                    class="form-control" />
                 </div>
               </div>
             </div>
@@ -301,7 +292,7 @@
               <form>
                 <div class="row">
                   <div class="form-group col">
-                    <label for="description">Fichier ROM</label>
+                    <label for="description">Fichier ROM / zip *</label>
                     <input
                       ref="romFile"
                       type="file"
@@ -347,7 +338,7 @@
               </form>
             </div>
             <div class="card-body text-center">
-              <button class="btn btn-success" @click.prevent="addGame">
+              <button class="btn btn-success" :disabled="!canSubmit" @click.prevent="addGame">
                 Enregistrer le jeu
               </button>
             </div>
@@ -397,6 +388,16 @@ export default {
       ],
     };
   },
+  computed: {
+    canSubmit() {
+      return (
+        this.game.name &&
+        this.game.path &&
+        this.game.description &&
+        this.game.file
+      );
+    },
+  },
   created: function () {
     this.getCores();
   },
@@ -423,7 +424,7 @@ export default {
           loader.hide();
         });
     },
-    uploadRom: function (event) {
+    uploadRom() {
       let loader = this.$loading.show();
 
       let form_file = new FormData();
@@ -437,69 +438,61 @@ export default {
         .then((resp) => {
           this.game.file = resp.data;
         })
-        .catch(() => {
+        .catch((error) => {
           this.$toasted.global.error({
             message: "Impossible d'uploader le fichier.",
           });
+          this.$refs.romFile.value = "";
+          throw error;
         })
         .finally(() => {
           loader.hide();
         });
     },
     addGame: function () {
-      if (this.game) {
-        if (!this.game.file) {
-          this.$toasted.global.error({
-            message: "Veuillez ajouter un fichier ROM.",
-          });
-        } else if (this.game.name && this.game.path && this.game.description) {
-          let form = new FormData();
-          form.append("name", this.game.name);
-          form.append("path", this.game.path);
-          form.append("core", this.game.core.id);
-          form.append("file", this.game.file.id);
-          form.append("description", this.game.description);
-          form.append("logo", this.$refs.logo.files[0]);
-          form.append("cover", this.$refs.cover.files[0]);
-          form.append("is_video", this.game.is_video);
-          form.append("j_up", this.game.j_up);
-          form.append("j_down", this.game.j_down);
-          form.append("j_right", this.game.j_right);
-          form.append("j_left", this.game.j_left);
-          form.append("btn_x", this.game.btn_x);
-          form.append("btn_y", this.game.btn_y);
-          form.append("btn_a", this.game.btn_a);
-          form.append("btn_b", this.game.btn_b);
-          form.append("btn_l", this.game.btn_l);
-          form.append("btn_r", this.game.btn_r);
-          form.append("btn_start", this.game.btn_start);
-          form.append("btn_select", this.game.btn_select);
-          form.append("type", this.game.type);
-          form.append("nb_players", this.game.nb_players);
-          form.append("installation_script", this.game.installation_script);
-          form.append("execution_script", this.game.execution_script);
-          form.append("kill_script", this.game.kill_script);
+      let form = new FormData();
+      form.append("name", this.game.name);
+      form.append("path", this.game.path);
+      form.append("file_id", this.game.file.id);
+      form.append("description", this.game.description);
+      form.append("is_video", this.game.is_video);
+      form.append("j_up", this.game.j_up);
+      form.append("j_down", this.game.j_down);
+      form.append("j_right", this.game.j_right);
+      form.append("j_left", this.game.j_left);
+      form.append("btn_x", this.game.btn_x);
+      form.append("btn_y", this.game.btn_y);
+      form.append("btn_a", this.game.btn_a);
+      form.append("btn_b", this.game.btn_b);
+      form.append("btn_l", this.game.btn_l);
+      form.append("btn_r", this.game.btn_r);
+      form.append("btn_start", this.game.btn_start);
+      form.append("btn_select", this.game.btn_select);
 
-          this.$http
-            .post("games/", form, {
-              headers: {
-                "Content-Type": "multipart/form-data",
-              },
-            })
-            .then((resp) => {
-              this.game = resp.data;
-              this.$router.push("/games");
-            })
-            .catch((err) => {
-              console.error(err.response);
-              this.$toasted.global.error({
-                message: "Impossible d'ajouter ce jeu.",
-              });
-            });
-        } else {
-          this.$toasted.global.error({ message: "Des champs sont manquants." });
-        }
-      }
+      if (this.game.core) {form.append("core_id", this.game.core.id);};
+      if (this.game.type) {form.append("type", this.game.type);};
+      if (this.game.nb_players != null) {form.append("nb_players", this.game.nb_players);};
+      if (this.game.installation_script) {form.append("installation_script", this.game.installation_script);};
+      if (this.game.execution_script) {form.append("execution_script", this.game.execution_script);};
+      if (this.$refs.logo.files && this.$refs.logo.files.length > 0) {form.append("logo", this.$refs.logo.files[0]);};
+      if (this.$refs.cover.files && this.$refs.cover.files.length > 0) {form.append("cover", this.$refs.cover.files[0]);};
+
+      this.$http
+        .post("games/", form, {
+          headers: {
+            "Content-Type": "multipart/form-data",
+          },
+        })
+        .then((resp) => {
+          this.game = resp.data;
+          this.$router.push("/games");
+        })
+        .catch((err) => {
+          console.error(err.response);
+          this.$toasted.global.error({
+            message: "Impossible d'ajouter ce jeu.",
+          });
+        });
     },
   },
 };

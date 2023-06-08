@@ -592,7 +592,7 @@ export default {
       }
 
       this.$http
-        .post("terminal/", body)
+        .post("terminals/", body)
 
         .then((resp) => {
           this.terminal = resp.data;
