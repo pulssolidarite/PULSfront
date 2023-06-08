@@ -292,7 +292,7 @@
               <form>
                 <div class="row">
                   <div class="form-group col">
-                    <label for="description">Fichier ROM *</label>
+                    <label for="description">Fichier ROM / zip *</label>
                     <input
                       ref="romFile"
                       type="file"
@@ -452,11 +452,8 @@ export default {
       let form = new FormData();
       form.append("name", this.game.name);
       form.append("path", this.game.path);
-      if (this.game.core) {form.append("core", this.game.core.id);};
       form.append("file", this.game.file.id);
       form.append("description", this.game.description);
-      if (this.$refs.logo.files) {form.append("logo", this.$refs.logo.files[0]);};
-      if (this.$refs.cover.files) {form.append("cover", this.$refs.cover.files[0]);};
       form.append("is_video", this.game.is_video);
       form.append("j_up", this.game.j_up);
       form.append("j_down", this.game.j_down);
@@ -470,10 +467,14 @@ export default {
       form.append("btn_r", this.game.btn_r);
       form.append("btn_start", this.game.btn_start);
       form.append("btn_select", this.game.btn_select);
+
+      if (this.game.core) {form.append("core", this.game.core.id);};
       if (this.game.type) {form.append("type", this.game.type);};
       if (this.game.nb_players != null) {form.append("nb_players", this.game.nb_players);};
       if (this.game.installation_script) {form.append("installation_script", this.game.installation_script);};
       if (this.game.execution_script) {form.append("execution_script", this.game.execution_script);};
+      if (this.$refs.logo.files && this.$refs.logo.files.length > 0) {form.append("logo", this.$refs.logo.files[0]);};
+      if (this.$refs.cover.files && this.$refs.cover.files.length > 0) {form.append("cover", this.$refs.cover.files[0]);};
 
       this.$http
         .post("games/", form, {
