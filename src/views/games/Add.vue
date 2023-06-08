@@ -442,6 +442,7 @@ export default {
           this.$toasted.global.error({
             message: "Impossible d'uploader le fichier.",
           });
+          this.$refs.romFile.value = "";
           throw error;
         })
         .finally(() => {
@@ -452,7 +453,7 @@ export default {
       let form = new FormData();
       form.append("name", this.game.name);
       form.append("path", this.game.path);
-      form.append("file", this.game.file.id);
+      form.append("file_id", this.game.file.id);
       form.append("description", this.game.description);
       form.append("is_video", this.game.is_video);
       form.append("j_up", this.game.j_up);
@@ -468,7 +469,7 @@ export default {
       form.append("btn_start", this.game.btn_start);
       form.append("btn_select", this.game.btn_select);
 
-      if (this.game.core) {form.append("core", this.game.core.id);};
+      if (this.game.core) {form.append("core_id", this.game.core.id);};
       if (this.game.type) {form.append("type", this.game.type);};
       if (this.game.nb_players != null) {form.append("nb_players", this.game.nb_players);};
       if (this.game.installation_script) {form.append("installation_script", this.game.installation_script);};
