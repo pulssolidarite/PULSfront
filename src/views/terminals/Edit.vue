@@ -511,7 +511,7 @@ export default {
         };
 
         this.$http
-          .patch("terminal/" + this.terminal.id + "/", submittedTerminal)
+          .patch("terminals/" + this.terminal.id + "/", submittedTerminal)
           .then(() => {
             this.getTerminal();
             this.$toasted.global.success({
