@@ -465,15 +465,15 @@ export default {
       }
     },
     campaignIsSelected: function (id) {
-      return this.terminal.campaigns.includes(id);
+      return this.terminal.campaign_ids.includes(id);
     },
     selectCampaign: function (campaign) {
       if (!this.campaignIsSelected(campaign.id)) {
-        this.terminal.campaigns.push(campaign.id);
+        this.terminal.campaign_ids.push(campaign.id);
       } else {
-        var index = this.terminal.campaigns.indexOf(campaign.id);
+        var index = this.terminal.campaign_ids.indexOf(campaign.id);
         if (index !== -1) {
-          this.terminal.campaigns.splice(index, 1);
+          this.terminal.campaign_ids.splice(index, 1);
         }
       }
     },
@@ -496,7 +496,7 @@ export default {
         let loader = this.$loading.show();
 
         const submittedTerminal = {
-          campaigns: this.terminal.campaigns,
+          campaign_ids: this.terminal.campaign_ids,
           games: this.terminal.games,
           donation_default_amount: this.terminal.donation_default_amount,
           donation_formula: this.terminal.donation_formula,
