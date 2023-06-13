@@ -436,8 +436,8 @@ export default {
       choosenCustomer: {},
       customer: {},
       terminal: {
-        campaigns: [],
-        games: [],
+        campaign_ids: [],
+        game_ids: [],
         payment_terminal: null,
         donation_formula: "Classique",
         owner: {
