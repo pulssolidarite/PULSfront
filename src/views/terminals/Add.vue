@@ -334,7 +334,7 @@
                     <label
                       for="campaign">Campagnes actives :
                       <span
-                        :class="['font-weight-bold']">({{ terminal.campaigns.length }}/{{
+                        :class="['font-weight-bold']">({{ terminal.campaign_ids.length }}/{{
                         campaigns.length
                       }})</span></label>
                     <div class="row form-group">
@@ -379,7 +379,7 @@
                     <label
                       for="game">Jeux actifs :
                       <span
-                        :class="['font-weight-bold']">({{ terminal.games.length }}/{{ games.length }})</span></label>
+                        :class="['font-weight-bold']">({{ terminal.game_ids.length }}/{{ games.length }})</span></label>
                     <div class="row form-group">
                       <label
                         v-for="game in games"
@@ -522,8 +522,8 @@ export default {
         });
     },
     campaignExists: function (id) {
-      for (let i = 0; i < this.terminal.campaigns.length; i++) {
-        if (this.terminal.campaigns[i] == id) {
+      for (let i = 0; i < this.terminal.campaign_ids.length; i++) {
+        if (this.terminal.campaign_ids[i] == id) {
           return true;
         }
       }
@@ -532,19 +532,19 @@ export default {
     selectCampaign: function (campaign) {
       if (!this.campaignExists(campaign.id)) {
         // Only if not max campaigns
-        this.terminal.campaigns.push(campaign.id);
+        this.terminal.campaign_ids.push(campaign.id);
       } else {
-        for (let index = 0; index < this.terminal.campaigns.length; index++) {
-          const element = this.terminal.campaigns[index];
+        for (let index = 0; index < this.terminal.campaign_ids.length; index++) {
+          const element = this.terminal.campaign_ids[index];
           if (element == campaign.id) {
-            this.$delete(this.terminal.campaigns, index);
+            this.$delete(this.terminal.campaign_ids, index);
           }
         }
       }
     },
     gameExists: function (id) {
-      for (let i = 0; i < this.terminal.games.length; i++) {
-        if (this.terminal.games[i] == id) {
+      for (let i = 0; i < this.terminal.game_ids.length; i++) {
+        if (this.terminal.game_ids[i] == id) {
           return true;
         }
       }
@@ -552,12 +552,12 @@ export default {
     },
     selectGame: function (game) {
       if (!this.gameExists(game.id)) {
-        this.terminal.games.push(game.id);
+        this.terminal.game_ids.push(game.id);
       } else {
-        for (let index = 0; index < this.terminal.games.length; index++) {
-          const element = this.terminal.games[index];
+        for (let index = 0; index < this.terminal.game_ids.length; index++) {
+          const element = this.terminal.game_ids[index];
           if (element == game.id) {
-            this.$delete(this.terminal.games, index);
+            this.$delete(this.terminal.game_ids, index);
           }
         }
       }
