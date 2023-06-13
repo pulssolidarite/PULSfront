@@ -478,16 +478,16 @@ export default {
       }
     },
     gameIsSelected: function (id) {
-      return this.terminal.games.includes(id);
+      return this.terminal.game_ids.includes(id);
     },
     selectGame: function (game) {
       if (!this.gameIsSelected(game.id)) {
-        this.terminal.games.push(game.id);
+        this.terminal.game_ids.push(game.id);
         // }
       } else {
-        var index = this.terminal.games.indexOf(game.id);
+        var index = this.terminal.game_ids.indexOf(game.id);
         if (index !== -1) {
-          this.terminal.games.splice(index, 1);
+          this.terminal.game_ids.splice(index, 1);
         }
       }
     },
@@ -497,7 +497,7 @@ export default {
 
         const submittedTerminal = {
           campaign_ids: this.terminal.campaign_ids,
-          games: this.terminal.games,
+          game_ids: this.terminal.game_ids,
           donation_default_amount: this.terminal.donation_default_amount,
           donation_formula: this.terminal.donation_formula,
           donation_max_amount: this.terminal.donation_max_amount,
