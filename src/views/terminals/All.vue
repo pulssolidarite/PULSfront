@@ -158,6 +158,7 @@
                     <th class="border-0" />
                     <th v-if="isAdmin" class="border-0" />
                     <th v-if="isAdmin" class="border-0" />
+                    <th v-if="isAdmin" class="border-0" />
                   </tr>
                 </thead>
                 <tbody>
@@ -432,7 +433,7 @@ export default {
         .then(() => {
           this.$set(terminal, "restart", resp.data.restart);
           this.$toasted.global.success({
-            message: "Redémarrage programmé",
+            message: "Redémarrage programmé d'ici une heure",
           });
         })
         .catch((error) => {
