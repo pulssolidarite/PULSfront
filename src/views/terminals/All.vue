@@ -158,6 +158,7 @@
                     <th class="border-0" />
                     <th v-if="isAdmin" class="border-0" />
                     <th v-if="isAdmin" class="border-0" />
+                    <th v-if="isAdmin" class="border-0" />
                   </tr>
                 </thead>
                 <tbody>
@@ -246,9 +247,19 @@
                         href=""
                         class="text-primary"
                         :disabled="terminal.check_for_updates"
-                        @click.prevent="checkForUpdates(index)">
+                        @click.prevent="checkForUpdates(terminal)">
                         <i v-if="terminal.check_for_updates" class="bi bi-hourglass" />
                         <i v-else class="bi bi-arrow-counterclockwise" />
+                      </a>
+                    </td>
+                    <td v-if="isAdmin">
+                      <a
+                        href=""
+                        :disabled="terminal.restart"
+                        class="text-primary"
+                        @click.prevent="restart(terminal)">
+                        <span v-if="terminal.restart">En attente de redémarrage</span>
+                        <span v-else>Redémarrer la borne</span>
                       </a>
                     </td>
                   </tr>
@@ -400,11 +411,11 @@ export default {
           });
         });
     },
-    checkForUpdates: function (index) {
+    checkForUpdates: function (terminal) {
       this.$http
-        .post("terminals/" + this.terminals[index].id + "/check_for_updates/")
+        .post("terminals/" + terminal.id + "/check_for_updates/")
         .then(() => {
-          this.$set(this.terminals[index], "check_for_updates", resp.data.check_for_updates);
+          this.$set(terminal, "check_for_updates", resp.data.check_for_updates);
           this.$toasted.global.success({
             message: "Vérification des mises à jour programmée",
           });
@@ -412,6 +423,22 @@ export default {
         .catch((error) => {
           this.$toasted.global.error({
             message: "Impossible de programmer la vérification des mises à jour",
+          });
+          throw error;
+        });
+    },
+    restart: function (terminal) {
+      this.$http
+        .post("terminals/" + terminal.id + "/restart/")
+        .then(() => {
+          this.$set(terminal, "restart", resp.data.restart);
+          this.$toasted.global.success({
+            message: "Redémarrage programmé d'ici une heure",
+          });
+        })
+        .catch((error) => {
+          this.$toasted.global.error({
+            message: "Impossible de programmer le redémarrage",
           });
           throw error;
         });
